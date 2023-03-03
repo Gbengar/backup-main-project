@@ -55,7 +55,6 @@ const SearchFilter = () => {
   return (
     <div className={styles.topbarCenter}>
       <div className={styles.searchbar}>
-        <BiSearchAlt size={18} className={styles.icon} />
         <input
           type="text"
           id="searchFilter"

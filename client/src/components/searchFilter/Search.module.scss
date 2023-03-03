@@ -55,8 +55,8 @@
     display: block; /* Make it into a block element to fill the whole list */
   }
   
-  #myUL li a:hover:not(.header) {
-    background-color: #eee; /* Add a hover effect to all links, except for headers */
+  .myUL li a:hover:not(.header) {
+    background-color: #e7dfdf; /* Add a hover effect to all links, except for headers */
   }
 
   
