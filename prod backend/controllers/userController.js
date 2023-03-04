@@ -343,6 +343,19 @@ const forgotPassword = asyncHandler(async (req, res) => {
   }
 });
 
+//Get Single User
+
+const getSingle = asyncHandler(async (req, res) => {
+  const user = await User.findById({ _id: req.params.id }).select("-password");
+
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  } else {
+    res.status(200).json({ user });
+  }
+});
+
 // Reset Password
 
 const resetPassword = asyncHandler(async (req, res) => {
@@ -388,4 +401,5 @@ module.exports = {
   changePassword,
   forgotPassword,
   resetPassword,
+  getSingle,
 };
