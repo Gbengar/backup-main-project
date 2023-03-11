@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import EditProfile from "./pages/profile/EditProfile";
 import { Messenger } from "./pages/messenger/Messenger";
+import ViewProfile from "./pages/profile/ViewProfile";
 
 axios.defaults.withCredentials = true;
 
@@ -63,6 +64,15 @@ function App() {
             element={
               <Layout>
                 <EditProfile />
+              </Layout>
+            }
+          />
+
+          <Route
+            path="/profiles/:_id"
+            element={
+              <Layout>
+                <ViewProfile />
               </Layout>
             }
           />

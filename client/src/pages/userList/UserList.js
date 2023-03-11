@@ -28,9 +28,13 @@ const UserList = () => {
   );
   const filteredUsers = useSelector(selectUsers);
 
+  //console.log(filteredUsers._63f25e22b87d53f1e6373f35);
+
   useEffect(() => {
     dispatch(getUsers());
   }, [dispatch]);
+
+  
 
   const removeUser = async (id) => {
     await dispatch(deleteUser(id));

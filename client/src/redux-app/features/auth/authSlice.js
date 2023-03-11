@@ -6,9 +6,8 @@ const initialState = {
   isLoggedIn: false,
   user: null,
   users: [],
-  twoFactor: false,
+
   isError: false,
-  isSuccess: false,
   isLoading: false,
   message: "",
 };
@@ -194,7 +193,6 @@ const authSlice = createSlice({
         state.user = action.payload;
         toast.success("Registeration Successful");
         console.log(action.payload);
-        localStorage.setItem("user", JSON.stringify(action.payload));
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
@@ -214,7 +212,7 @@ const authSlice = createSlice({
         state.isLoggedIn = true;
         state.user = action.payload;
         toast.success("Login Successful");
-        localStorage.setItem("user", JSON.stringify(action.payload));
+
         console.log(action.payload);
       })
       .addCase(login.rejected, (state, action) => {
@@ -234,7 +232,6 @@ const authSlice = createSlice({
         state.isLoggedIn = false;
         state.user = null;
         toast.success(action.payload);
-        localStorage.removeItem("user");
       })
       .addCase(logout.rejected, (state, action) => {
         state.isLoading = false;
@@ -251,7 +248,6 @@ const authSlice = createSlice({
         state.isSuccess = true;
         state.isLoggedIn = action.payload;
         toast.success(action.payload);
-        localStorage.setItem("user", JSON.stringify(action.payload));
       })
       .addCase(getLoginStatus.rejected, (state, action) => {
         state.isLoading = false;
@@ -268,7 +264,6 @@ const authSlice = createSlice({
         state.isSuccess = true;
         state.isLoggedIn = true;
         state.user = action.payload;
-        localStorage.setItem("user", JSON.stringify(action.payload));
       })
       .addCase(getUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -285,7 +280,6 @@ const authSlice = createSlice({
         state.isSuccess = true;
         state.message = action.payload;
         toast.success(action.payload);
-        localStorage.setItem("user", JSON.stringify(action.payload));
       })
       .addCase(changePassword.rejected, (state, action) => {
         state.isLoading = false;
@@ -301,7 +295,6 @@ const authSlice = createSlice({
         state.isLoggedIn = true;
         state.user = action.payload;
         toast.success("Updated Successful");
-        localStorage.setItem("user", JSON.stringify(action.payload));
       })
       .addCase(updateUser.rejected, (state, action) => {
         state.isLoading = false;

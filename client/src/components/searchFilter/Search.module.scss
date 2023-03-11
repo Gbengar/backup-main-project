@@ -19,7 +19,7 @@
   
   .searchInput {
     border: none;
-    width: 70%;
+    width: 10%;
   }
   
   .searchInput:focus {
@@ -44,7 +44,7 @@
   }
   
   
-  .myUL ul li {
+  .myUL ul ul li {
     border: 1px solid #ddd; /* Add a border to all links */
     margin-top: -1px; /* Prevent double borders */
     background-color: #f6f6f6; /* Grey background color */
@@ -59,4 +59,36 @@
     background-color: #e7dfdf; /* Add a hover effect to all links, except for headers */
   }
 
-  
+  .characters,
+.character-meta {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.characters {
+  flex-grow: 1;
+}
+
+.character {
+  display: flex;
+  margin-bottom: 1em;
+}
+
+.character-thumb {
+  width: 4em;
+  height: 4em;
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+  border-radius: .4em;
+  margin-right: .6em;
+}
+
+.character-meta li {
+  margin-bottom: .2em;
+}
+
+.character-meta li:last-child {
+  margin-bottom: 0;
+}
