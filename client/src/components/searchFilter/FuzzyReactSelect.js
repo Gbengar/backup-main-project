@@ -7,8 +7,15 @@ import Fuse from "fuse.js";
 import MenuList from "./MenuList";
 import { Link } from "react-router-dom";
 
-const FuzzyReactSelect = ({ options, fuzzyOptions, wait, ...props }) => {
+const FuzzyReactSelect = ({
+  options,
+  fuzzyOptions,
+  wait,
+  placeholder,
+  ...props
+}) => {
   const [fuse, setFuse] = useState(null);
+  const [selectedValue, setSelectedValue] = useState(null);
 
   // use fuse to search
   const searchOptions = (inputValue) =>
@@ -33,6 +40,11 @@ const FuzzyReactSelect = ({ options, fuzzyOptions, wait, ...props }) => {
     }
   }, [fuse, options]);
 
+  const handleSelect = (selectedOption) => {
+    setSelectedValue(selectedOption);
+    props.onChange(selectedOption); // pass selected value to parent component
+  };
+
   return (
     <Select
       defaultOptions={options}
@@ -40,18 +52,25 @@ const FuzzyReactSelect = ({ options, fuzzyOptions, wait, ...props }) => {
       isSearchable
       components={{ MenuList }}
       loadOptions={(value) => debouncedLoadOptions(value)}
+      value={selectedValue}
+      onChange={handleSelect}
+      placeholder={placeholder}
     />
   );
 };
 
 FuzzyReactSelect.defaultProps = {
   wait: 300,
+  placeholder: "Select...",
+  onChange: () => {},
 };
 
 FuzzyReactSelect.propTypes = {
   options: PropTypes.array.isRequired,
   fuzzyOptions: PropTypes.object.isRequired,
   wait: PropTypes.number,
+  placeholder: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 export default FuzzyReactSelect;

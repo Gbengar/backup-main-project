@@ -69,7 +69,7 @@ function App() {
           />
 
           <Route
-            path="/profiles/:_id"
+            path="/profile/:_id"
             element={
               <Layout>
                 <ViewProfile />

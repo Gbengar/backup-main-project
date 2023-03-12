@@ -11,41 +11,42 @@ import {
 import "./Profile.scss";
 import Loader, { Spinner } from "../../components/loader/Loader";
 import { Link, useParams } from "react-router-dom";
-import { handleByID } from "../../components/searchFilter/SearchFilter";
 
 const ViewProfile = () => {
-  //handleByID()
-
   useRedirectLoggedOutUser("/login");
-  const dispatch = useDispatch();
-  const users = useSelector((state) => state.auth.users);
 
-  console.log(users);
-  const initialState = {
-    name: users.id.name,
-    email: users?.id.email,
-    phone: users?.id.phone,
-    photo: users?.id.photo,
-    bio: users?.id.bio,
-  };
-  const [profile, setProfile] = useState(initialState);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getUsers());
   }, [dispatch]);
+  const users = useSelector((state) => state.auth.users);
+  const { _id } = useParams(); // get the ID parameter from the URL
+
+  console.log(_id);
+
+  const [profile, setProfile] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    photo: "",
+    bio: "",
+  });
 
   useLayoutEffect(() => {
-    if (users.id) {
+    const user = users.find((u) => u._id === _id); // find the user with the ID
+
+    console.log(user);
+    if (user) {
       setProfile({
-        ...profile,
-        name: users?.id.name,
-        email: users?.id.email,
-        phone: users?.id.phone,
-        photo: users?.id.photo,
-        bio: users?.id.bio,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        photo: user.photo,
+        bio: user.bio,
       });
     }
-  }, [users.id, profile]);
+  }, [_id, users]);
 
   return (
     <>
@@ -67,25 +68,25 @@ const ViewProfile = () => {
 
               <>
                 <div className="profile-photo">
-                  <img src={users?.id.photo} alt="profileImage" />
+                  <img src={profile.photo} alt="profileImage" />
                 </div>
                 <form>
                   <p>
                     <label>Name:</label>
-                    <span>{profile?.name}</span>
+                    <span>{profile.name}</span>
                   </p>
                   <p>
                     <label>Email:</label>
-                    <span>{profile?.email}</span>
+                    <span>{profile.email}</span>
                   </p>
                   <p>
                     <label>Phone:</label>
-                    <span>{profile?.phone}</span>
+                    <span>{profile.phone}</span>
                   </p>
                   <p>
                     <label>Bio:</label>
                     <textarea
-                      value={profile?.bio}
+                      value={profile.bio}
                       cols="30"
                       rows="10"
                       disabled

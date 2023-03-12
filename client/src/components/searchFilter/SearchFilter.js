@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getUsers } from "../../redux-app/features/auth/authSlice";
 import FuzzyReactSelect from "./FuzzyReactSelect";
+import { useHistory } from "react-router-dom";
 
 const SearchFilter = () => {
+  const [selectValue, setSelectValue] = useState("");
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getUsers());
@@ -35,7 +39,39 @@ const SearchFilter = () => {
   };
 
   const handleChange = (selectedOption) => {
-    console.log("handleChange", selectedOption.value);
+    if (selectedOption) {
+      const userId = selectedOption.value;
+      console.log("handleChange", userId);
+      setSelectValue(userId);
+      // Navigate to link using useHistory from react-router-dom
+      navigate(`/profile/${userId}`);
+    } else {
+      setSelectValue("");
+    }
+  };
+
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      cursor: "pointer",
+    }),
+    singleValue: (provided, state) => ({
+      ...provided,
+      cursor: "pointer",
+    }),
+    option2: (provided, state) => ({
+      ...provided,
+      color: "red",
+    }),
+    option3: (provided, state) => ({
+      ...provided,
+      borderRadius: 0,
+      colors: {
+        ...provided.colors,
+        primary25: "hotpink",
+        primary: "black",
+      },
+    }),
   };
   return (
     <div className="topbarCenter">
@@ -43,9 +79,11 @@ const SearchFilter = () => {
         options={pickedMockdata}
         fuzzyOptions={fuzzyOptions}
         onChange={handleChange}
+        styles={customStyles}
         autoCorrect="off"
         spellCheck="off"
         placeholder="Search..."
+        value={selectValue}
       />
     </div>
   );
