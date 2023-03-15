@@ -18,6 +18,9 @@ const {
   getUsers,
   deleteUser,
   getSingle,
+  getFriend,
+  followUser,
+  unfollowUser,
 } = require("../controllers/userController");
 const protect = require("../middleware/authMiddleware");
 
@@ -39,8 +42,12 @@ router.post("/conversations", conversationRoute);
 router.get("/conversations/:userId", getConversation);
 
 // Messages routers
-
 router.post("/messages", addMessages);
 router.get("/messages/:conversationId", getMessages);
+
+// Get Friends & Followers
+router.get("/friends/:userId", getFriend);
+router.put("/:id/follow", followUser);
+router.put("/:id/unfollow", unfollowUser);
 
 module.exports = router;
