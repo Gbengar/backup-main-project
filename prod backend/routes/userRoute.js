@@ -2,6 +2,7 @@ const express = require("express");
 const {
   conversationRoute,
   getConversation,
+  startConvosFollowings,
 } = require("../controllers/conversation");
 const { addMessages, getMessages } = require("../controllers/messages");
 const router = express.Router();
@@ -40,6 +41,7 @@ router.put("/resetpassword/:resetToken", resetPassword);
 // Conversation routes
 router.post("/conversations", conversationRoute);
 router.get("/conversations/:userId", getConversation);
+router.get("/find/:firstUserId/:secondUserId", startConvosFollowings);
 
 // Messages routers
 router.post("/messages", addMessages);

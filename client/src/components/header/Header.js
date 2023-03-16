@@ -10,6 +10,8 @@ import { UserName } from "../../pages/profile/EditProfile";
 import Search from "../search/Search";
 import SearchFilter from "../searchFilter/SearchFilter";
 
+import { TiMessages } from "react-icons/ti";
+
 const activeLink = ({ isActive }) => (isActive ? "active" : "");
 
 const Header = () => {
@@ -52,6 +54,12 @@ const Header = () => {
             <li>
               <NavLink to="/profile" className={activeLink}>
                 Profile
+              </NavLink>
+            </li>
+
+            <li>
+              <NavLink to="/messenger">
+                <TiMessages size={20} className={activeLink} />
               </NavLink>
             </li>
             <li>
