@@ -46,7 +46,7 @@ const Profile = () => {
         {isLoading && <Loader />}
         <div className="container">
           <PageMenu />
-          <h2>Profile</h2>
+          <h2>Welcome, {user?.name}</h2>
           <div className="--flex-start profile">
             <Card cardClass={"card"}>
               <>
@@ -97,7 +97,5 @@ const Profile = () => {
     </>
   );
 };
-
-
 
 export default Profile;

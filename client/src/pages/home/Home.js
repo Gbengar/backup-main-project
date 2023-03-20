@@ -1,14 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Home.scss";
 import loginImg from "../../assets/homeImage.svg";
 import { Link } from "react-router-dom";
+import AnimatedLetters from "../../components/addDesign/animatedLetters/AnimatedLetters";
 
 const Home = () => {
+  const [letterClass, setLetterClass] = useState("text-animate");
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLetterClass("text-animate-hover");
+    }, 3000);
+  }, []);
+
   return (
     <div>
+      <div className="text-zone"></div>
       <section className="container hero">
         <div className="hero-text">
-          <h2>Join our Network to connect with businesses</h2>
+          <h1>
+            <AnimatedLetters
+              letterClass={letterClass}
+              strArray={[
+                "J",
+                "o",
+                "i",
+                "n",
+                " ",
+                "o",
+                "u",
+                "r",
+                " ",
+                "N",
+                "e",
+                "t",
+                "w",
+                "o",
+                "r",
+                "k",
+              ]}
+              idx={15}
+            />
+          </h1>
           <p>
             A place to meet greatminds and grow your connections for all
             business and personel needs

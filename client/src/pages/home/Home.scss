@@ -56,6 +56,11 @@
     font-weight: bold;
     text-align: center;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out;
+
+  }
+  .hero-text:hover {
+    transform: translateY(-10px);
   }
   
   .hero-text h2 {
