@@ -23,6 +23,7 @@ import { useEffect } from "react";
 import EditProfile from "./pages/profile/EditProfile";
 import { Messenger } from "./pages/messenger/Messenger";
 import ViewProfile from "./pages/profile/ViewProfile";
+import Timeline from "./pages/eventCenter/Timeline";
 
 axios.defaults.withCredentials = true;
 
@@ -97,6 +98,15 @@ function App() {
             element={
               <Layout>
                 <UserList />
+              </Layout>
+            }
+          />
+
+          <Route
+            path="/timeline"
+            element={
+              <Layout>
+                <Timeline />
               </Layout>
             }
           />

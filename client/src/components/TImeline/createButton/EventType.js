@@ -1,0 +1,39 @@
+import React from "react";
+import { FaPlus, FaCog } from "react-icons/fa";
+
+function EventButton(props) {
+  return (
+    <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <button
+        style={{
+          padding: "10px",
+          borderRadius: "20px 0 0 20px",
+          border: "none",
+        }}
+        onClick={props.handleNewEvent}
+      >
+        <FaPlus style={{ fontSize: "1.2rem" }} />
+      </button>
+      <button
+        style={{
+          padding: "10px",
+          borderRadius: "0 20px 20px 0",
+          border: "none",
+        }}
+        onClick={props.handleSettings}
+      >
+        <span
+          style={{
+            border: "1px solid black",
+            padding: "5px 10px",
+            borderRadius: "20px",
+          }}
+        >
+          Settings <FaCog style={{ fontSize: "1.2rem", marginLeft: "5px" }} />
+        </span>
+      </button>
+    </div>
+  );
+}
+
+export default EventButton;

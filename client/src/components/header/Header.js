@@ -2,6 +2,8 @@ import React from "react";
 import "./Header.scss";
 import logo from "../../assets/images/logo.png";
 import { FaUserCircle } from "react-icons/fa";
+import { MdOutlineNotificationsActive } from "react-icons/md";
+
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { RESET, logout } from "../../redux-app/features/auth/authSlice";
@@ -38,9 +40,10 @@ const Header = () => {
         <ul className="home-links">
           <ShowOnLogin>
             <li className="--flex-center">
-              <FaUserCircle size={20} />
-              &nbsp;
-              <UserName />
+              <NavLink to="/profile" className={activeLink}>
+                <FaUserCircle size={20} />
+                &nbsp;
+              </NavLink>
             </li>
           </ShowOnLogin>
           <ShowOnLogout>
@@ -52,14 +55,28 @@ const Header = () => {
           </ShowOnLogout>
           <ShowOnLogin>
             <li>
-              <NavLink to="/profile" className={activeLink}>
-                Profile
+              <NavLink to="/timeline" className={activeLink}>
+                Timeline
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/homepage" className={activeLink}>
+                HomePage
               </NavLink>
             </li>
 
             <li>
               <NavLink to="/messenger">
                 <TiMessages size={20} className={activeLink} />
+              </NavLink>
+            </li>
+
+            <li>
+              <NavLink to="/notification">
+                <MdOutlineNotificationsActive
+                  size={20}
+                  className={activeLink}
+                />
               </NavLink>
             </li>
             <li>

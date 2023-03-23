@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { getUsers } from "../../redux-app/features/auth/authSlice";
 import FuzzyReactSelect from "./FuzzyReactSelect";
 import { useHistory } from "react-router-dom";
+import { BiSearchAlt2 } from "react-icons/bi";
 
 const SearchFilter = () => {
   const [selectValue, setSelectValue] = useState("");

@@ -23,6 +23,8 @@
   --color-primary: #007bff;
   --color-success: #28a745;
   --color-danger: orangered;
+
+  ;
 }
 
 * {
@@ -338,9 +340,18 @@ p {
   background: rgb(174, 49, 4);
 }
 
+.--btn-timeline {
+  color: #fff;
+  background: #75520C
+}
 .--btn-success {
   color: #fff;
   background: #28a745;
+}
+
+.--btn-gold {
+  color: #fff;
+  background: black;
 }
 
 /* Background */

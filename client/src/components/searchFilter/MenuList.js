@@ -14,7 +14,7 @@ const MenuList = ({ options, children, getValue }) => {
 
   // if no options, render react-selects default message
   if (arrayIsEmpty(children)) {
-    return <div>{children}</div>;
+    return <div> {children}</div>;
   }
 
   return (

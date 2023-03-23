@@ -1,0 +1,73 @@
+.button-style{
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+  
+  }
+
+  .filter {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px;
+  }
+  .filterforname{
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 30px;
+  }
+  .filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 0;
+  }
+
+  .filterforname {
+    flex-grow: 1;
+  }
+
+  .event-button-container {
+    display: flex;
+    justify-content: flex-end;
+    flex-grow: 1;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 400px;
+    padding: 5px 0;
+    border: 50% solid #030b6b;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+    justify-content: center;
+    
+  }
+
+  .withincard{
+    padding: 10px;
+  }
+  
+  .dropright{
+    display: flex;
+    justify-content: flex-end;
+    flex-grow: 1;
+  }
+
+  .dropleft{
+    display: flex;
+    justify-content: flex-start;
+    flex-grow: 1;
+  }
+
+  .parent-container {
+    display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+   
+  }
+  
