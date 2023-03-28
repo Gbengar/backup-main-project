@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const PageMenu = () => {
+const PageMenuTimeline = () => {
   return (
     <div>
       <nav className="--btn-timeline --p --mb">
@@ -10,7 +10,7 @@ const PageMenu = () => {
             <NavLink to="/timeline">Event Type</NavLink>
           </li>
           <li>
-            <NavLink to="/pending">Scheduled Events</NavLink>
+            <NavLink to="/scheduled">Scheduled Events</NavLink>
           </li>
           <li>
             <NavLink to="/flow">Workflow</NavLink>
@@ -24,4 +24,4 @@ const PageMenu = () => {
   );
 };
 
-export default PageMenu;
+export default PageMenuTimeline;

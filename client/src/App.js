@@ -23,7 +23,10 @@ import { useEffect } from "react";
 import EditProfile from "./pages/profile/EditProfile";
 import { Messenger } from "./pages/messenger/Messenger";
 import ViewProfile from "./pages/profile/ViewProfile";
-import Timeline from "./pages/eventCenter/Timeline";
+import Timeline from "./pages/Scheduling/eventType/Timeline";
+import ScheduledEvent from "./pages/Scheduling/ScheduledEvent/ScheduledEvent";
+import Upcoming from "./pages/Scheduling/ScheduledEvent/subEvent/Upcoming";
+import NewEvent from "./pages/newEvent/NewEvent";
 
 axios.defaults.withCredentials = true;
 
@@ -107,6 +110,24 @@ function App() {
             element={
               <Layout>
                 <Timeline />
+              </Layout>
+            }
+          />
+
+          <Route
+            path="/scheduled"
+            element={
+              <Layout>
+                <ScheduledEvent />
+              </Layout>
+            }
+          />
+
+          <Route
+            path="/newevent"
+            element={
+              <Layout>
+                <NewEvent />
               </Layout>
             }
           />

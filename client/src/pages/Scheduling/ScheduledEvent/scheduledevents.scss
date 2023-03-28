@@ -1,0 +1,33 @@
+.pageNo{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.othersec{
+    display: flex;
+}
+
+.list{
+    padding: auto;
+    margin: 10px;
+    justify-content: flex-start;
+}
+
+.home-linkes {
+    display: flex;
+    justify-content:  flex-start;
+    width:auto;
+    border-bottom: 1px solid black;
+    padding: 20px;
+    & li a {
+      color:gold;
+    }
+    & > * {
+      margin-left: 1rem;
+      color: gold;
+    }
+  }
+
+  .space{
+    padding: 0 10px;
+  }

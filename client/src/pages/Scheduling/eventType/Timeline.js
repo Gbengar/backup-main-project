@@ -3,17 +3,17 @@ import { FaCog } from "react-icons/fa";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
-import Card from "../../components/card/Card";
-import EventType from "../../components/eventType/EventType";
-import Button from "../../components/TImeline/createButton/CreateButton";
-import EventButton from "../../components/TImeline/createButton/EventType";
-import PageMenuTimeline from "../../components/TImeline/PageMenuTimeline";
-import useRedirectLoggedOutUser from "../../customHook/useRedirectLoggedOutUser";
-import { getUser } from "../../redux-app/features/auth/authSlice";
+import Card from "../../../components/card/Card";
+import EventType from "../../../components/eventType/EventType";
+import Button from "../../../components/TImeline/createButton/CreateButton";
+import EventButton from "../../../components/TImeline/createButton/EventType";
+import PageMenuTimeline from "../../../components/TImeline/PageMenuTimeline";
+import useRedirectLoggedOutUser from "../../../customHook/useRedirectLoggedOutUser";
+import { getUser } from "../../../redux-app/features/auth/authSlice";
 import "./timeline.scss";
 import SettingsButton, {
   DropdownButton,
-} from "../../components/TImeline/createButton/SettingsButton";
+} from "../../../components/TImeline/createButton/SettingsButton";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Checkbox from "@mui/material/Checkbox";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
