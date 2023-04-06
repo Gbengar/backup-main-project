@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const Availability = require("./Availability");
 
 const userSchema = mongoose.Schema(
   {
@@ -53,6 +54,9 @@ const userSchema = mongoose.Schema(
       type: Array,
       default: [],
     },
+    availability: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Availability" },
+    ],
   },
   {
     timestamps: true,

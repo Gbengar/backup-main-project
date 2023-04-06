@@ -68,20 +68,20 @@ const Profile = () => {
                   <form>
                     <p>
                       <label>Name:</label>
-                      <span>{profile?.name}</span>
+                      <span>{user?.name}</span>
                     </p>
                     <p>
                       <label>Email:</label>
-                      <span>{profile?.email}</span>
+                      <span>{user?.email}</span>
                     </p>
                     <p>
                       <label>Phone:</label>
-                      <span>{profile?.phone}</span>
+                      <span>{user?.phone}</span>
                     </p>
                     <p>
                       <label>Bio:</label>
                       <textarea
-                        value={profile?.bio}
+                        value={user?.bio}
                         cols="30"
                         rows="10"
                         disabled

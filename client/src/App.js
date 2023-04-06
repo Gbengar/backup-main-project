@@ -27,6 +27,7 @@ import Timeline from "./pages/Scheduling/eventType/Timeline";
 import ScheduledEvent from "./pages/Scheduling/ScheduledEvent/ScheduledEvent";
 import Upcoming from "./pages/Scheduling/ScheduledEvent/subEvent/Upcoming";
 import NewEvent from "./pages/newEvent/NewEvent";
+import OtherUsersEvent from "./pages/newEvent/OtherUsers/OtherUsersEvent";
 
 axios.defaults.withCredentials = true;
 
@@ -73,7 +74,7 @@ function App() {
           />
 
           <Route
-            path="/profile/:_id"
+            path="/profiles/:_id"
             element={
               <Layout>
                 <ViewProfile />
@@ -128,6 +129,15 @@ function App() {
             element={
               <Layout>
                 <NewEvent />
+              </Layout>
+            }
+          />
+
+          <Route
+            path="/otherusersevent"
+            element={
+              <Layout>
+                <OtherUsersEvent />
               </Layout>
             }
           />

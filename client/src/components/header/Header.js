@@ -27,7 +27,9 @@ const Header = () => {
     dispatch(RESET());
     await dispatch(logout());
     navigate("/login");
+    window.location.reload();
   };
+
   return (
     <header className="header">
       <nav>

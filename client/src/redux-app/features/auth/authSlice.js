@@ -1,12 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 import { toast } from "react-toastify";
 import authService from "./authService";
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+export const API_URL = `${BACKEND_URL}/api/users/`;
 
 const initialState = {
   isLoggedIn: false,
   user: null,
   users: [],
-
   isError: false,
   isLoading: false,
   message: "",
@@ -165,6 +168,8 @@ export const deleteUser = createAsyncThunk(
     }
   }
 );
+
+//getEvents;
 
 const authSlice = createSlice({
   name: "auth",
@@ -340,4 +345,17 @@ export const { RESET } = authSlice.actions;
 export const selectIsLoggedIn = (state) => state.auth.isLoggedIn;
 export const selectName = (state) => state.auth.name;
 export const selectUser = (state) => state.auth.user;
+
+export const selectUserById = (state, userId) => {
+  const loggedInUser = state.auth.user;
+  const selectedUser = state.users.find((user) => user._id === userId);
+
+  // Check if the selected user is the same as the logged-in user
+  if (selectedUser && loggedInUser && selectedUser._id === loggedInUser._id) {
+    return null; // Return null if the selected user is the same as the logged-in user
+  } else {
+    return selectedUser; // Otherwise, return the selected user
+  }
+};
+
 export default authSlice.reducer;

@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import MyCalendar from "./MyCalendar";
+import MyCalendar from "../MyCalendar";
 import { useSelector } from "react-redux";
+import OtherUsersPageMenu from "../../../components/pageMenu/OtherUsersPageMenu";
+import Card from "../../../components/card/Card";
+import { useParams } from "react-router-dom";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API_URL = `${BACKEND_URL}/api/users/`;
 
-const NewEvent = () => {
+const OtherUsersEvent = () => {
   const { user, isLoading, isLoggedIn, isSuccess } = useSelector(
     (state) => state.auth
   );
+
+  const { _id: viewedUserId } = useParams();
+
   const [fetchMeeting, setFetchMeeting] = useState(null);
   const [fetchEvents, setFetchEvents] = useState(null);
 
@@ -17,7 +23,7 @@ const NewEvent = () => {
     const getMeetings = async () => {
       if (user) {
         try {
-          const res = await axios.get(`${API_URL}meeting/` + user._id);
+          const res = await axios.get(`${API_URL}meeting/` + viewedUserId);
           setFetchMeeting(res.data);
           console.log(res.data);
         } catch (error) {
@@ -26,7 +32,9 @@ const NewEvent = () => {
       }
     };
     getMeetings();
-  }, [user]);
+  }, [user, viewedUserId]);
+
+  console.log(viewedUserId);
 
   useEffect(() => {
     const getAllEvents = async () => {
@@ -47,7 +55,18 @@ const NewEvent = () => {
     getAllEvents();
   }, [fetchMeeting]);
 
-  return <div>{fetchEvents && <MyCalendar events={fetchEvents.flat()} />}</div>;
+  return (
+    <>
+      <section>
+        <div className="container">
+          <OtherUsersPageMenu />
+          <Card cardClass={"card"}>
+            {fetchEvents && <MyCalendar events={fetchEvents.flat()} />}
+          </Card>
+        </div>
+      </section>
+    </>
+  );
 };
 
-export default NewEvent;
+export default OtherUsersEvent;

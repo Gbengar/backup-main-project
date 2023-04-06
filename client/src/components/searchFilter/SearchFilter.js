@@ -45,7 +45,7 @@ const SearchFilter = () => {
       console.log("handleChange", userId);
       setSelectValue(userId);
       // Navigate to link using useHistory from react-router-dom
-      navigate(`/profile/${userId}`);
+      navigate(`/profiles/${userId}`);
     } else {
       setSelectValue("");
     }

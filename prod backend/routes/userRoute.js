@@ -4,6 +4,12 @@ const {
   getConversation,
   startConvosFollowings,
 } = require("../controllers/conversation");
+const { addEvent, getEvents } = require("../controllers/event");
+const {
+  meetingRoute,
+  getMeeting,
+  startMeetFollowings,
+} = require("../controllers/meeting");
 const { addMessages, getMessages } = require("../controllers/messages");
 const router = express.Router();
 const {
@@ -51,5 +57,15 @@ router.get("/messages/:conversationId", getMessages);
 router.get("/friends/:userId", getFriend);
 router.put("/:id/follow", followUser);
 router.put("/:id/unfollow", unfollowUser);
+
+// Meeting routes
+router.post("/meeting", meetingRoute);
+router.get("/meeting/:userId", getMeeting);
+router.get("/findmeeting/:firstUserId/:secondUserId", startMeetFollowings);
+
+// Event routers
+
+router.post("/events", addEvent);
+router.get("/events/:meetingId", getEvents);
 
 module.exports = router;
