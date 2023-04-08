@@ -6,6 +6,7 @@ import {
   getUser,
   getUsers,
   selectUser,
+  setSelectedUserId,
 } from "../../redux-app/features/auth/authSlice";
 import "./Profile.scss";
 import Loader, { Spinner } from "../../components/loader/Loader";
@@ -81,6 +82,12 @@ const ViewProfile = () => {
     photo: "",
     bio: "",
   });
+
+  useEffect(() => {
+    dispatch(getUser());
+    dispatch(setSelectedUserId(viewedUserId)); // dispatch the setSelectedUserId action
+  }, [dispatch, viewedUserId]);
+  console.log(viewedUserId);
 
   // Check if the profile belongs to the logged-in user
   const isMyProfile = user && user._id === viewedUserId;

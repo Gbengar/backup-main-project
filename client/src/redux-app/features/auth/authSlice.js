@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
 import authService from "./authService";
@@ -13,6 +13,7 @@ const initialState = {
   isError: false,
   isLoading: false,
   message: "",
+  selectedUserId: null,
 };
 
 // Register User
@@ -169,12 +170,16 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
-//getEvents;
+export const setSelectedUserId = createAction("auth/setSelectedUserId");
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    setSelectedUserId: (state, action) => {
+      state.selectedUserId = action.payload;
+    },
+
     RESET(state) {
       state.twoFactor = false;
       state.isError = false;
@@ -345,17 +350,5 @@ export const { RESET } = authSlice.actions;
 export const selectIsLoggedIn = (state) => state.auth.isLoggedIn;
 export const selectName = (state) => state.auth.name;
 export const selectUser = (state) => state.auth.user;
-
-export const selectUserById = (state, userId) => {
-  const loggedInUser = state.auth.user;
-  const selectedUser = state.users.find((user) => user._id === userId);
-
-  // Check if the selected user is the same as the logged-in user
-  if (selectedUser && loggedInUser && selectedUser._id === loggedInUser._id) {
-    return null; // Return null if the selected user is the same as the logged-in user
-  } else {
-    return selectedUser; // Otherwise, return the selected user
-  }
-};
-
+export const selectSelectedUserId = (state) => state.auth.selectedUserId;
 export default authSlice.reducer;
