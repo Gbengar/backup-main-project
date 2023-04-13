@@ -28,6 +28,7 @@ import ScheduledEvent from "./pages/Scheduling/ScheduledEvent/ScheduledEvent";
 import Upcoming from "./pages/Scheduling/ScheduledEvent/subEvent/Upcoming";
 import NewEvent from "./pages/newEvent/NewEvent";
 import OtherUsersEvent from "./pages/newEvent/OtherUsers/OtherUsersEvent";
+import AddNewEvent from "./pages/newEvent/Add New Event/AddNewEvent";
 
 axios.defaults.withCredentials = true;
 
@@ -129,6 +130,15 @@ function App() {
             element={
               <Layout>
                 <NewEvent />
+              </Layout>
+            }
+          />
+
+          <Route
+            path="/addnewevent"
+            element={
+              <Layout>
+                <AddNewEvent />
               </Layout>
             }
           />

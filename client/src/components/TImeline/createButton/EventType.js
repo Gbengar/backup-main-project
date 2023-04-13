@@ -1,19 +1,22 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import { FaPlus, FaCog } from "react-icons/fa";
 
 function EventButton(props) {
   return (
     <div style={{ display: "flex", justifyContent: "flex-end" }}>
-      <button
-        style={{
-          padding: "10px",
-          borderRadius: "20px 0 0 20px",
-          border: "none",
-        }}
-        onClick={props.handleNewEvent}
-      >
-        <FaPlus style={{ fontSize: "1.2rem" }} />
-      </button>
+      <NavLink to="/addNewEvent">
+        <button
+          style={{
+            padding: "10px",
+            borderRadius: "20px 0 0 20px",
+            border: "none",
+          }}
+          title="Add new event"
+        >
+          <FaPlus style={{ fontSize: "1.2rem", cursor: "pointer" }} />
+        </button>
+      </NavLink>
       <button
         style={{
           padding: "10px",

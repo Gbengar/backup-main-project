@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 import moment from "moment";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import NewEventForm from "./NewEventForm";
 
 const MyCalendar = ({ events }) => {
   const [calendarEvents, setCalendarEvents] = useState([]);
@@ -34,9 +36,24 @@ const MyCalendar = ({ events }) => {
   }, [events]);
 
   const handleDateSelect = (selectInfo) => {
-    console.log(selectInfo.start);
-    console.log(selectInfo.end);
-    console.log(selectInfo.allDay);
+    // check if the selected date is the same as the clicked date
+    const clickedDate = moment(selectInfo.date).startOf("day");
+    const selectedStart = moment(selectInfo.start).startOf("day");
+    const selectedEnd = moment(selectInfo.end).startOf("day");
+    if (clickedDate.isSame(selectedStart) && clickedDate.isSame(selectedEnd)) {
+      ReactDOM.render(
+        <NewEventForm
+          onClose={() =>
+            ReactDOM.unmountComponentAtNode(document.getElementById("modal"))
+          }
+          meetingId={selectInfo.meetingId}
+          onNewEvent={(newEvent) =>
+            setCalendarEvents((events) => [...events, newEvent])
+          }
+        />,
+        document.getElementById("modal")
+      );
+    }
   };
 
   const handleEventClick = (clickInfo) => {
@@ -67,13 +84,12 @@ const MyCalendar = ({ events }) => {
       dayMaxEvents={true}
       weekends={true}
       events={calendarEvents}
-      dateClick={handleDateSelect}
+      select={handleDateSelect} // add the handleDateSelect function as a prop
       eventClick={handleEventClick}
       headerToolbar={{
         start: "prev,next today",
         center: "title",
         end: "dayGridMonth,timeGridWeek,timeGridDay",
-        // add the timeGridWeek and timeGridDay buttons to the header toolbar
       }}
       views={{
         dayGridMonth: {
@@ -81,13 +97,13 @@ const MyCalendar = ({ events }) => {
         },
         timeGridWeek: {
           buttonText: "Week",
-          dayMaxEventRows: 6, // maximum number of events displayed per day
-          dayMaxEvents: true, // whether to show a "+X more" indicator for days with too many events
+          dayMaxEventRows: 6,
+          dayMaxEvents: true,
         },
         timeGridDay: {
           buttonText: "Day",
-          dayMaxEventRows: 6, // maximum number of events displayed per day
-          dayMaxEvents: true, // whether to show a "+X more" indicator for days with too many events
+          dayMaxEventRows: 6,
+          dayMaxEvents: true,
         },
       }}
       viewDidMount={handleViewChange}

@@ -15,6 +15,34 @@ const addEvent = asyncHandler(async (req, res) => {
   }
 });
 
+// Create Event
+const createEvent = asyncHandler(async (req, res) => {
+  const { meetingId, title, start, end, status, rejectionReason } = req.body;
+
+  // Validation
+  if (!title || !start || !end) {
+    res.status(400);
+    throw new Error("Please provide all required fields");
+  }
+
+  // Create new event
+  const event = await Event.create({
+    meetingId,
+    title,
+    start,
+    end,
+    status,
+    rejectionReason,
+  });
+
+  if (event) {
+    res.status(201).json(event);
+  } else {
+    res.status(400);
+    throw new Error("Invalid event data");
+  }
+});
+
 // get
 const getEvents = asyncHandler(async (req, res) => {
   try {
@@ -27,4 +55,4 @@ const getEvents = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { addEvent, getEvents };
+module.exports = { addEvent, getEvents, createEvent };

@@ -1,0 +1,35 @@
+.back {
+    margin: 30px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    background-color: #ccc;
+    cursor: pointer;
+    width: fit-content;
+  }
+  
+  
+  .back:hover {
+    background-color: #ddd;
+  }
+  
+  .back button {
+    display: inline-flex;
+    align-items: center;
+    font-size: 1rem;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    color: #333;
+    padding: 0;
+  }
+  
+  .back button svg {
+    height: 1em;
+    width: 1em;
+    margin-right: 0.5em;
+    align-items: center;
+  }
+  

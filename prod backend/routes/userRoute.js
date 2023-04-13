@@ -4,7 +4,7 @@ const {
   getConversation,
   startConvosFollowings,
 } = require("../controllers/conversation");
-const { addEvent, getEvents } = require("../controllers/event");
+const { addEvent, getEvents, createEvent } = require("../controllers/event");
 const {
   meetingRoute,
   getMeeting,
@@ -66,6 +66,9 @@ router.get("/findmeeting/:firstUserId/:secondUserId", startMeetFollowings);
 // Event routers
 
 router.post("/events", addEvent);
+
+// create Event
+router.post("/events", createEvent);
 router.get("/events/:meetingId", getEvents);
 
 module.exports = router;
