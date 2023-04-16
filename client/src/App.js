@@ -29,6 +29,7 @@ import Upcoming from "./pages/Scheduling/ScheduledEvent/subEvent/Upcoming";
 import NewEvent from "./pages/newEvent/NewEvent";
 import OtherUsersEvent from "./pages/newEvent/OtherUsers/OtherUsersEvent";
 import AddNewEvent from "./pages/newEvent/Add New Event/AddNewEvent";
+import UserFollowing from "./pages/newEvent/Add New Event/UserFollowing";
 
 axios.defaults.withCredentials = true;
 
@@ -148,6 +149,15 @@ function App() {
             element={
               <Layout>
                 <OtherUsersEvent />
+              </Layout>
+            }
+          />
+
+          <Route
+            path="/follow"
+            element={
+              <Layout>
+                <UserFollowing />
               </Layout>
             }
           />

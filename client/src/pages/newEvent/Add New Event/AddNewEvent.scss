@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Encode+Sans+Condensed&display=swap');
+
+
 .tophead {
     display: flex;
     justify-content: space-between;
@@ -215,6 +218,7 @@
     -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
     -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    
   }
   
   .prop-label {
@@ -256,4 +260,10 @@
   
   pre {
     line-height: normal;
+  }
+
+  
+  .newText{
+    font-family: 'Encode Sans Condensed', sans-serif;
+
   }

@@ -6,31 +6,9 @@ import { DropdownButton } from "../../../components/TImeline/createButton/Settin
 import Select from "react-select";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import PhoneInTalkIcon from "@mui/icons-material/PhoneInTalk";
-import CustomSelect from "./CustomSelect";
-import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 
-const options = [
-  {
-    value: "newOption1",
-    label: "In Person Meeting",
-    text: "Set an address or a place",
-    icon: <LocationOnIcon />,
-  },
-  {
-    value: "newOption1",
-    label: "Phone Call vitual",
-    text: "Inbound or Outgoing call",
-    icon: <PhoneInTalkIcon />,
-  },
-  {
-    value: "newOption2",
-    label: "Ask Invitee for Location",
-    text: "My Invitee will set the place",
-    icon: <QuestionAnswerIcon />,
-  },
-];
+import CustomSelect from "./CustomSelect";
+import UserFollowing from "./UserFollowing";
 
 const modules = {
   toolbar: [
@@ -103,7 +81,7 @@ const AddNewEvent = () => {
               </div>
               <div className="form-group">
                 <label>Description/Instructions</label>
-                <CustomSelect className="select-container" />
+                <CustomSelect className="newText" />
               </div>
 
               <div className="form-group">
@@ -119,9 +97,9 @@ const AddNewEvent = () => {
               </div>
               <div className="form-group">
                 <label>Select Invitee</label>
-                <Select
+                <UserFollowing
                   className="select-container"
-                  placeholder="Select an option"
+                  placeholder="Select user to schedule meeting with"
                 />
               </div>
             </form>
@@ -133,26 +111,3 @@ const AddNewEvent = () => {
 };
 
 export default AddNewEvent;
-
-const customStyles = {
-  control: (provided) => ({
-    ...provided,
-    cursor: "pointer",
-  }),
-  singleValue: (provided) => ({
-    ...provided,
-    cursor: "pointer",
-  }),
-  option: (provided, state) => ({
-    ...provided,
-    cursor: "pointer",
-    backgroundColor: state.isSelected ? "#e5e5e5" : "white",
-    "&:hover": {
-      backgroundColor: "#e5e5e5",
-    },
-  }),
-  menu: (provided) => ({
-    ...provided,
-    cursor: "pointer",
-  }),
-};

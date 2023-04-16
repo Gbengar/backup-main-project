@@ -50,10 +50,13 @@ const userSchema = mongoose.Schema(
       type: Array,
       default: [],
     },
-    followings: {
-      type: Array,
-      default: [],
-    },
+    followings: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+
     availability: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Availability" },
     ],
