@@ -9,6 +9,7 @@ import "react-quill/dist/quill.snow.css";
 
 import CustomSelect from "./CustomSelect";
 import UserFollowing from "./UserFollowing";
+import { handleSelectChange } from "./UserFollowing";
 
 const modules = {
   toolbar: [
@@ -24,7 +25,7 @@ const modules = {
   },
 };
 
-const AddNewEvent = () => {
+const AddNewEvent = ({ selectedUser }) => {
   const onNext = () => {};
   const onCancel = () => {};
 
@@ -74,32 +75,23 @@ const AddNewEvent = () => {
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="Input 1"
                   value={input1}
                   onChange={(e) => setInput1(e.target.value)}
                 />
               </div>
               <div className="form-group">
-                <label>Description/Instructions</label>
-                <CustomSelect className="newText" />
+                <label>Select Invitee</label>
+                <UserFollowing className="newText" />
               </div>
 
               <div className="form-group">
-                <label>Location</label>
-
+                <label>Description/ Instructions</label>
                 <ReactQuill
                   className="select-container"
                   value={input2}
                   onChange={setInput2}
                   modules={modules}
                   placeholder="Write a summary and any details your invitee should know about the event"
-                />
-              </div>
-              <div className="form-group">
-                <label>Select Invitee</label>
-                <UserFollowing
-                  className="select-container"
-                  placeholder="Select user to schedule meeting with"
                 />
               </div>
             </form>
