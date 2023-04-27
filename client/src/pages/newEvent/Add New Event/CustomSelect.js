@@ -3,6 +3,7 @@ import Select from "react-select";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneInTalkIcon from "@mui/icons-material/PhoneInTalk";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
+import ConstructionIcon from "@mui/icons-material/Construction";
 import "./AddNewEvent.scss";
 import Modal from "react-modal";
 import { useSelector } from "react-redux";
@@ -16,8 +17,6 @@ const CustomSelect = ({ selectedUser }) => {
   if (selectedUser && selectedUser.phone) {
     console.log(selectedUser.phone);
   }
-
-  const selectRef = useRef(null);
 
   const options = [
     {
@@ -38,6 +37,12 @@ const CustomSelect = ({ selectedUser }) => {
       text: "My Invitee will set the place",
       icon: <QuestionAnswerIcon style={{ color: "blue", fontSize: 25 }} />,
     },
+    {
+      value: "newOption4",
+      label: "Custom",
+      text: "Leave customised location details",
+      icon: <ConstructionIcon style={{ color: "yellow", fontSize: 25 }} />,
+    },
   ];
 
   const [selectedOption, setSelectedOption] = useState(null);
@@ -46,8 +51,10 @@ const CustomSelect = ({ selectedUser }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [location, setLocation] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [customize, setCustomize] = useState("");
   const [inviteeLocation, setInviteeLocation] = useState("");
   const [callOption, setCallOption] = useState(null);
+  const [additionalInfo, setAdditionalInfo] = useState(false);
 
   const handleModalOpen = () => {
     if (!modalIsOpen) {
@@ -62,7 +69,11 @@ const CustomSelect = ({ selectedUser }) => {
   const handleChange = (selectedOption) => {
     setSelectedOption(selectedOption);
     setIsSelected(true);
-    handleModalOpen();
+    if (selectedOption.value === "newOption3") {
+      setModalIsOpen(false);
+    } else {
+      setModalIsOpen(true);
+    }
   };
 
   const handleMenuOpen = () => {
@@ -90,17 +101,53 @@ const CustomSelect = ({ selectedUser }) => {
     setPhoneNumber(""); // Reset phone number state
   };
 
+  const handleCustomization = (e) => {
+    setCustomize(e.target.value);
+  };
+
+  const handleButtonClick = () => {
+    setAdditionalInfo((prevState) => !prevState);
+  };
+
   let modalContent;
   if (selectedOption?.value === "newOption1") {
     modalContent = (
-      <div>
+      <div className="form-group">
         <label>Location:</label>
-        <input
-          className="input-css"
-          type="text"
-          value={location}
-          onChange={handleLocationChange}
-        />
+        <div>
+          <input
+            className="input-css"
+            type="text"
+            value={location}
+            onChange={handleLocationChange}
+          />
+        </div>
+        <br />
+
+        {additionalInfo ? null : (
+          <label className="onHover" onClick={handleButtonClick}>
+            + include additional Information:
+          </label>
+        )}
+
+        {additionalInfo && (
+          <div>
+            <textarea
+              placeholder="Type here..."
+              className="input-css"
+              rows="4"
+              cols="50"
+            ></textarea>
+          </div>
+        )}
+        <div className="--flex-end">
+          <div className="buttinnext">
+            <button onClick={handleModalClose}>Cancel</button>
+          </div>
+          <div className="updatebtn --light-blue">
+            <button>Update</button>
+          </div>
+        </div>
       </div>
     );
   } else if (selectedOption?.value === "newOption2") {
@@ -166,7 +213,7 @@ const CustomSelect = ({ selectedUser }) => {
               <span>{user.phone}</span>
               <div className="--flex-end ">
                 <div className="buttinnext">
-                  <button>Cancel</button>
+                  <button onClick={handleModalClose}>Cancel</button>
                 </div>
                 <div className="updatebtn --light-blue">
                   <button>Update</button>
@@ -186,7 +233,7 @@ const CustomSelect = ({ selectedUser }) => {
               )}
               <div className="--flex-end">
                 <div className="buttinnext">
-                  <button>Cancel</button>
+                  <button onClick={handleModalClose}>Cancel</button>
                 </div>
                 <div className="updatebtn --light-blue">
                   <button>Update</button>
@@ -198,15 +245,25 @@ const CustomSelect = ({ selectedUser }) => {
         </div>
       </div>
     );
-  } else if (selectedOption?.value === "newOption3") {
+  } else if (selectedOption?.value === "newOption4") {
     modalContent = (
       <div>
-        <label>Invitee Location:</label>
+        <label>Customize:</label>
         <input
+          className="input-css"
           type="text"
-          value={inviteeLocation}
-          onChange={handleInviteeLocationChange}
+          value={setCustomize}
+          onChange={handleButtonClick}
         />
+
+        <div className="--flex-end">
+          <div className="buttinnext">
+            <button onClick={handleModalClose}>Cancel</button>
+          </div>
+          <div className="updatebtn --light-blue">
+            <button>Update</button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -263,6 +320,7 @@ const CustomSelect = ({ selectedUser }) => {
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={handleModalClose}
+          shouldCloseOnOverlayClick={false}
           style={{
             content: {
               width: "30%",
@@ -304,7 +362,6 @@ const CustomSelect = ({ selectedUser }) => {
                 </div>
               );
             }}
-            ref={selectRef}
           />
           <div className="moddall">{modalContent}</div>
         </Modal>
