@@ -86,6 +86,8 @@ const CustomSelect = ({ selectedUser }) => {
       setModalOptionSelected(true);
       setModalSelectedOption(selectedOption); // pass the selectedOption value to the Modal component
     }
+
+    console.log(selectedOption);
   };
 
   const handleModalCancelClick = () => {
@@ -97,6 +99,7 @@ const CustomSelect = ({ selectedUser }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewMeeting({ ...newMeeting, [name]: value });
+    console.log(e);
   };
 
   const handleModalUpdateClick = async () => {
@@ -202,10 +205,10 @@ const CustomSelect = ({ selectedUser }) => {
                   <input
                     type="radio"
                     id="call_me"
-                    name="call_option"
+                    name="callOption"
                     value="call_me"
-                    onChange={handleInputChange}
                     checked={newMeeting?.callOption === "call_me"}
+                    onChange={handleInputChange}
                   />
                   <h4 htmlFor="call_me" className="modal-label">
                     My Invitee should call me
@@ -227,10 +230,10 @@ const CustomSelect = ({ selectedUser }) => {
                   <input
                     type="radio"
                     id="i_call"
-                    name="call_option"
+                    name="callOption"
                     value="i_call"
-                    onChange={handleInputChange}
                     checked={newMeeting?.callOption === "i_call"}
+                    onChange={handleInputChange}
                   />
                   <h4 htmlFor="i_call" className="modal-label">
                     I will call my Invitee
