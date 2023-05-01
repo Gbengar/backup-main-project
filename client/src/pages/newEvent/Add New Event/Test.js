@@ -1,161 +1,118 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import PhoneInTalkIcon from "@mui/icons-material/PhoneInTalk";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
+import "./AddNewEvent.scss";
 import Modal from "react-modal";
-
-const customStyles = {
-  content: {
-    width: "50%",
-    margin: "auto",
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
-  },
-};
 
 Modal.setAppElement("#root");
 
-const Test = () => {
+const CustomSelect = ({ selectedUser }) => {
+  if (selectedUser && selectedUser.phone) {
+    console.log(selectedUser.phone);
+  }
+
   const options = [
     {
       value: "newOption1",
       label: "In Person Meeting",
-      text: "Set an address or a place",
-      icon: <LocationOnIcon style={{ color: "red", fontSize: 25 }} />,
-    },
-    {
-      value: "newOption2",
-      label: "Phone Call virtual",
-      text: "Inbound or Outgoing call",
-      icon: <PhoneInTalkIcon style={{ color: "green", fontSize: 25 }} />,
     },
     {
       value: "newOption3",
       label: "Ask Invitee for Location",
-      text: "My Invitee will set the place",
-      icon: <QuestionAnswerIcon style={{ color: "blue", fontSize: 25 }} />,
     },
   ];
 
-  const callOptions = [
-    { value: "call_me", label: "My Invitee should call me" },
-    { value: "i_call", label: "I will call my invitee" },
-  ];
-
   const [selectedOption, setSelectedOption] = useState(null);
+  const [isSelected, setIsSelected] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [location, setLocation] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [inviteeLocation, setInviteeLocation] = useState("");
-  const [callOption, setCallOption] = useState(null);
-
-  const handleModalOpen = () => {
-    setModalIsOpen(true);
-  };
+  const [additionalInfo, setAdditionalInfo] = useState(false);
+  const [modalSelectedOption, setModalSelectedOption] = useState(null);
+  const [modalOptionSelected, setModalOptionSelected] = useState(false);
 
   const handleModalClose = () => {
     setModalIsOpen(false);
-    setPhoneNumber("");
-    if (selectedOption?.value === "newOption3") {
-      setInviteeLocation("");
-    }
-  };
-
-  const handleChange = (selectedOption) => {
-    setSelectedOption(selectedOption);
-    handleModalOpen();
   };
 
   const handleLocationChange = (e) => {
     setLocation(e.target.value);
   };
 
-  const handlePhoneNumberChange = (e) => {
-    setPhoneNumber(e.target.value);
+  const handleButtonClick = () => {
+    setAdditionalInfo((prevState) => !prevState);
   };
 
-  const handleInviteeLocationChange = (e) => {
-    setInviteeLocation(e.target.value);
+  const handleModalOptionChange = (selectedOption) => {
+    setModalSelectedOption(selectedOption);
   };
 
-  const handleCallOptionChange = (e) => {
-    setCallOption(e.target.value);
-    setPhoneNumber(""); // Reset phone number state
+  const handleModalUpdateClick = () => {
+    setSelectedOption(modalSelectedOption);
+    setModalOptionSelected(true);
+    setModalIsOpen(false);
+  };
+
+  const handleModalCancelClick = () => {
+    setModalSelectedOption(null);
+    setModalIsOpen(false);
+  };
+
+  const handleChange = (selectedOption) => {
+    setSelectedOption(selectedOption);
+    setIsSelected(true);
+    if (selectedOption.value === "newOption3") {
+      setModalOptionSelected(true);
+    } else {
+      setModalIsOpen(true);
+    }
   };
 
   let modalContent;
   if (selectedOption?.value === "newOption1") {
     modalContent = (
-      <div>
-        <h2>{selectedOption.label}</h2>
+      <div className="form-group">
         <label>Location:</label>
-        <input type="text" value={location} onChange={handleLocationChange} />
-      </div>
-    );
-  } else if (selectedOption?.value === "newOption2") {
-    modalContent = (
-      <div>
-        <h2>{selectedOption.label}</h2>
         <div>
-          <label>Call Option:</label>
+          <input
+            className="input-css"
+            type="text"
+            value={location}
+            onChange={handleLocationChange}
+          />
+        </div>
+        <br />
+
+        {additionalInfo ? null : (
+          <label className="onHover" onClick={handleButtonClick}>
+            + include additional Information:
+          </label>
+        )}
+
+        {additionalInfo && (
           <div>
-            <input
-              type="radio"
-              id="call_me"
-              name="call_option"
-              value="call_me"
-              onChange={handleCallOptionChange}
-              checked={callOption === "call_me"}
-            />
-            <label htmlFor="call_me">My Invitee should call me</label>
+            <textarea
+              placeholder="Type here..."
+              className="input-css"
+              rows="4"
+              cols="50"
+            ></textarea>
           </div>
-          <div>
-            <input
-              type="radio"
-              id="i_call"
-              name="call_option"
-              value="i_call"
-              onChange={handleCallOptionChange}
-              checked={callOption === "i_call"}
-            />
-            <label htmlFor="i_call">I will call my invitee</label>
+        )}
+
+        <div className="--flex-end">
+          <div className="buttinnext">
+            <button onClick={handleModalCancelClick}>Cancel</button>
           </div>
-          {callOption === "i_call" && modalIsOpen ? (
-            <>
-              <label>My Phone Number:</label>
-              <input
-                type="text"
-                value={phoneNumber}
-                onChange={handlePhoneNumberChange}
-              />
-            </>
-          ) : callOption === "call_me" && modalIsOpen ? (
-            <>
-              <label>Invitee Phone Number:</label>
-              <input
-                type="text"
-                value={phoneNumber}
-                onChange={handlePhoneNumberChange}
-              />
-            </>
-          ) : null}
+          {additionalInfo && modalOptionSelected && (
+            <div className="updatebtn --light-blue">
+              <button onClick={handleModalUpdateClick}>Update</button>
+            </div>
+          )}
         </div>
       </div>
     );
-  } else if (selectedOption?.value === "newOption3") {
-    modalContent = (
-      <div>
-        <h2>{selectedOption.label}</h2>
-        <label>Invitee Location:</label>
-        <input
-          type="text"
-          value={inviteeLocation}
-          onChange={handleInviteeLocationChange}
-        />
-      </div>
-    );
   }
-
   return (
     <div>
       <Select
@@ -164,18 +121,21 @@ const Test = () => {
         value={selectedOption}
         options={options}
         onChange={handleChange}
+        menuPortalTarget={document.body}
       />
-      {selectedOption && (
+      {isSelected && (
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={handleModalClose}
-          style={customStyles}
+          shouldCloseOnOverlayClick={false}
         >
-          {modalContent}
+          <h3>Location :</h3>
+          <Select value={selectedOption} onChange={handleModalOptionChange} />
+          <div className="moddall">{modalContent}</div>
         </Modal>
       )}
     </div>
   );
 };
 
-export default Test;
+export default CustomSelect;
