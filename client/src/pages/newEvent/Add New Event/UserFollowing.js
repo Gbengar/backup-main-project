@@ -19,6 +19,7 @@ const UserFollowing = () => {
   const [followingUserNames, setFollowingUserNames] = useState([]);
   const [menuIsOpen, setMenuIsOpen] = useState(false); // Add state for menuIsOpen
   const [selectedUser, setSelectedUser] = useState(null);
+  const [userData, setUserData] = useState({});
 
   useEffect(() => {
     dispatch(getUser());
@@ -105,7 +106,11 @@ const UserFollowing = () => {
         <>
           <div style={{ marginTop: "10px" }}>
             <label>Location: </label>
-            <CustomSelect selectedUser={selectedUser} />
+            <CustomSelect
+              selectedUser={selectedUser}
+              onSave={(data) => setUserData(data)}
+              userData={userData}
+            />
           </div>
         </>
       )}

@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 
 Modal.setAppElement("#root");
 
-const CustomSelect = ({ selectedUser }) => {
+const CustomSelect = ({ selectedUser, onSave, userData }) => {
   const { isLoading, isLoggedIn, isSuccess, message, user, users } =
     useSelector((state) => state.auth);
 
@@ -114,7 +114,9 @@ const CustomSelect = ({ selectedUser }) => {
       ...modalSelectedOption,
       ...newMeeting,
     };
-    console.log(combinedObject.value);
+    console.log(combinedObject);
+
+    onSave(combinedObject); // add this line
   };
 
   const handleSave = async () => {
@@ -314,6 +316,7 @@ const CustomSelect = ({ selectedUser }) => {
         value={selectedOption}
         options={options}
         onChange={handleChange}
+        userData={userData}
         getOptionLabel={(option) => {
           const isSelectedOption =
             selectedOption && selectedOption.value === option.value;
