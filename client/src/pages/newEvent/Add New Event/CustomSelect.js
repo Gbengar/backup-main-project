@@ -7,6 +7,7 @@ import ConstructionIcon from "@mui/icons-material/Construction";
 import "./AddNewEvent.scss";
 import Modal from "react-modal";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 Modal.setAppElement("#root");
 
@@ -114,12 +115,12 @@ const CustomSelect = ({ selectedUser, onSave, userData }) => {
       ...modalSelectedOption,
       ...newMeeting,
     };
-    console.log(combinedObject);
 
     onSave(combinedObject); // add this line
+    console.log(combinedObject);
   };
 
-  const handleSave = async () => {
+  const handleSave = async (combinedObject) => {
     if (selectedOption?.value === "newOption1") {
       setNewMeeting((prevState) => ({
         ...prevState,
@@ -144,6 +145,7 @@ const CustomSelect = ({ selectedUser, onSave, userData }) => {
         customize: prevState.customize,
       }));
     }
+    console.log(combinedObject);
   };
 
   let modalContent;
@@ -316,6 +318,7 @@ const CustomSelect = ({ selectedUser, onSave, userData }) => {
         value={selectedOption}
         options={options}
         onChange={handleChange}
+        onSave={handleSave}
         userData={userData}
         getOptionLabel={(option) => {
           const isSelectedOption =

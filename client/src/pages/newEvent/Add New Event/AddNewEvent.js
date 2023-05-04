@@ -9,6 +9,7 @@ import CustomSelect from "./CustomSelect";
 import UserFollowing from "./UserFollowing";
 import { handleSelectChange } from "./UserFollowing";
 import { toast } from "react-toastify";
+import Modal from "react-modal";
 
 const modules = {
   toolbar: [
@@ -25,13 +26,23 @@ const modules = {
 };
 
 const AddNewEvent = ({ selectedUser }) => {
+  const handleSave = (combinedObject) => {
+    console.log(combinedObject);
+    setMeetingData((prevState) => ({
+      ...prevState,
+      combinedObject: combinedObject,
+    }));
+  };
+
   const initialState = {
     eventName: "",
     meetingDescription: "",
+    combinedObject: {},
   };
 
   const [meetingData, setMeetingData] = useState(initialState);
-  const { eventName, meetingDescription } = meetingData;
+  const { eventName, meetingDescription, combinedObject } = meetingData;
+  const [showModal, setShowModal] = useState(false);
 
   const handleInputChange = (e) => {
     if (!e.target) {
@@ -46,25 +57,72 @@ const AddNewEvent = ({ selectedUser }) => {
     setMeetingData({ ...meetingData, meetingDescription: value });
   };
 
-  const [userData, setUserData] = useState({});
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!eventName || !meetingDescription) {
       return toast.error("All fields are required");
     }
+    if (Object.keys(combinedObject).length === 0) {
+      return toast.error("Select an invitee and location");
+    }
 
     const data = {
       eventName,
       meetingDescription,
-      ...userData, // include userData in the data object
+      combinedObject,
     };
 
     console.log(data);
+    setShowModal(false);
+    toast.success("Event has been created.");
+  };
+
+  const handleCancel = (e) => {
+    e.preventDefault();
+    setShowModal(true);
+  };
+
+  const handleConfirmCancel = () => {
+    setMeetingData(initialState);
+    setShowModal(false);
+    window.location.reload();
+  };
+
+  const handleCancelModalClose = () => {
+    setShowModal(false);
+  };
+
+  const customStyles = {
+    content: {
+      width: "30%",
+      height: "fit-content",
+      margin: "auto",
+      top: "0",
+      bottom: "0",
+      left: "0",
+      right: "0",
+    },
   };
 
   return (
     <div>
+      {showModal && (
+        <Modal
+          isOpen={showModal}
+          onRequestClose={handleCancelModalClose}
+          contentLabel="Cancel Modal"
+          style={customStyles}
+        >
+          <div className="Cancelmodal-content">
+            <p>Are you sure you want to cancel?</p>
+            <div className="Cancelmodal-buttons">
+              <button onClick={handleConfirmCancel}>Yes</button>
+              <button onClick={handleCancelModalClose}>No</button>
+            </div>
+          </div>
+        </Modal>
+      )}
+
       <div className="tophead">
         <Back />
         <div className="title-container">
@@ -85,7 +143,7 @@ const AddNewEvent = ({ selectedUser }) => {
               </div>
               <div className="--flex-end">
                 <div className="buttinnext">
-                  <button>Cancel</button>
+                  <button onClick={handleCancel}>Cancel</button>
                 </div>
                 <div className="buttin">
                   <button type="submit">Next</button>
@@ -99,13 +157,14 @@ const AddNewEvent = ({ selectedUser }) => {
                   type="text"
                   className="form-control"
                   name="eventName"
-                  value={setMeetingData?.eventName}
+                  autoComplete="off"
+                  value={eventName}
                   onChange={handleInputChange}
                 />
               </div>
               <div className="form-group">
                 <label>Select Invitee</label>
-                <UserFollowing className="newText" userData={userData} />
+                <UserFollowing className="newText" onSave={handleSave} />
               </div>
 
               <div className="form-group">

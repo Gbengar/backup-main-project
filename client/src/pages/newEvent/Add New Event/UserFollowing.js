@@ -11,7 +11,7 @@ export const handleSelectChange = (selectedOption, users, setSelectedUser) => {
   setSelectedUser(selectedUser);
 };
 
-const UserFollowing = () => {
+const UserFollowing = ({ onSave }) => {
   const dispatch = useDispatch();
   const { isLoading, isLoggedIn, isSuccess, message, user, users } =
     useSelector((state) => state.auth);
@@ -89,6 +89,11 @@ const UserFollowing = () => {
     setMenuIsOpen(false);
   };
 
+  const handleSave = (combinedObject) => {
+    console.log(combinedObject);
+    onSave(combinedObject); // call the onSave function from AddNewEvent
+  };
+
   return (
     <div>
       <Select
@@ -108,7 +113,7 @@ const UserFollowing = () => {
             <label>Location: </label>
             <CustomSelect
               selectedUser={selectedUser}
-              onSave={(data) => setUserData(data)}
+              onSave={handleSave}
               userData={userData}
             />
           </div>

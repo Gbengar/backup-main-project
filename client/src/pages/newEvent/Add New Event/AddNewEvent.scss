@@ -347,7 +347,11 @@ h4.modal-row {
   -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 
+  &:active {
+    border-color: blue;
   }
+}
+
 
   .onHover{
     color: blue;
@@ -357,5 +361,33 @@ h4.modal-row {
   &:hover {
     text-decoration: underline;
   }
+  
 
   }
+
+  .Cancelmodal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .Canceloverlay {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+  
+  .Cancelmodal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+  }
+  
+  .Cancelmodal-buttons button:first-child {
+    margin-right: 10px;
+  }
+  
+  
+  
+  
+  
