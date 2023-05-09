@@ -16,6 +16,10 @@ const EventSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  option: {
+    type: String,
+    enum: ["SetAddress", "SetPhoneNumber", "AskInvitee", "SetCustom"],
+  },
   status: {
     type: String,
     enum: ["accept", "reject", "reschedule"],

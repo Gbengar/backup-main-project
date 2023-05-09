@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./AddNewEvent.scss";
 import Back from "../../../components/Buttons/Back/Back";
 import Share from "../../../components/Buttons/Share/Share";
@@ -10,6 +10,9 @@ import UserFollowing from "./UserFollowing";
 import { handleSelectChange } from "./UserFollowing";
 import { toast } from "react-toastify";
 import Modal from "react-modal";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const modules = {
   toolbar: [
@@ -25,7 +28,16 @@ const modules = {
   },
 };
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API_URL = `${BACKEND_URL}/api/users/`;
+
 const AddNewEvent = ({ selectedUser }) => {
+  const { user, isLoading, isLoggedIn, isSuccess, startEvent } = useSelector(
+    (state) => state.auth
+  );
+
+  const navigate = useNavigate();
+
   const handleSave = (combinedObject) => {
     console.log(combinedObject);
     setMeetingData((prevState) => ({
@@ -38,11 +50,14 @@ const AddNewEvent = ({ selectedUser }) => {
     eventName: "",
     meetingDescription: "",
     combinedObject: {},
+    meetingId: "",
   };
 
   const [meetingData, setMeetingData] = useState(initialState);
   const { eventName, meetingDescription, combinedObject } = meetingData;
   const [showModal, setShowModal] = useState(false);
+  const [meetingId, setMeetingId] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false); // add state variable
 
   const handleInputChange = (e) => {
     if (!e.target) {
@@ -57,7 +72,7 @@ const AddNewEvent = ({ selectedUser }) => {
     setMeetingData({ ...meetingData, meetingDescription: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!eventName || !meetingDescription) {
       return toast.error("All fields are required");
@@ -66,15 +81,40 @@ const AddNewEvent = ({ selectedUser }) => {
       return toast.error("Select an invitee and location");
     }
 
+    const { value, text, location, locationAdd, callOption, customize } =
+      combinedObject;
+
     const data = {
+      value,
       eventName,
       meetingDescription,
-      combinedObject,
+      text,
+      location,
+      locationAdd,
+      callOption,
+      customize,
+      selectedUserId: combinedObject.selectedUser._id,
+      meetingId,
     };
 
-    console.log(data);
     setShowModal(false);
-    toast.success("Event has been created.");
+
+    try {
+      setIsSubmitting(true);
+      const res = await axios.post(`${API_URL}createeventSetup`, data);
+      console.log(res.data);
+      setMeetingData({ ...meetingData, meetingId: res.data._id });
+      setIsSubmitting(false);
+      toast.success("Event has been created.");
+      navigate("/completeSchedule");
+
+      // move toast.success call here
+    } catch (error) {
+      setIsSubmitting(false);
+      console.log(error);
+      toast.error("Error creating event.");
+    }
+    console.log(combinedObject.selectedUser._id);
   };
 
   const handleCancel = (e) => {
@@ -103,6 +143,22 @@ const AddNewEvent = ({ selectedUser }) => {
       right: "0",
     },
   };
+
+  useEffect(() => {
+    const setMeeting = async () => {
+      if (user && combinedObject.selectedUser) {
+        try {
+          const members = [user._id, combinedObject.selectedUser._id];
+          const res = await axios.post(`${API_URL}meeting`, { members });
+          setMeetingId(res.data._id);
+          console.log(res.data._id);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+    setMeeting();
+  }, [user, combinedObject.selectedUser]);
 
   return (
     <div>

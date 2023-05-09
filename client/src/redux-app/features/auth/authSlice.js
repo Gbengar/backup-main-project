@@ -8,6 +8,7 @@ export const API_URL = `${BACKEND_URL}/api/users/`;
 
 const initialState = {
   isLoggedIn: false,
+
   user: null,
   users: [],
   isError: false,

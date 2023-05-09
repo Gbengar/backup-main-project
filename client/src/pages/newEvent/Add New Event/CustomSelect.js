@@ -17,25 +17,25 @@ const CustomSelect = ({ selectedUser, onSave, userData }) => {
 
   const options = [
     {
-      value: "newOption1",
+      value: "SetAddress",
       label: "In Person Meeting",
       text: "Set an address or a place",
       icon: <LocationOnIcon style={{ color: "red", fontSize: 25 }} />,
     },
     {
-      value: "newOption2",
+      value: "SetPhoneNumber",
       label: "Phone Call virtual",
       text: "Inbound or Outgoing call",
       icon: <PhoneInTalkIcon style={{ color: "green", fontSize: 25 }} />,
     },
     {
-      value: "newOption3",
+      value: "AskInvitee",
       label: "Ask Invitee for Location",
       text: "My Invitee will set the place",
       icon: <QuestionAnswerIcon style={{ color: "blue", fontSize: 25 }} />,
     },
     {
-      value: "newOption4",
+      value: "SetCustom",
       label: "Custom",
       text: "Leave customised location details",
       icon: <ConstructionIcon style={{ color: "yellow", fontSize: 25 }} />,
@@ -55,6 +55,8 @@ const CustomSelect = ({ selectedUser, onSave, userData }) => {
     locationAdd: "",
     callOption: "",
     customize: "",
+    aconfirmInvitee: "",
+    selectedUser: "",
   };
 
   const [newMeeting, setNewMeeting] = useState(initialState);
@@ -80,9 +82,8 @@ const CustomSelect = ({ selectedUser, onSave, userData }) => {
   const handleChange = (selectedOption) => {
     setSelectedOption(selectedOption);
     setIsSelected(true);
-    if (selectedOption.value === "newOption3") {
-      setModalOptionSelected(true);
-    } else if (!modalIsOpen) {
+
+    if (!modalIsOpen) {
       setModalIsOpen(true);
       setModalOptionSelected(true);
       setModalSelectedOption(selectedOption); // pass the selectedOption value to the Modal component
@@ -114,32 +115,34 @@ const CustomSelect = ({ selectedUser, onSave, userData }) => {
     const combinedObject = {
       ...modalSelectedOption,
       ...newMeeting,
+      selectedUser: selectedUser,
     };
 
     onSave(combinedObject); // add this line
     console.log(combinedObject);
+    console.log(combinedObject.selectedUser._id);
   };
 
   const handleSave = async (combinedObject) => {
-    if (selectedOption?.value === "newOption1") {
+    if (selectedOption?.value === "SetAddress") {
       setNewMeeting((prevState) => ({
         ...prevState,
         location: prevState.location,
         locationAdd: additionalInfo ? newMeeting?.locationAdd : "",
       }));
-    } else if (selectedOption?.value === "newOption2") {
+    } else if (selectedOption?.value === "SetPhoneNumber") {
       setNewMeeting((prevState) => ({
         ...prevState,
         callOption: prevState.callOption,
       }));
-    } else if (selectedOption?.value === "newOption3") {
+    } else if (selectedOption?.value === "AskInvitee") {
       setNewMeeting((prevState) => ({
         ...prevState,
         location: "",
         locationAdd: "",
         callOption: "",
       }));
-    } else if (selectedOption?.value === "newOption4") {
+    } else if (selectedOption?.value === "SetCustom") {
       await setNewMeeting((prevState) => ({
         ...prevState,
         customize: prevState.customize,
@@ -149,7 +152,7 @@ const CustomSelect = ({ selectedUser, onSave, userData }) => {
   };
 
   let modalContent;
-  if (selectedOption?.value === "newOption1") {
+  if (selectedOption?.value === "SetAddress") {
     modalContent = (
       <div className="form-group">
         <label>Location:</label>
@@ -197,7 +200,7 @@ const CustomSelect = ({ selectedUser, onSave, userData }) => {
         </div>
       </div>
     );
-  } else if (selectedOption?.value === "newOption2") {
+  } else if (selectedOption?.value === "SetPhoneNumber") {
     modalContent = (
       <div>
         <div>
@@ -285,7 +288,7 @@ const CustomSelect = ({ selectedUser, onSave, userData }) => {
         </div>
       </div>
     );
-  } else if (selectedOption?.value === "newOption4") {
+  } else if (selectedOption?.value === "SetCustom") {
     modalContent = (
       <div>
         <label>Customize:</label>
@@ -304,6 +307,46 @@ const CustomSelect = ({ selectedUser, onSave, userData }) => {
           {modalOptionSelected && (
             <div className="updatebtn --light-blue">
               <button onClick={handleModalUpdateClick}>Update</button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  } else if (selectedOption?.value === "AskInvitee") {
+    modalContent = (
+      <div>
+        <h4 style={{ display: "inline-block" }}>
+          Are you sure you want Invitee to set the location?
+        </h4>
+        <div style={{ display: "inline-block", marginLeft: "10px" }}>
+          <label>
+            <input
+              type="radio"
+              name="aconfirmInvitee"
+              value="yes"
+              checked={newMeeting?.aconfirmInvitee === "yes"}
+              onChange={handleInputChange}
+            />
+            Yes
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="aconfirmInvitee"
+              value="no"
+              checked={newMeeting?.aconfirmInvitee === "no"}
+              onChange={handleInputChange}
+            />
+            No
+          </label>
+        </div>
+        <div className="--flex-end">
+          <div className="buttinnext">
+            <button onClick={handleModalCancelClick}>Cancel</button>
+          </div>
+          {modalOptionSelected && (
+            <div className="updatebtn --light-blue">
+              <button onClick={handleModalUpdateClick}>Confirm</button>
             </div>
           )}
         </div>

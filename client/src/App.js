@@ -31,6 +31,7 @@ import OtherUsersEvent from "./pages/newEvent/OtherUsers/OtherUsersEvent";
 import AddNewEvent from "./pages/newEvent/Add New Event/AddNewEvent";
 import UserFollowing from "./pages/newEvent/Add New Event/UserFollowing";
 import Test from "./pages/newEvent/Add New Event/Test";
+import CompleteSchedule from "./pages/newEvent/Add New Event/ContinueSchedule/CompleteSchedule";
 
 axios.defaults.withCredentials = true;
 
@@ -141,6 +142,15 @@ function App() {
             element={
               <Layout>
                 <AddNewEvent />
+              </Layout>
+            }
+          />
+
+          <Route
+            path="/completeSchedule"
+            element={
+              <Layout>
+                <CompleteSchedule />
               </Layout>
             }
           />

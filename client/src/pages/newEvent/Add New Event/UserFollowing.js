@@ -9,6 +9,8 @@ export const handleSelectChange = (selectedOption, users, setSelectedUser) => {
   const selectedUserId = selectedOption.value;
   const selectedUser = users.find((user) => user._id === selectedUserId);
   setSelectedUser(selectedUser);
+  console.log(selectedUserId);
+  return selectedUserId;
 };
 
 const UserFollowing = ({ onSave }) => {
