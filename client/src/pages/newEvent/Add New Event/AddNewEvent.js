@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./AddNewEvent.scss";
 import Back from "../../../components/Buttons/Back/Back";
 import Share from "../../../components/Buttons/Share/Share";
-import { DropdownButton } from "../../../components/TImeline/createButton/SettingsButton";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import CustomSelect from "./CustomSelect";
@@ -13,6 +12,7 @@ import Modal from "react-modal";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import DropdownButton from "../../../components/TImeline/createButton/DropdownButton";
 
 const modules = {
   toolbar: [
@@ -32,7 +32,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API_URL = `${BACKEND_URL}/api/users/`;
 
 const AddNewEvent = ({ selectedUser }) => {
-  const { user, isLoading, isLoggedIn, isSuccess, startEvent } = useSelector(
+  const { user, isLoading, isLoggedIn, isSuccess } = useSelector(
     (state) => state.auth
   );
 

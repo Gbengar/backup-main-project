@@ -5,7 +5,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Settings, ArrowDropUp, ArrowDropDown } from "@mui/icons-material";
 
-export const DropdownButton = () => {
+const DropdownButton = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -43,3 +43,5 @@ export const DropdownButton = () => {
     </div>
   );
 };
+
+export default DropdownButton;
