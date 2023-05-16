@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Select from "react-select";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneInTalkIcon from "@mui/icons-material/PhoneInTalk";
@@ -11,36 +11,43 @@ import { toast } from "react-toastify";
 
 Modal.setAppElement("#root");
 
-const CustomSelect = ({ selectedUser, onSave, userData }) => {
-  const { isLoading, isLoggedIn, isSuccess, message, user, users } =
-    useSelector((state) => state.auth);
+const options = [
+  {
+    value: "SetAddress",
+    label: "In Person Meeting",
+    text: "Set an address or a place",
+    icon: <LocationOnIcon style={{ color: "red", fontSize: 25 }} />,
+  },
+  {
+    value: "SetPhoneNumber",
+    label: "Phone Call virtual",
+    text: "Inbound or Outgoing call",
+    icon: <PhoneInTalkIcon style={{ color: "green", fontSize: 25 }} />,
+  },
+  {
+    value: "AskInvitee",
+    label: "Ask Invitee for Location",
+    text: "My Invitee will set the place",
+    icon: <QuestionAnswerIcon style={{ color: "blue", fontSize: 25 }} />,
+  },
+  {
+    value: "SetCustom",
+    label: "Custom",
+    text: "Leave customised location details",
+    icon: <ConstructionIcon style={{ color: "yellow", fontSize: 25 }} />,
+  },
+];
+const initialState = {
+  location: "",
+  locationAdd: "",
+  callOption: "",
+  customize: "",
+  aconfirmInvitee: "",
+  selectedUser: "",
+};
 
-  const options = [
-    {
-      value: "SetAddress",
-      label: "In Person Meeting",
-      text: "Set an address or a place",
-      icon: <LocationOnIcon style={{ color: "red", fontSize: 25 }} />,
-    },
-    {
-      value: "SetPhoneNumber",
-      label: "Phone Call virtual",
-      text: "Inbound or Outgoing call",
-      icon: <PhoneInTalkIcon style={{ color: "green", fontSize: 25 }} />,
-    },
-    {
-      value: "AskInvitee",
-      label: "Ask Invitee for Location",
-      text: "My Invitee will set the place",
-      icon: <QuestionAnswerIcon style={{ color: "blue", fontSize: 25 }} />,
-    },
-    {
-      value: "SetCustom",
-      label: "Custom",
-      text: "Leave customised location details",
-      icon: <ConstructionIcon style={{ color: "yellow", fontSize: 25 }} />,
-    },
-  ];
+const CustomSelect = ({ selectedUser, onSave, userData }) => {
+  const { user, users } = useSelector(({ auth }) => auth);
 
   const [selectedOption, setSelectedOption] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
@@ -50,22 +57,11 @@ const CustomSelect = ({ selectedUser, onSave, userData }) => {
   const [modalSelectedOption, setModalSelectedOption] = useState(null);
   const [modalOptionSelected, setModalOptionSelected] = useState(false);
 
-  const initialState = {
-    location: "",
-    locationAdd: "",
-    callOption: "",
-    customize: "",
-    aconfirmInvitee: "",
-    selectedUser: "",
-  };
-
   const [newMeeting, setNewMeeting] = useState(initialState);
 
-  const handleModalClose = () => {
-    console.log("modalIsOpen:", false);
-
+  const handleModalClose = useCallback(() => {
     setModalIsOpen(false);
-  };
+  }, []);
 
   const handleMenuOpen = () => {
     setMenuIsOpen(true);
@@ -79,18 +75,19 @@ const CustomSelect = ({ selectedUser, onSave, userData }) => {
     setAdditionalInfo((prevState) => !prevState);
   };
 
-  const handleChange = (selectedOption) => {
-    setSelectedOption(selectedOption);
-    setIsSelected(true);
+  const handleChange = useCallback(
+    (selectedOption) => {
+      setSelectedOption(selectedOption);
+      setIsSelected(true);
 
-    if (!modalIsOpen) {
-      setModalIsOpen(true);
-      setModalOptionSelected(true);
-      setModalSelectedOption(selectedOption); // pass the selectedOption value to the Modal component
-    }
-
-    console.log(selectedOption);
-  };
+      if (!modalIsOpen) {
+        setModalIsOpen(true);
+        setModalOptionSelected(true);
+        setModalSelectedOption(selectedOption);
+      }
+    },
+    [modalIsOpen]
+  );
 
   const handleModalCancelClick = () => {
     setModalSelectedOption(null);
@@ -98,183 +95,96 @@ const CustomSelect = ({ selectedUser, onSave, userData }) => {
     setNewMeeting(initialState);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewMeeting({ ...newMeeting, [name]: value });
-    console.log(e);
-  };
+  const handleInputChange = useCallback(
+    (e) => {
+      const { name, value } = e.target;
+      setNewMeeting({ ...newMeeting, [name]: value });
+    },
+    [newMeeting]
+  );
+
+  const handleSave = useCallback(
+    async (combinedObject) => {
+      if (selectedOption?.value === "SetAddress") {
+        setNewMeeting((prevState) => ({
+          ...prevState,
+          location: prevState.location,
+          locationAdd: additionalInfo ? newMeeting?.locationAdd : "",
+        }));
+      } else if (selectedOption?.value === "SetPhoneNumber") {
+        setNewMeeting((prevState) => ({
+          ...prevState,
+          callOption: prevState.callOption,
+        }));
+      } else if (selectedOption?.value === "AskInvitee") {
+        setNewMeeting((prevState) => ({
+          ...prevState,
+          location: "",
+          locationAdd: "",
+          callOption: "",
+        }));
+      } else if (selectedOption?.value === "SetCustom") {
+        await setNewMeeting((prevState) => ({
+          ...prevState,
+          customize: prevState.customize,
+        }));
+      }
+    },
+    [additionalInfo, newMeeting, selectedOption]
+  );
 
   const handleModalUpdateClick = async () => {
     setSelectedOption(modalSelectedOption);
     setModalOptionSelected(false);
     setModalIsOpen(false);
-    console.log(modalSelectedOption);
-    await handleSave();
-    console.log(newMeeting);
 
     const combinedObject = {
       ...modalSelectedOption,
       ...newMeeting,
-      selectedUser: selectedUser,
+      selectedUser,
     };
 
-    onSave(combinedObject); // add this line
-    console.log(combinedObject);
-    console.log(combinedObject.selectedUser._id);
+    await handleSave();
+    onSave(combinedObject);
   };
 
-  const handleSave = async (combinedObject) => {
+  const modalContent = useMemo(() => {
     if (selectedOption?.value === "SetAddress") {
-      setNewMeeting((prevState) => ({
-        ...prevState,
-        location: prevState.location,
-        locationAdd: additionalInfo ? newMeeting?.locationAdd : "",
-      }));
-    } else if (selectedOption?.value === "SetPhoneNumber") {
-      setNewMeeting((prevState) => ({
-        ...prevState,
-        callOption: prevState.callOption,
-      }));
-    } else if (selectedOption?.value === "AskInvitee") {
-      setNewMeeting((prevState) => ({
-        ...prevState,
-        location: "",
-        locationAdd: "",
-        callOption: "",
-      }));
-    } else if (selectedOption?.value === "SetCustom") {
-      await setNewMeeting((prevState) => ({
-        ...prevState,
-        customize: prevState.customize,
-      }));
-    }
-    console.log(combinedObject);
-  };
-
-  let modalContent;
-  if (selectedOption?.value === "SetAddress") {
-    modalContent = (
-      <div className="form-group">
-        <label>Location:</label>
-        <div>
-          <input
-            className="input-css"
-            type="text"
-            name="location"
-            value={newMeeting?.location}
-            onChange={handleInputChange}
-          />
-        </div>
-        <br />
-
-        {additionalInfo ? null : (
-          <label className="onHover" onClick={handleButtonClick}>
-            + include additional Information:
-          </label>
-        )}
-
-        {additionalInfo && (
+      return (
+        <div className="form-group">
+          <label>Location:</label>
           <div>
-            <textarea
-              placeholder="Type here..."
+            <input
               className="input-css"
-              name="locationAdd"
-              rows="4"
-              cols="50"
               type="text"
-              value={newMeeting?.locationAdd}
+              name="location"
+              value={newMeeting?.location}
               onChange={handleInputChange}
-            ></textarea>
+            />
           </div>
-        )}
+          <br />
 
-        <div className="--flex-end">
-          <div className="buttinnext">
-            <button onClick={handleModalCancelClick}>Cancel</button>
-          </div>
-          {modalOptionSelected && (
-            <div className="updatebtn --light-blue">
-              <button onClick={handleModalUpdateClick}>Update</button>
+          {additionalInfo ? null : (
+            <label className="onHover" onClick={handleButtonClick}>
+              + include additional Information:
+            </label>
+          )}
+
+          {additionalInfo && (
+            <div>
+              <textarea
+                placeholder="Type here..."
+                className="input-css"
+                name="locationAdd"
+                rows="4"
+                cols="50"
+                type="text"
+                value={newMeeting?.locationAdd}
+                onChange={handleInputChange}
+              ></textarea>
             </div>
           )}
-        </div>
-      </div>
-    );
-  } else if (selectedOption?.value === "SetPhoneNumber") {
-    modalContent = (
-      <div>
-        <div>
-          <label>Call Option:</label>
-          <div>
-            <div className="modal-call">
-              <div className="modal-content">
-                <div className="modal-row">
-                  <input
-                    type="radio"
-                    id="call_me"
-                    name="callOption"
-                    value="call_me"
-                    checked={newMeeting?.callOption === "call_me"}
-                    onChange={handleInputChange}
-                  />
-                  <h4 htmlFor="call_me" className="modal-label">
-                    My Invitee should call me
-                  </h4>
-                </div>
-                <div className="modal-span">
-                  <span>
-                    Calendly will require your invitee’s phone number before
-                    scheduling.
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div className="modal-call">
-              <div className="modal-content">
-                <div className="modal-row">
-                  <input
-                    type="radio"
-                    id="i_call"
-                    name="callOption"
-                    value="i_call"
-                    checked={newMeeting?.callOption === "i_call"}
-                    onChange={handleInputChange}
-                  />
-                  <h4 htmlFor="i_call" className="modal-label">
-                    I will call my Invitee
-                  </h4>
-                </div>
-                <div className="modal-span">
-                  <span>
-                    Applaza requires that your phone number is up-to-date before
-                    scheduling. Please confirm your phone number below. If it is
-                    not correct, please update it in your profile tab.
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          {newMeeting?.callOption === "i_call" && modalIsOpen ? (
-            <>
-              <label>My Phone Number:</label>
-              <span>{user.phone}</span>;
-            </>
-          ) : newMeeting?.callOption === "call_me" && modalIsOpen ? (
-            <>
-              {selectedUser ? (
-                <>
-                  <label>Invitee Phone Number:</label>
-                  <span>{selectedUser.phone}</span>
-                </>
-              ) : (
-                <p>Select a user first.</p>
-              )}
-              ;
-            </>
-          ) : null}
           <div className="--flex-end">
             <div className="buttinnext">
               <button onClick={handleModalCancelClick}>Cancel</button>
@@ -286,73 +196,170 @@ const CustomSelect = ({ selectedUser, onSave, userData }) => {
             )}
           </div>
         </div>
-      </div>
-    );
-  } else if (selectedOption?.value === "SetCustom") {
-    modalContent = (
-      <div>
-        <label>Customize:</label>
-        <input
-          className="input-css"
-          type="text"
-          name="customize"
-          value={newMeeting?.customize}
-          onChange={handleInputChange}
-        />
+      );
+    } else if (selectedOption?.value === "SetPhoneNumber") {
+      return (
+        <div>
+          <div>
+            <label>Call Option:</label>
+            <div>
+              <div className="modal-call">
+                <div className="modal-content">
+                  <div className="modal-row">
+                    <input
+                      type="radio"
+                      id="call_me"
+                      name="callOption"
+                      value="call_me"
+                      checked={newMeeting?.callOption === "call_me"}
+                      onChange={handleInputChange}
+                    />
+                    <h4 htmlFor="call_me" className="modal-label">
+                      My Invitee should call me
+                    </h4>
+                  </div>
+                  <div className="modal-span">
+                    <span>
+                      Calendly will require your invitee’s phone number before
+                      scheduling.
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div className="modal-call">
+                <div className="modal-content">
+                  <div className="modal-row">
+                    <input
+                      type="radio"
+                      id="i_call"
+                      name="callOption"
+                      value="i_call"
+                      checked={newMeeting?.callOption === "i_call"}
+                      onChange={handleInputChange}
+                    />
+                    <h4 htmlFor="i_call" className="modal-label">
+                      I will call my Invitee
+                    </h4>
+                  </div>
+                  <div className="modal-span">
+                    <span>
+                      Applaza requires that your phone number is up-to-date
+                      before scheduling. Please confirm your phone number below.
+                      If it is not correct, please update it in your profile
+                      tab.
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-        <div className="--flex-end">
-          <div className="buttinnext">
-            <button onClick={handleModalCancelClick}>Cancel</button>
-          </div>
-          {modalOptionSelected && (
-            <div className="updatebtn --light-blue">
-              <button onClick={handleModalUpdateClick}>Update</button>
+            {newMeeting?.callOption === "i_call" && modalIsOpen ? (
+              <>
+                <label>My Phone Number:</label>
+                <span>{user.phone}</span>;
+              </>
+            ) : newMeeting?.callOption === "call_me" && modalIsOpen ? (
+              <>
+                {selectedUser ? (
+                  <>
+                    <label>Invitee Phone Number:</label>
+                    <span>{selectedUser.phone}</span>
+                  </>
+                ) : (
+                  <p>Select a user first.</p>
+                )}
+                ;
+              </>
+            ) : null}
+            <div className="--flex-end">
+              <div className="buttinnext">
+                <button onClick={handleModalCancelClick}>Cancel</button>
+              </div>
+              {modalOptionSelected && (
+                <div className="updatebtn --light-blue">
+                  <button onClick={handleModalUpdateClick}>Update</button>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      </div>
-    );
-  } else if (selectedOption?.value === "AskInvitee") {
-    modalContent = (
-      <div>
-        <h4 style={{ display: "inline-block" }}>
-          Are you sure you want Invitee to set the location?
-        </h4>
-        <div style={{ display: "inline-block", marginLeft: "10px" }}>
-          <label>
-            <input
-              type="radio"
-              name="aconfirmInvitee"
-              value="yes"
-              checked={newMeeting?.aconfirmInvitee === "yes"}
-              onChange={handleInputChange}
-            />
-            Yes
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="aconfirmInvitee"
-              value="no"
-              checked={newMeeting?.aconfirmInvitee === "no"}
-              onChange={handleInputChange}
-            />
-            No
-          </label>
-        </div>
-        <div className="--flex-end">
-          <div className="buttinnext">
-            <button onClick={handleModalCancelClick}>Cancel</button>
           </div>
-          {modalOptionSelected && (
-            <div className="updatebtn --light-blue">
-              <button onClick={handleModalUpdateClick}>Confirm</button>
-            </div>
-          )}
         </div>
-      </div>
-    );
-  }
+      );
+    } else if (selectedOption?.value === "SetCustom") {
+      return (
+        <div>
+          <label>Customize:</label>
+          <input
+            className="input-css"
+            type="text"
+            name="customize"
+            value={newMeeting?.customize}
+            onChange={handleInputChange}
+          />
+
+          <div className="--flex-end">
+            <div className="buttinnext">
+              <button onClick={handleModalCancelClick}>Cancel</button>
+            </div>
+            {modalOptionSelected && (
+              <div className="updatebtn --light-blue">
+                <button onClick={handleModalUpdateClick}>Update</button>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    } else if (selectedOption?.value === "AskInvitee") {
+      return (
+        <div>
+          <h4 style={{ display: "inline-block" }}>
+            Are you sure you want Invitee to set the location?
+          </h4>
+          <div style={{ display: "inline-block", marginLeft: "10px" }}>
+            <label>
+              <input
+                type="radio"
+                name="aconfirmInvitee"
+                value="yes"
+                checked={newMeeting?.aconfirmInvitee === "yes"}
+                onChange={handleInputChange}
+              />
+              Yes
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="aconfirmInvitee"
+                value="no"
+                checked={newMeeting?.aconfirmInvitee === "no"}
+                onChange={handleInputChange}
+              />
+              No
+            </label>
+          </div>
+          <div className="--flex-end">
+            <div className="buttinnext">
+              <button onClick={handleModalCancelClick}>Cancel</button>
+            </div>
+            {modalOptionSelected && (
+              <div className="updatebtn --light-blue">
+                <button onClick={handleModalUpdateClick}>Confirm</button>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }, [
+    selectedOption,
+    additionalInfo,
+    newMeeting,
+    handleInputChange,
+    handleButtonClick,
+  ]);
   return (
     <div>
       <Select

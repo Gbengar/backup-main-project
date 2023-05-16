@@ -15,6 +15,7 @@ const initialState = {
   isLoading: false,
   message: "",
   selectedUserId: null,
+  newEvent: null,
 };
 
 // Register User
@@ -179,6 +180,9 @@ const authSlice = createSlice({
   reducers: {
     setSelectedUserId: (state, action) => {
       state.selectedUserId = action.payload;
+    },
+    setNewEvent: (state, action) => {
+      state.newEvent = action.payload;
     },
 
     RESET(state) {

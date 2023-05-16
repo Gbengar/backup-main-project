@@ -15,17 +15,16 @@ const options = [
   { label: "2 hours 30 mins", value: 150 },
   { label: "2 hours 45 mins", value: 165 },
   { label: "3 hours", value: 180 },
-  { label: "Custom", value: "custom" },
 ];
 
 const MeetingTime = ({ onDurationChange }) => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   useEffect(() => {
-    if (selectedOption && selectedOption.value !== "custom") {
+    if (selectedOption) {
       onDurationChange(selectedOption.value);
     }
-  }, [selectedOption, onDurationChange]);
+  }, [selectedOption]);
 
   const handleChange = (option) => {
     setSelectedOption(option);
@@ -36,7 +35,7 @@ const MeetingTime = ({ onDurationChange }) => {
       options={options}
       value={selectedOption}
       onChange={handleChange}
-      className="select-container"
+      className="completesche2"
     />
   );
 };

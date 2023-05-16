@@ -16,6 +16,9 @@ const addEventSetup = asyncHandler(async (req, res) => {
     selectedUserId,
     additionalInfo,
     meetingId,
+    start,
+    end,
+    duration,
   } = req.body;
 
   // Validation
@@ -26,7 +29,10 @@ const addEventSetup = asyncHandler(async (req, res) => {
     (value === "SetPhoneNumber" && !callOption) ||
     (value === "SetCustom" && !customize) ||
     (value === "AskInvitee" &&
-      (location || locationAdd || callOption || customize))
+      (location || locationAdd || callOption || customize)) ||
+    !start ||
+    !end ||
+    !duration
   ) {
     res.status(400);
     throw new Error("Please provide a valid option");
@@ -44,6 +50,9 @@ const addEventSetup = asyncHandler(async (req, res) => {
     meetingDescription,
     selectedUserId,
     meetingId,
+    start,
+    end,
+    duration,
   });
 
   if (event) {

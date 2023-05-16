@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../AddNewEvent.scss";
 import Back from "../../../../components/Buttons/Back/Back";
 import Share from "../../../../components/Buttons/Share/Share";
@@ -6,52 +6,134 @@ import DropdownButton from "../../../../components/TImeline/createButton/Dropdow
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import MeetingTime from "./MeetingTime";
+import SetMeetingReminder from "./SetMeetingReminder";
+import { toast } from "react-toastify";
+import { Navigate } from "react-router-dom";
+import axios from "axios";
 
-const CompleteSchedule = () => {
-  const [completeMeeting, setCompleteMeeting] = useState({
-    title: "",
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API_URL = `${BACKEND_URL}/api/users/`;
+
+const CompleteSchedule = ({ newEvent }) => {
+  const [event, setEvent] = useState(null);
+
+  useEffect(() => {
+    const storedEvent = localStorage.getItem("newEvent");
+    if (storedEvent) {
+      const parsedEvent = JSON.parse(storedEvent);
+      setEvent(parsedEvent);
+      setTimeout(() => {
+        localStorage.removeItem("newEvent");
+      }, 5 * 60 * 1000); // remove after 5 minutes
+    } else {
+      setEvent(newEvent);
+    }
+  }, [newEvent]);
+
+  const initialState = {
     start: null,
     end: null,
-  });
-  const [duration, setDuration] = useState(null);
-  const [customDuration, setCustomDuration] = useState(false);
+    duration: null,
+    reminder: null,
+    newEvent: newEvent || null,
+  };
+
+  console.log(initialState);
+
+  const [completeMeeting, setCompleteMeeting] = useState(initialState);
+  const { start, end, duration, reminder } = completeMeeting;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setCompleteMeeting({ ...completeMeeting, [name]: value });
+    setCompleteMeeting((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
 
     if (name === "start") {
-      setCompleteMeeting({ ...completeMeeting, end: value });
+      setCompleteMeeting((prevState) => ({
+        ...prevState,
+        end: value,
+      }));
     }
   };
 
   const handleDurationChange = (duration) => {
-    if (duration === "custom") {
-      setCustomDuration(true);
-    } else {
-      setCustomDuration(false);
-      setDuration(duration);
-    }
+    setCompleteMeeting((prevState) => ({
+      ...prevState,
+      duration,
+    }));
   };
 
-  const handleStartChange = (date) => {
-    if (customDuration) {
-      setCompleteMeeting({
-        ...completeMeeting,
-        start: date,
-      });
-    } else {
-      setCompleteMeeting({
-        ...completeMeeting,
-        start: date,
-        end: duration ? new Date(date.getTime() + duration * 60000) : date,
-      });
-    }
+  const handleReminderChange = (reminder) => {
+    setCompleteMeeting((prevState) => ({
+      ...prevState,
+      reminder,
+    }));
+    console.log(reminder);
   };
 
-  const handleSubmit = (e) => {
+  const handleSave = (newEvent) => {
+    setCompleteMeeting((prevState) => ({
+      ...prevState,
+      start: newEvent.start,
+      end: newEvent.end,
+      duration: newEvent.duration,
+      reminder: newEvent.reminder,
+      newEvent: newEvent,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(completeMeeting);
+
+    if (!start || !end || !duration || !reminder) {
+      toast.error("Please fill all input fields.");
+      return;
+    }
+
+    const {
+      value,
+      location,
+      locationAdd,
+      callOption,
+      customize,
+      eventName,
+      meetingDescription,
+      selectedUserId,
+      meetingId,
+    } = newEvent;
+
+    const data = {
+      value,
+      eventName,
+      meetingDescription,
+      location,
+      locationAdd,
+      callOption,
+      customize,
+      selectedUserId,
+      meetingId,
+      start,
+      end,
+      duration,
+      reminder,
+    };
+
+    // Call newEvent with the data object
+
+    await handleSave(data);
+    console.log(data);
+    try {
+      const response = await axios.post(`${API_URL}postevents`, data);
+      console.log(response.data);
+      // Do something with the response if needed
+    } catch (error) {
+      console.error(error);
+      // Handle the error if needed
+    }
+
+    console.log(data);
   };
 
   return (
@@ -68,7 +150,7 @@ const CompleteSchedule = () => {
       </div>
       <div className="container">
         <div className="form-section">
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="section-header">
               <div className="--flex-end">
                 <div className="buttinnext">
@@ -81,60 +163,59 @@ const CompleteSchedule = () => {
             </div>
             <div className="margin-from-top">
               <div className="form-group">
-                <label htmlFor="title">Title:</label>
+                <label htmlFor="duration">Duration:</label>
                 <MeetingTime
-                  className="newText"
+                  className="completesche2"
                   onDurationChange={handleDurationChange}
+                  placeholder="duration"
                 />
               </div>
               <div className="form-group">
                 <label htmlFor="start">Start Date:</label>
                 <DatePicker
                   selected={completeMeeting.start}
-                  onChange={handleStartChange}
+                  onChange={(date) => {
+                    const newEndDate = new Date(
+                      date.getTime() + (completeMeeting.duration || 0) * 60000
+                    );
+                    setCompleteMeeting((prevState) => ({
+                      ...prevState,
+                      start: date,
+                      end: newEndDate,
+                    }));
+                  }}
                   showTimeSelect
                   timeFormat="HH:mm"
                   timeIntervals={15}
                   dateFormat="yyyy-MM-dd HH:mm"
-                  className="form-control"
+                  className="completesche"
                   placeholderText="YYYY-MM-DD HH:mm"
+                  style={{ width: "150%" }}
                   name="start"
                 />
               </div>
-              {!customDuration && (
-                <div className="form-group">
-                  <label htmlFor="end">End Date:</label>
-                  <DatePicker
-                    selected={completeMeeting.end || null}
-                    showTimeSelect
-                    timeFormat="HH:mm"
-                    timeIntervals={15}
-                    dateFormat="yyyy-MM-dd HH:mm"
-                    className="form-control"
-                    placeholderText="YYYY-MM-DD HH:mm"
-                    name="end"
-                    disabled={completeMeeting.start !== null}
-                  />
-                </div>
-              )}
-              {customDuration && (
-                <div className="form-group">
-                  <label htmlFor="end">End Date:</label>
-                  <DatePicker
-                    selected={completeMeeting.end || null}
-                    onChange={(date) =>
-                      setCompleteMeeting({ ...completeMeeting, end: date })
-                    }
-                    showTimeSelect
-                    timeFormat="HH:mm"
-                    timeIntervals={15}
-                    dateFormat="yyyy-MM-dd HH:mm"
-                    className="form-control"
-                    placeholderText="YYYY-MM-DD HH:mm"
-                    name="end"
-                  />
-                </div>
-              )}
+              <div className="form-group">
+                <label htmlFor="end">End Date:</label>
+                <DatePicker
+                  selected={completeMeeting.end || null}
+                  onChange={(date) =>
+                    setCompleteMeeting({ ...completeMeeting, end: date })
+                  }
+                  showTimeSelect
+                  timeFormat="HH:mm"
+                  timeIntervals={15}
+                  dateFormat="yyyy-MM-dd HH:mm"
+                  className="completesche"
+                  placeholderText="YYYY-MM-DD HH:mm"
+                  name="end"
+                  disabled={completeMeeting.start === null}
+                  style={{ width: "150%" }}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="end">Set Reminder:</label>
+                <SetMeetingReminder onReminderChange={handleReminderChange} />
+              </div>
             </div>
           </form>
         </div>

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import AccessCodeLogin from "./pages/auth/AccessCodeLogin";
 import Forgot from "./pages/auth/Forgot";
@@ -19,7 +19,7 @@ import {
   selectUser,
 } from "./redux-app/features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import EditProfile from "./pages/profile/EditProfile";
 import { Messenger } from "./pages/messenger/Messenger";
 import ViewProfile from "./pages/profile/ViewProfile";
@@ -46,6 +46,18 @@ function App() {
       dispatch(getUser());
     }
   }, [dispatch, isLoggedIn, user]);
+
+  const [newEvent, setNewEvent] = useState(null);
+
+  useEffect(() => {
+    const storedEvent = JSON.parse(localStorage.getItem("newEvent"));
+    if (storedEvent) {
+      console.log("Setting newEvent from localStorage:", storedEvent);
+      setNewEvent(storedEvent);
+    }
+  }, []);
+
+  const storedEvent = JSON.parse(localStorage.getItem("newEvent"));
 
   return (
     <>
@@ -141,7 +153,7 @@ function App() {
             path="/addnewevent"
             element={
               <Layout>
-                <AddNewEvent />
+                <AddNewEvent setNewEvent={setNewEvent} />
               </Layout>
             }
           />
@@ -149,9 +161,13 @@ function App() {
           <Route
             path="/completeSchedule"
             element={
-              <Layout>
-                <CompleteSchedule />
-              </Layout>
+              storedEvent ? (
+                <Layout>
+                  <CompleteSchedule newEvent={storedEvent} />
+                </Layout>
+              ) : (
+                <Navigate to="/addnewevent" />
+              )
             }
           />
 

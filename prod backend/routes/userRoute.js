@@ -69,7 +69,7 @@ router.get("/findmeeting/:firstUserId/:secondUserId", startMeetFollowings);
 router.post("/events", addEvent);
 
 // create Event
-router.post("/events", createEvent);
+router.post("/postevents", createEvent);
 
 router.get("/events/:meetingId", getEvents);
 

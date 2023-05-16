@@ -387,7 +387,32 @@ h4.modal-row {
     margin-right: 10px;
   }
   
+  .completesche {
+    display: block;
+    width: 30%;
+    padding: 6px 12px;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #a65959;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  }
   
   
+  .completesche2 {
+    width: 30%;
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 1;
+    color: #a65959;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  }
   
   

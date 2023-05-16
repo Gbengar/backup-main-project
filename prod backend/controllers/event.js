@@ -17,22 +17,57 @@ const addEvent = asyncHandler(async (req, res) => {
 
 // Create Event
 const createEvent = asyncHandler(async (req, res) => {
-  const { meetingId, title, start, end, status, rejectionReason } = req.body;
+  const {
+    value,
+    location,
+    locationAdd,
+    callOption,
+    customize,
+    eventName,
+    meetingDescription,
+    selectedUserId,
+    additionalInfo,
+    meetingId,
+    start,
+    end,
+    duration,
+    reminder,
+  } = req.body;
 
   // Validation
-  if (!title || !start || !end) {
+  if (
+    !value ||
+    (value === "SetAddress" && !location) ||
+    (value === "SetAddress" && additionalInfo && !locationAdd) ||
+    (value === "SetPhoneNumber" && !callOption) ||
+    (value === "SetCustom" && !customize) ||
+    (value === "AskInvitee" &&
+      (location || locationAdd || callOption || customize)) ||
+    !start ||
+    !end ||
+    !duration ||
+    !reminder
+  ) {
     res.status(400);
-    throw new Error("Please provide all required fields");
+    throw new Error("Please provide a valid option");
   }
 
   // Create new event
   const event = await Event.create({
+    value,
+    location: value === "SetAddress" ? location : undefined,
+    locationAdd:
+      value === "SetAddress" && additionalInfo ? locationAdd : undefined,
+    callOption: value === "SetPhoneNumber" ? callOption : undefined,
+    customize: value === "SetCustom" ? customize : undefined,
+    eventName,
+    meetingDescription,
+    selectedUserId,
     meetingId,
-    title,
     start,
     end,
-    status,
-    rejectionReason,
+    duration,
+    reminder,
   });
 
   if (event) {

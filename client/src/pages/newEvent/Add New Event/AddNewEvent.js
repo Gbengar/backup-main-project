@@ -31,7 +31,7 @@ const modules = {
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API_URL = `${BACKEND_URL}/api/users/`;
 
-const AddNewEvent = ({ selectedUser }) => {
+const AddNewEvent = ({ setIsAccessed, setNewEvent }) => {
   const { user, isLoading, isLoggedIn, isSuccess } = useSelector(
     (state) => state.auth
   );
@@ -101,20 +101,24 @@ const AddNewEvent = ({ selectedUser }) => {
 
     try {
       setIsSubmitting(true);
-      const res = await axios.post(`${API_URL}createeventSetup`, data);
-      console.log(res.data);
-      setMeetingData({ ...meetingData, meetingId: res.data._id });
+
+      // Call onAddNewEvent function to save the data to CompleteSchedule
+      await handleSave(data);
+
       setIsSubmitting(false);
-      toast.success("Event has been created.");
+      setNewEvent(data); // set newEvent state instead of isAccessed
       navigate("/completeSchedule");
 
-      // move toast.success call here
+      // Save newEvent data in localStorage for 5 minutes
+      localStorage.setItem("newEvent", JSON.stringify(data));
+      setTimeout(() => {
+        localStorage.removeItem("newEvent");
+      }, 5 * 60 * 1000);
     } catch (error) {
       setIsSubmitting(false);
       console.log(error);
       toast.error("Error creating event.");
     }
-    console.log(combinedObject.selectedUser._id);
   };
 
   const handleCancel = (e) => {
