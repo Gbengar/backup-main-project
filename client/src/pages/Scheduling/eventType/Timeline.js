@@ -7,7 +7,7 @@ import Button from "../../../components/TImeline/createButton/CreateButton";
 import EventButton from "../../../components/TImeline/createButton/EventType";
 import PageMenuTimeline from "../../../components/TImeline/PageMenuTimeline";
 import useRedirectLoggedOutUser from "../../../customHook/useRedirectLoggedOutUser";
-import { getUser } from "../../../redux-app/features/auth/authSlice";
+import { RESET, getUser } from "../../../redux-app/features/auth/authSlice";
 import "./timeline.scss";
 
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -19,7 +19,7 @@ import DropdownButton from "../../../components/TImeline/createButton/DropdownBu
 const Timeline = () => {
   useRedirectLoggedOutUser("/login");
   const dispatch = useDispatch();
-  const { isLoading, isLoggedIn, isSuccess, message, user } = useSelector(
+  const { isLoading, isLoggedIn, message, user } = useSelector(
     (state) => state.auth
   );
 
@@ -54,6 +54,8 @@ const Timeline = () => {
   const handleCheckBoxChange = (event) => {
     setChecked(event.target.checked);
   };
+
+  //dispatch(RESET());
 
   return (
     <>

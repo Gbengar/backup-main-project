@@ -8,14 +8,22 @@ import "react-datepicker/dist/react-datepicker.css";
 import MeetingTime from "./MeetingTime";
 import SetMeetingReminder from "./SetMeetingReminder";
 import { toast } from "react-toastify";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API_URL = `${BACKEND_URL}/api/users/`;
+import { useDispatch, useSelector } from "react-redux";
+import {
+  RESET,
+  createEvent,
+} from "../../../../redux-app/features/auth/authSlice";
 
 const CompleteSchedule = ({ newEvent }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [event, setEvent] = useState(null);
+
+  const { isLoading, isLoggedIn, isSuccess, message, isError, isEvent } =
+    useSelector((state) => state.auth);
 
   useEffect(() => {
     const storedEvent = localStorage.getItem("newEvent");
@@ -37,8 +45,6 @@ const CompleteSchedule = ({ newEvent }) => {
     reminder: null,
     newEvent: newEvent || null,
   };
-
-  console.log(initialState);
 
   const [completeMeeting, setCompleteMeeting] = useState(initialState);
   const { start, end, duration, reminder } = completeMeeting;
@@ -70,7 +76,6 @@ const CompleteSchedule = ({ newEvent }) => {
       ...prevState,
       reminder,
     }));
-    console.log(reminder);
   };
 
   const handleSave = (newEvent) => {
@@ -123,18 +128,14 @@ const CompleteSchedule = ({ newEvent }) => {
     // Call newEvent with the data object
 
     await handleSave(data);
-    console.log(data);
-    try {
-      const response = await axios.post(`${API_URL}postevents`, data);
-      console.log(response.data);
-      // Do something with the response if needed
-    } catch (error) {
-      console.error(error);
-      // Handle the error if needed
-    }
-
-    console.log(data);
+    await dispatch(createEvent(data));
   };
+  useEffect(() => {
+    if (isEvent) {
+      navigate("/timeline");
+    }
+    dispatch(RESET());
+  }, [isEvent, dispatch, navigate, isError]);
 
   return (
     <>

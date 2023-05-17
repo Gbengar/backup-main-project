@@ -8,7 +8,6 @@ export const API_URL = `${BACKEND_URL}/api/users/`;
 
 const initialState = {
   isLoggedIn: false,
-
   user: null,
   users: [],
   isError: false,
@@ -16,6 +15,7 @@ const initialState = {
   message: "",
   selectedUserId: null,
   newEvent: null,
+  createevent: null,
 };
 
 // Register User
@@ -172,6 +172,21 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
+export const createEvent = createAsyncThunk(
+  "auth/createEvent",
+  async (userData, thunkAPI) => {
+    try {
+      return await authService.createEvent(userData);
+    } catch (error) {
+      const message =
+        (error.res && error.res.data && error.res.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const setSelectedUserId = createAction("auth/setSelectedUserId");
 
 const authSlice = createSlice({
@@ -189,6 +204,7 @@ const authSlice = createSlice({
       state.twoFactor = false;
       state.isError = false;
       state.isSuccess = false;
+      state.isEvent = false;
       state.isLoading = false;
       state.message = "";
     },
@@ -343,6 +359,24 @@ const authSlice = createSlice({
         toast.success(action.payload);
       })
       .addCase(deleteUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      })
+      // CreateEvent
+      .addCase(createEvent.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createEvent.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isEvent = true;
+        state.createevent = action.payload;
+        toast.success("Event Created Successfully");
+        console.log(action.payload);
+        localStorage.removeItem("newEvent");
+      })
+      .addCase(createEvent.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
