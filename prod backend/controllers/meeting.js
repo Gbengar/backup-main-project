@@ -7,8 +7,9 @@ const Meeting = require("../models/Meeting");
 // new conversation
 
 const meetingRoute = asyncHandler(async (req, res) => {
+  const { senderId, receiverId } = req.body; // Assuming senderId and receiverId are the correct property names
   const newMeeting = new Meeting({
-    members: [req.body.senderID, req.body.receiverId],
+    members: [senderId, receiverId],
   });
   try {
     const savedMeeting = await newMeeting.save();
@@ -17,6 +18,7 @@ const meetingRoute = asyncHandler(async (req, res) => {
     res.status(500).json(error);
   }
 });
+
 // get conversation of user
 
 const getMeeting = asyncHandler(async (req, res) => {

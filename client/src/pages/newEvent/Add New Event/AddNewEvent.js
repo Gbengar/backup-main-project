@@ -40,10 +40,10 @@ const AddNewEvent = ({ setIsAccessed, setNewEvent }) => {
 
   const handleSave = (combinedObject) => {
     console.log(combinedObject);
-    setMeetingData((prevState) => ({
-      ...prevState,
+    setMeetingData({
+      ...meetingData,
       combinedObject: combinedObject,
-    }));
+    });
   };
 
   const initialState = {
@@ -94,7 +94,7 @@ const AddNewEvent = ({ setIsAccessed, setNewEvent }) => {
       callOption,
       customize,
       selectedUserId: combinedObject.selectedUser._id,
-      meetingId,
+      meetingId: "", // Initialize meetingId as an empty string
     };
 
     setShowModal(false);
@@ -102,14 +102,26 @@ const AddNewEvent = ({ setIsAccessed, setNewEvent }) => {
     try {
       setIsSubmitting(true);
 
-      // Call onAddNewEvent function to save the data to CompleteSchedule
+      // Set the meetingId directly in the handleSubmit function
+      const receiverId = combinedObject.selectedUser?._id;
+
+      if (user && receiverId) {
+        const members = [user._id, receiverId];
+        const response = await axios.post(`${API_URL}meeting`, {
+          senderId: user._id,
+          receiverId: receiverId,
+        });
+        data.meetingId = response.data._id; // Set the meetingId in the data object
+        console.log(response.data._id);
+        console.log(members);
+      }
+
       await handleSave(data);
 
       setIsSubmitting(false);
-      setNewEvent(data); // set newEvent state instead of isAccessed
+      setNewEvent(data);
       navigate("/completeSchedule");
 
-      // Save newEvent data in localStorage for 5 minutes
       localStorage.setItem("newEvent", JSON.stringify(data));
       setTimeout(() => {
         localStorage.removeItem("newEvent");
@@ -118,6 +130,25 @@ const AddNewEvent = ({ setIsAccessed, setNewEvent }) => {
       setIsSubmitting(false);
       console.log(error);
       toast.error("Error creating event.");
+    }
+  };
+
+  const setMeetingIdFunction = async () => {
+    const receiverId = combinedObject.selectedUser?._id;
+
+    if (user && receiverId) {
+      const members = [user._id, receiverId];
+      try {
+        const response = await axios.post(`${API_URL}meeting`, {
+          senderId: user._id,
+          receiverId: receiverId,
+        });
+        setMeetingId(response.data._id);
+        console.log(response.data._id);
+        console.log(members);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -147,22 +178,6 @@ const AddNewEvent = ({ setIsAccessed, setNewEvent }) => {
       right: "0",
     },
   };
-
-  useEffect(() => {
-    const setMeeting = async () => {
-      if (user && combinedObject.selectedUser) {
-        try {
-          const members = [user._id, combinedObject.selectedUser._id];
-          const res = await axios.post(`${API_URL}meeting`, { members });
-          setMeetingId(res.data._id);
-          console.log(res.data._id);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
-    setMeeting();
-  }, [user, combinedObject.selectedUser]);
 
   return (
     <div>

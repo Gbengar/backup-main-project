@@ -3,7 +3,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import "./Calendar.scss"; // Import the custom CSS file
 
-const Upcoming = () => {
+const Past = () => {
   const events = []; // Replace with your events data
 
   return (
@@ -11,7 +11,7 @@ const Upcoming = () => {
       <div style={{ maxWidth: "250px", margin: "0 auto" }}>
         {events.length === 0 ? (
           <div className="overlay">
-            <p>No Events Yet</p>
+            <p>No Pending Event</p>
           </div>
         ) : null}
         <FullCalendar
@@ -22,14 +22,12 @@ const Upcoming = () => {
           events={events}
           eventContent={renderEventContent}
         />
-
-        <span>Share Event Type links to schedule events.</span>
-        <button>View Event type</button>
       </div>
     </div>
   );
 };
 
+// Custom event rendering function
 const renderEventContent = (eventInfo) => {
   return (
     <div className="event-content">
@@ -38,4 +36,4 @@ const renderEventContent = (eventInfo) => {
   );
 };
 
-export default Upcoming;
+export default Past;

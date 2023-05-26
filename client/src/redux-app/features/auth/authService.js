@@ -70,6 +70,7 @@ const createEvent = async (userData) => {
   const res = await axios.post(API_URL + "postevents", userData);
   return res.data;
 };
+
 const authService = {
   register,
   validateEmail,

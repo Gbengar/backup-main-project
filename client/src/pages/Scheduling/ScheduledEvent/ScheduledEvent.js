@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../../../components/card/Card";
 import Button from "../../../components/TImeline/createButton/CreateButton";
 import EventCard from "../../../components/TImeline/eventCard/EventCard";
@@ -7,8 +7,17 @@ import Upcoming from "./subEvent/Upcoming";
 import "./scheduledevents.scss";
 import { NavLink } from "react-router-dom";
 import EventMenu from "../../../components/TImeline/EventSchedule/EventMenu";
+import { useSelector } from "react-redux";
+import axios from "axios";
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API_URL = `${BACKEND_URL}/api/users/`;
 
 const ScheduledEvent = () => {
+  const { user, isLoading, isLoggedIn, isSuccess } = useSelector(
+    (state) => state.auth
+  );
+
   const [showUpcoming, setShowUpcoming] = useState(false);
 
   const handleUpcomingClick = () => {
@@ -29,9 +38,7 @@ const ScheduledEvent = () => {
         </div>
 
         <div className="container">
-          <Card>
-            <EventMenu />
-          </Card>
+          <EventMenu />
         </div>
       </section>
     </>

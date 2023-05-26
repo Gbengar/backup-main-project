@@ -30,7 +30,6 @@ const {
   unfollowUser,
 } = require("../controllers/userController");
 const protect = require("../middleware/authMiddleware");
-const { addEventSetup } = require("../controllers/addeventSetup");
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
@@ -74,7 +73,5 @@ router.post("/postevents", createEvent);
 router.get("/events/:meetingId", getEvents);
 
 // Add Event Setup
-
-router.post("/createeventSetup", addEventSetup);
 
 module.exports = router;

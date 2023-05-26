@@ -193,6 +193,7 @@ const CompleteSchedule = ({ newEvent }) => {
                   placeholderText="YYYY-MM-DD HH:mm"
                   style={{ width: "150%" }}
                   name="start"
+                  autoComplete="off"
                 />
               </div>
               <div className="form-group">
