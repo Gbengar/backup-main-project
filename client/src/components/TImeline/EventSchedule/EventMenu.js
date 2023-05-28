@@ -8,8 +8,12 @@ import SetEvent from "../../../pages/Scheduling/ScheduledEvent/SetEvent";
 import "./EventMenu.scss";
 import SetCalendar from "../../../pages/Scheduling/ScheduledEvent/SetCalender";
 import SetEventRange from "../../../pages/Scheduling/ScheduledEvent/SetEventRange";
+import EventFetcher from "../../../pages/Scheduling/ScheduledEvent/EventFetcher";
+import { useSelector } from "react-redux";
 
 const EventMenu = () => {
+  const { user } = useSelector((state) => state.auth);
+
   const [activeComponent, setActiveComponent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [startDate, setStartDate] = useState(null);
@@ -99,11 +103,7 @@ const EventMenu = () => {
       {activeComponent === "past" && <SetEvent display="past" />}
       {activeComponent === "upcoming" && <SetEvent display="upcoming" />}
       {activeComponent === "datePicker" && (
-        <SetEventRange
-          display="datePicker"
-          startDate={startDate}
-          endDate={endDate}
-        />
+        <EventFetcher user={user} startDate={startDate} endDate={endDate} />
       )}
     </div>
   );

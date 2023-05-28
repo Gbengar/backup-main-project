@@ -33,6 +33,7 @@ import UserFollowing from "./pages/newEvent/Add New Event/UserFollowing";
 import Test from "./pages/newEvent/Add New Event/Test";
 import CompleteSchedule from "./pages/newEvent/Add New Event/ContinueSchedule/CompleteSchedule";
 import SetEvent from "./pages/Scheduling/ScheduledEvent/SetEvent";
+import SetEventRange from "./pages/Scheduling/ScheduledEvent/SetEventRange";
 
 axios.defaults.withCredentials = true;
 
@@ -185,7 +186,7 @@ function App() {
             path="/follow"
             element={
               <Layout>
-                <SetEvent />
+                <SetEventRange />
               </Layout>
             }
           />
