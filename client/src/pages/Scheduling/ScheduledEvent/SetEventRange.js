@@ -15,8 +15,8 @@ const SetEventRange = ({ events, loading }) => {
 
   const eventList = events.map((event) => ({
     eventName: event.eventName,
-    start: moment(event.start),
-    end: moment(event.end),
+    start: moment(event.start).toDate(),
+    end: moment(event.end).toDate(),
   }));
 
   console.log(eventList);
