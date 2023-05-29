@@ -6,20 +6,16 @@ import Loader from "../../../components/loader/Loader";
 
 const localizer = momentLocalizer(moment);
 
-const SetEventRange = ({ events, loading }) => {
-  if (loading) {
-    return <Loader />; // Render a loader while events are being fetched
+const SetEventRange = ({ events }) => {
+  if (!events || events.length === 0) {
+    return <div>No events to display.</div>;
   }
 
-  console.log(events);
-
   const eventList = events.map((event) => ({
-    eventName: event.eventName,
+    title: event.eventName,
     start: moment(event.start).toDate(),
     end: moment(event.end).toDate(),
   }));
-
-  console.log(eventList);
 
   return (
     <div>

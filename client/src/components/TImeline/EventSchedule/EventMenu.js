@@ -1,4 +1,3 @@
-// EventMenu.js
 import React, { useState } from "react";
 import Modal from "react-modal";
 import DatePicker from "react-datepicker";
@@ -29,7 +28,7 @@ const EventMenu = () => {
   };
 
   const openModal = () => {
-    setIsModalOpen(!isModalOpen);
+    setIsModalOpen(true);
   };
 
   const handleStartDateChange = (date) => {
@@ -42,7 +41,7 @@ const EventMenu = () => {
 
   const handleApply = () => {
     closeModal();
-    handleClick("datePicker");
+    setActiveComponent("datePicker");
   };
 
   const closeModal = () => {
@@ -76,7 +75,7 @@ const EventMenu = () => {
                   selectsStart
                   startDate={startDate}
                   endDate={endDate}
-                  dateFormat="YYYY-MM-DD"
+                  dateFormat="yyyy-MM-dd"
                   inline
                 />
                 <DatePicker
@@ -86,7 +85,7 @@ const EventMenu = () => {
                   startDate={startDate}
                   endDate={endDate}
                   minDate={startDate}
-                  dateFormat="YYYY-MM-DD"
+                  dateFormat="yyyy-MM-dd"
                   inline
                 />
               </div>
@@ -103,7 +102,7 @@ const EventMenu = () => {
       {activeComponent === "past" && <SetEvent display="past" />}
       {activeComponent === "upcoming" && <SetEvent display="upcoming" />}
       {activeComponent === "datePicker" && (
-        <EventFetcher user={user} startDate={startDate} endDate={endDate} />
+        <EventFetcher user={user} startDay={startDate} endDay={endDate} />
       )}
     </div>
   );

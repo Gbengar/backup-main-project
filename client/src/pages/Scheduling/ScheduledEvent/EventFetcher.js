@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API_URL = `${BACKEND_URL}/api/users/`;
 
-const EventFetcher = ({ startDate, endDate, user }) => {
+const EventFetcher = ({ startDay, endDay, user }) => {
   const [fetchMeeting, setFetchMeeting] = useState([]);
   const [fetchEvents, setFetchEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,6 +29,8 @@ const EventFetcher = ({ startDate, endDate, user }) => {
 
   useEffect(() => {
     const getAllEvents = async () => {
+      setLoading(true);
+
       if (fetchMeeting) {
         try {
           const events = [];
@@ -37,31 +39,32 @@ const EventFetcher = ({ startDate, endDate, user }) => {
             events.push(res.data);
           }
 
-          // Flatten the events array
           const allEvents = events.flat();
 
-          // Filter events based on start date and end date
           const filteredEvents = allEvents.filter((event) => {
-            const eventStartDate = moment(event.startDate);
-            const eventEndDate = moment(event.endDate);
+            const eventStartDate = moment(event.start).startOf("day");
+            const eventEndDate = moment(event.end).endOf("day");
             return (
-              eventStartDate.isBetween(startDate, endDate, null, "[]") &&
-              eventEndDate.isBetween(startDate, endDate, null, "[]")
+              eventStartDate.isBetween(startDay, endDay, null, "[]") &&
+              eventEndDate.isBetween(startDay, endDay, null, "[]")
             );
           });
 
           setFetchEvents(filteredEvents);
-          setLoading(false); // Set loading to false when the events are fetched
-          console.log(allEvents);
+          setLoading(false);
         } catch (error) {
           console.log(error);
         }
       }
     };
     getAllEvents();
-  }, [fetchMeeting, startDate, endDate]);
+  }, [fetchMeeting, startDay, endDay]);
 
-  return <SetEventRange events={fetchEvents} loading={loading} />;
+  if (loading) {
+    return <Loader />;
+  }
+
+  return <SetEventRange events={fetchEvents} />;
 };
 
 export default EventFetcher;
