@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
-import Loader from "../../../components/loader/Loader";
 import SetEventRange from "./SetEventRange";
-import { useSelector } from "react-redux";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API_URL = `${BACKEND_URL}/api/users/`;
@@ -11,7 +9,7 @@ const API_URL = `${BACKEND_URL}/api/users/`;
 const EventFetcher = ({ startDay, endDay, user }) => {
   const [fetchMeeting, setFetchMeeting] = useState([]);
   const [fetchEvents, setFetchEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getMeetings = async () => {
@@ -51,7 +49,7 @@ const EventFetcher = ({ startDay, endDay, user }) => {
           });
 
           setFetchEvents(filteredEvents);
-          setLoading(false);
+          setLoading(false); // Set loading to false after events are fetched
         } catch (error) {
           console.log(error);
         }
@@ -60,11 +58,7 @@ const EventFetcher = ({ startDay, endDay, user }) => {
     getAllEvents();
   }, [fetchMeeting, startDay, endDay]);
 
-  if (loading) {
-    return <Loader />;
-  }
-
-  return <SetEventRange events={fetchEvents} />;
+  return <SetEventRange events={fetchEvents} loading={loading} />;
 };
 
 export default EventFetcher;
