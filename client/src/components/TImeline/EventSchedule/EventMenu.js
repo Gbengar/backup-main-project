@@ -5,10 +5,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import { NavLink } from "react-router-dom";
 import SetEvent from "../../../pages/Scheduling/ScheduledEvent/SetEvent";
 import "./EventMenu.scss";
-import SetCalendar from "../../../pages/Scheduling/ScheduledEvent/SetCalender";
-import SetEventRange from "../../../pages/Scheduling/ScheduledEvent/SetEventRange";
 import EventFetcher from "../../../pages/Scheduling/ScheduledEvent/EventFetcher";
 import { useSelector } from "react-redux";
+import PendingEventFetch from "../../../pages/Scheduling/ScheduledEvent/PendingEventFetch";
+import PastEventFetcher from "../../../pages/Scheduling/ScheduledEvent/PastEventFetcher";
 
 const EventMenu = () => {
   const { user } = useSelector((state) => state.auth);
@@ -99,8 +99,8 @@ const EventMenu = () => {
       <br />
       <br />
 
-      {activeComponent === "past" && <SetEvent display="past" />}
-      {activeComponent === "upcoming" && <SetEvent display="upcoming" />}
+      {activeComponent === "past" && <PastEventFetcher user={user} />}
+      {activeComponent === "upcoming" && <PendingEventFetch user={user} />}
       {activeComponent === "datePicker" && (
         <EventFetcher user={user} startDay={startDate} endDay={endDate} />
       )}

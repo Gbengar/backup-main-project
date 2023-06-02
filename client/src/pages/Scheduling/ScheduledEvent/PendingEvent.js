@@ -5,14 +5,13 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import Loader from "../../../components/loader/Loader";
 import { Modal } from "react-overlays";
 import "./scheduledevents.scss";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarXmark } from "@fortawesome/free-solid-svg-icons";
 import Box from "@mui/material/Box";
 
 const localizer = momentLocalizer(moment);
 
-const SetEventRange = ({ events, loading }) => {
+const PendingEvent = ({ events, loading }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [eventPosition, setEventPosition] = useState({ top: 0, left: 0 });
   const [loadingComplete, setLoadingComplete] = useState(false);
@@ -65,16 +64,6 @@ const SetEventRange = ({ events, loading }) => {
     reminder: event.reminder,
   }));
 
-  const CustomToolbar = (toolbar) => {
-    const { label } = toolbar;
-    return (
-      <div className="custom-toolbar">
-        <h6>Date Range</h6>
-        <span>{label}</span>
-      </div>
-    );
-  };
-
   return (
     <div>
       {loading ? (
@@ -89,7 +78,7 @@ const SetEventRange = ({ events, loading }) => {
                 </Box>
                 <br />
                 <div style={{ textAlign: "center" }}>
-                  <h4>No events from selected dates.</h4>
+                  <h4>You have no events coming up yet.</h4>
                 </div>
               </div>
             ) : (
@@ -102,7 +91,6 @@ const SetEventRange = ({ events, loading }) => {
                   endAccessor="end"
                   style={{ height: 400 }}
                   onSelectEvent={handleEventClick}
-                  toolbar={CustomToolbar}
                 />
               )
             )}
@@ -143,4 +131,4 @@ const SetEventRange = ({ events, loading }) => {
   );
 };
 
-export default SetEventRange;
+export default PendingEvent;
