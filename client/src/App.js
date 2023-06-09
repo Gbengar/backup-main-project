@@ -34,6 +34,9 @@ import Test from "./pages/newEvent/Add New Event/Test";
 import CompleteSchedule from "./pages/newEvent/Add New Event/ContinueSchedule/CompleteSchedule";
 import SetEvent from "./pages/Scheduling/ScheduledEvent/SetEvent";
 import SetEventRange from "./pages/Scheduling/ScheduledEvent/SetEventRange";
+import FetchEvents from "./pages/Scheduling/eventType/FetchEvents";
+import AllEvents from "./pages/Scheduling/eventType/AllEvents";
+import AllEventFetch from "./pages/Scheduling/eventType/AllEventFetch";
 
 axios.defaults.withCredentials = true;
 
@@ -128,11 +131,18 @@ function App() {
             path="/timeline"
             element={
               <Layout>
-                <Timeline />
+                <FetchEvents />
               </Layout>
             }
           />
-
+          <Route
+            path="/calendar/meet"
+            element={
+              <Layout>
+                <AllEventFetch />
+              </Layout>
+            }
+          />
           <Route
             path="/scheduled"
             element={
@@ -186,7 +196,7 @@ function App() {
             path="/follow"
             element={
               <Layout>
-                <SetEventRange />
+                <FetchEvents />
               </Layout>
             }
           />

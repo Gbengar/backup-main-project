@@ -9,14 +9,13 @@ import PageMenuTimeline from "../../../components/TImeline/PageMenuTimeline";
 import useRedirectLoggedOutUser from "../../../customHook/useRedirectLoggedOutUser";
 import { RESET, getUser } from "../../../redux-app/features/auth/authSlice";
 import "./timeline.scss";
+import EachEventCard from "./EachEventCard";
+import Loader from "../../../components/loader/Loader";
+import Fuse from "fuse.js";
+import SearchBox from "react-search-box";
+import ReactPaginate from "react-paginate";
 
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import Checkbox from "@mui/material/Checkbox";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import DropdownButton from "../../../components/TImeline/createButton/DropdownButton";
-
-const Timeline = () => {
+const Timeline = ({ events, loading }) => {
   useRedirectLoggedOutUser("/login");
   const dispatch = useDispatch();
   const { isLoading, isLoggedIn, message, user } = useSelector(
@@ -32,7 +31,11 @@ const Timeline = () => {
   };
 
   const [profile, setProfile] = useState(initialState);
-  const [checked, setChecked] = useState(false);
+  const [greeting, setGreeting] = useState("");
+  const [filteredEvents, setFilteredEvents] = useState(events); // Initialize with all events
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
+  const eventsPerPage = 6;
 
   useEffect(() => {
     dispatch(getUser());
@@ -51,73 +54,113 @@ const Timeline = () => {
     }
   }, [user]);
 
-  const handleCheckBoxChange = (event) => {
-    setChecked(event.target.checked);
+  useEffect(() => {
+    const currentHour = new Date().getHours();
+    let newGreeting = "";
+
+    if (currentHour >= 5 && currentHour < 12) {
+      newGreeting = "Good morning";
+    } else if (currentHour >= 12 && currentHour < 18) {
+      newGreeting = "Good afternoon";
+    } else {
+      newGreeting = "Good evening";
+    }
+
+    setGreeting(newGreeting);
+  }, []);
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      // If the search term is empty, show all events
+      setFilteredEvents(events);
+    } else {
+      // Configure the Fuse.js options
+      const options = {
+        includeScore: true,
+        keys: ["eventName"], // Specify the keys to search in your event object
+      };
+
+      // Create a new Fuse instance with the events and options
+      const fuse = new Fuse(events, options);
+
+      // Search for events based on the search term
+      const searchResults = fuse.search(searchTerm);
+
+      // Map the search results to get only the event objects
+      const filteredResults = searchResults.map((result) => result.item);
+
+      // Update the filtered events state
+      setFilteredEvents(filteredResults);
+    }
+  }, [searchTerm, events]);
+
+  const handleChange = (value) => {
+    setSearchTerm(value);
   };
 
-  //dispatch(RESET());
+  const pageCount = Math.ceil(filteredEvents.length / eventsPerPage);
+
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
+  const startIndex = currentPage * eventsPerPage;
+  const endIndex = startIndex + eventsPerPage;
+  const displayedEvents = filteredEvents.slice(startIndex, endIndex);
 
   return (
-    <>
+    <div>
       <div className="button-style">
         <Button buttonText="Create" />
       </div>
-      <section>
-        <div className=" container">
-          <PageMenuTimeline />
-        </div>
-        <div className="filter">
-          <EventType />
-        </div>
-        <div className="filter-container">
-          <div className="filterforname">
-            <h4>{profile?.name}</h4>
+      {loading ? (
+        <Loader />
+      ) : (
+        <section>
+          <div className="container">
+            <PageMenuTimeline />
           </div>
-          <div className="event-button-container">
-            <EventButton />
-          </div>
-        </div>
-        <div className="filterforname">
-          <Card cardClass={"card"}>
-            <div className="withincard">
-              <div className="parent-container">
-                <div className="dropleft">
-                  <Checkbox
-                    checked={checked}
-                    onChange={handleCheckBoxChange}
-                    icon={<CheckBoxOutlineBlankIcon />}
-                    checkedIcon={<CheckBoxIcon />}
-                  />
-                </div>
-                <div className="dropright">
-                  <DropdownButton />
-                </div>
+          <div className="filter">
+            <div className="filter-container">
+              <div className="filterforname">
+                <h4 className="--color-success --fw-thin">
+                  {greeting}, {profile?.name}
+                </h4>
               </div>
-              <div>
-                <h4>30 Minutes Meeting</h4>
-                <span>30 Mins One on One</span>
+              <div className="event-button-container">
+                <EventButton />
               </div>
-              <br />
-              <div>
-                <span>
-                  <Link to="/meeting">View Booking Page</Link>
-                </span>
-              </div>
-              <br />
-              <br />
-              <br />
-              <div>
-                <NavLink>
-                  <ContentCopyIcon /> Copy link
-                </NavLink>
-              </div>
-
-              <br />
             </div>
-          </Card>
-        </div>
-      </section>
-    </>
+            <div className="search-container">
+              <SearchBox
+                onChange={handleChange}
+                value={searchTerm}
+                placeholder="Search events"
+                inputBoxHeight="10px"
+              />
+            </div>
+          </div>
+          <div>
+            <div className="filterforname">
+              <EachEventCard events={displayedEvents} loading={loading} />
+            </div>
+          </div>
+          <div className="pagination-container">
+            <ReactPaginate
+              previousLabel={"Previous"}
+              nextLabel={"Next"}
+              breakLabel={"..."}
+              pageCount={pageCount}
+              marginPagesDisplayed={1}
+              pageRangeDisplayed={3}
+              onPageChange={handlePageChange}
+              containerClassName={"pagination"}
+              activeClassName={"active"}
+            />
+          </div>
+        </section>
+      )}
+    </div>
   );
 };
 

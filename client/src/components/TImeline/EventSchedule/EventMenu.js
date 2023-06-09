@@ -1,9 +1,7 @@
-import React, { useState } from "react";
-import Modal from "react-modal";
+import React, { useState, useRef, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { NavLink } from "react-router-dom";
-import SetEvent from "../../../pages/Scheduling/ScheduledEvent/SetEvent";
 import "./EventMenu.scss";
 import EventFetcher from "../../../pages/Scheduling/ScheduledEvent/EventFetcher";
 import { useSelector } from "react-redux";
@@ -18,17 +16,21 @@ const EventMenu = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
+  const datePickerRef = useRef(null);
+
   const handleClick = (componentName) => {
     if (activeComponent === componentName) {
-      closeModal();
       setActiveComponent(null);
+      if (isModalOpen) {
+        closeModal();
+      }
     } else {
       setActiveComponent(componentName);
     }
   };
 
   const openModal = () => {
-    setIsModalOpen(true);
+    setIsModalOpen((prevState) => !prevState);
   };
 
   const handleStartDateChange = (date) => {
@@ -47,6 +49,25 @@ const EventMenu = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (
+        datePickerRef.current &&
+        !datePickerRef.current.contains(event.target) &&
+        isModalOpen &&
+        !event.target.classList.contains("react-datepicker")
+      ) {
+        closeModal();
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [isModalOpen]);
 
   return (
     <div>
@@ -67,7 +88,7 @@ const EventMenu = () => {
             </NavLink>
           </div>
           {isModalOpen && (
-            <div className="dropdown-content">
+            <div className="dropdown-content" ref={datePickerRef}>
               <div className="date-picker-wrapper">
                 <DatePicker
                   selected={startDate}

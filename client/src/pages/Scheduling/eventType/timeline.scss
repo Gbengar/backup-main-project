@@ -1,73 +1,102 @@
-.button-style{
-    display: flex;
-    justify-content: flex-end;
-    padding: 10px;
-  
-  }
+.button-style {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}
 
-  .filter {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 30px;
-  }
-  .filterforname{
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 30px;
-  }
-  .filter-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 0;
-  }
+.filter {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 30px;
+}
 
-  .filterforname {
-    flex-grow: 1;
-  }
+.filterforname {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
 
-  .event-button-container {
-    display: flex;
-    justify-content: flex-end;
-    flex-grow: 1;
-  }
+.filter-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 0;
+}
 
-  .card {
-    width: 100%;
-    max-width: 400px;
-    padding: 5px 0;
-    border: 50% solid #030b6b;
-    -webkit-background-clip: padding-box;
-    -moz-background-clip: padding;
-    background-clip: padding-box;
-    justify-content: center;
-    
-  }
+.filterforname {
+  flex-grow: 1;
+}
 
-  .withincard{
-    padding: 10px;
-  }
-  
-  .dropright{
-    display: flex;
-    justify-content: flex-end;
-    flex-grow: 1;
-  }
+.event-button-container {
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+}
 
-  .dropleft{
-    display: flex;
-    justify-content: flex-start;
-    flex-grow: 1;
-  }
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
 
-  .parent-container {
-    display: flex;
+
+.card {
+  width: calc(33.33% - 20px); /* Adjust the width calculation as needed */
+  max-width: 350px;
+  margin: 10px;
+  padding: 5px 0;
+  border: 50% solid #030b6b;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  justify-content: center;
+}
+
+.withincard {
+  padding: 10px;
+}
+
+.dropright {
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+}
+
+.dropleft {
+  display: flex;
+  justify-content: flex-start;
+  flex-grow: 1;
+}
+
+.parent-container {
+  display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
+}
 
-   
-  }
-  
+
+.each-event-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.card-container {
+  width: calc(33.33% - 1rem); /* Adjust the width based on your requirements */
+  flex-grow: 1;
+  flex-basis: 0;
+}
+
+
+.search-container {
+  width: 200px; /* Adjust the width value to your preference */
+  height: 10px;
+  padding: 30px;
+}
