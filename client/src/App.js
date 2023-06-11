@@ -33,6 +33,7 @@ import CompleteSchedule from "./pages/newEvent/Add New Event/ContinueSchedule/Co
 import FetchEvents from "./pages/Scheduling/eventType/FetchEvents";
 import AllEventFetch from "./pages/Scheduling/eventType/AllEventFetch";
 import EventOptions from "./pages/scheduleorReminder/EventOptions";
+import NewEventMultipleUsers from "./pages/newEvent/Add Multiple Users/NewEventMultipleUsers";
 
 axios.defaults.withCredentials = true;
 
@@ -189,10 +190,19 @@ function App() {
           />
 
           <Route
-            path="/follow"
+            path="/createeventype"
             element={
               <Layout>
                 <EventOptions />
+              </Layout>
+            }
+          />
+
+          <Route
+            path="/follow"
+            element={
+              <Layout>
+                <NewEventMultipleUsers />
               </Layout>
             }
           />

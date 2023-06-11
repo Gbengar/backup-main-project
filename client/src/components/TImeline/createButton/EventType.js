@@ -5,7 +5,7 @@ import { FaPlus, FaCog } from "react-icons/fa";
 function EventButton(props) {
   return (
     <div style={{ display: "flex", justifyContent: "flex-end" }}>
-      <NavLink to="/addNewEvent">
+      <NavLink to="/createeventype">
         <button
           style={{
             padding: "10px",

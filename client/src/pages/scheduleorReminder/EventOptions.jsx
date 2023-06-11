@@ -23,7 +23,7 @@ const EventOptions = () => {
       </div>
       <div className="carded">
         <Card className="card-content">
-          <NavLink to="#" className="nav-link">
+          <NavLink to="/addnewevent" className="nav-link">
             <div className="icondiv">
               <FontAwesomeIcon
                 icon={faPeopleArrows}
