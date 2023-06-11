@@ -23,20 +23,16 @@ import { useEffect, useState } from "react";
 import EditProfile from "./pages/profile/EditProfile";
 import { Messenger } from "./pages/messenger/Messenger";
 import ViewProfile from "./pages/profile/ViewProfile";
-import Timeline from "./pages/Scheduling/eventType/Timeline";
 import ScheduledEvent from "./pages/Scheduling/ScheduledEvent/ScheduledEvent";
-import Upcoming from "./pages/Scheduling/ScheduledEvent/subEvent/Upcoming";
 import NewEvent from "./pages/newEvent/NewEvent";
 import OtherUsersEvent from "./pages/newEvent/OtherUsers/OtherUsersEvent";
 import AddNewEvent from "./pages/newEvent/Add New Event/AddNewEvent";
-import UserFollowing from "./pages/newEvent/Add New Event/UserFollowing";
-import Test from "./pages/newEvent/Add New Event/Test";
+
 import CompleteSchedule from "./pages/newEvent/Add New Event/ContinueSchedule/CompleteSchedule";
-import SetEvent from "./pages/Scheduling/ScheduledEvent/SetEvent";
-import SetEventRange from "./pages/Scheduling/ScheduledEvent/SetEventRange";
+
 import FetchEvents from "./pages/Scheduling/eventType/FetchEvents";
-import AllEvents from "./pages/Scheduling/eventType/AllEvents";
 import AllEventFetch from "./pages/Scheduling/eventType/AllEventFetch";
+import EventOptions from "./pages/scheduleorReminder/EventOptions";
 
 axios.defaults.withCredentials = true;
 
@@ -196,7 +192,7 @@ function App() {
             path="/follow"
             element={
               <Layout>
-                <FetchEvents />
+                <EventOptions />
               </Layout>
             }
           />

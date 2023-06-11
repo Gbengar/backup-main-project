@@ -95,7 +95,12 @@ const EachEventCard = ({ events, loading }) => {
             <br />
             <div>
               <span>
-                <NavLink to={`/meeting/${event.id}`}>View Booking Page</NavLink>
+                <NavLink
+                  className="link-no-underline"
+                  to={`/meeting/${event.id}`}
+                >
+                  View Booking Page
+                </NavLink>
               </span>
             </div>
             <br />

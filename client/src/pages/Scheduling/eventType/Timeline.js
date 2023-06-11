@@ -147,15 +147,19 @@ const Timeline = ({ events, loading }) => {
           </div>
           <div className="pagination-container">
             <ReactPaginate
-              previousLabel={"Previous"}
-              nextLabel={"Next"}
-              breakLabel={"..."}
+              previousLabel="Prev"
+              breakLabel="..."
+              nextLabel="Next"
               pageCount={pageCount}
               marginPagesDisplayed={1}
               pageRangeDisplayed={3}
+              renderOnZeroPageCount={null}
               onPageChange={handlePageChange}
-              containerClassName={"pagination"}
-              activeClassName={"active"}
+              containerClassName="pagination"
+              pageLinkClassName="page-num"
+              previousLinkClassName="page-num"
+              nextLinkClassName="page-num"
+              activeLinkClassName="activePage"
             />
           </div>
         </section>

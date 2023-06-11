@@ -1,0 +1,46 @@
+.carded {
+  padding: 10px 200px;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center; /* Center the card horizontally */
+  
+}
+
+.card-container .card {
+  max-width: 400px; /* Adjust the max-width as desired */
+  width: 100%;
+  border: 1px solid;
+
+}
+
+.nav-link {
+  margin-bottom: 10px; /* Add margin between NavLink components */
+  display: flex; /* Use flexbox for alignment */
+  align-items: center; /* Vertically center the content */
+  border: 1px solid ; /* Add border to NavLink */
+  transition: border-color 0.3s ease; /* Add transition effect */
+  border-radius: 4px; /* Add border radius */
+}
+
+.nav-link:hover {
+  border-color: lightblue; /* Change border color on hover */
+}
+
+.nav-link.last-link {
+  margin-bottom: 0; /* Remove bottom margin for the last NavLink */
+}
+
+.linknote {
+  padding-left: 20px; /* Adjust the desired padding */
+}
+
+.icondiv {
+  padding-right: 10px; /* Adjust the desired padding */
+}
+
+.one-on-one {
+  font-size: 15px; /* Adjust the font size as desired */
+  /* Add any other styles you want for the text container */
+}
