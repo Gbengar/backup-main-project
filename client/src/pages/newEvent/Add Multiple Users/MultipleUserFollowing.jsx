@@ -6,13 +6,13 @@ import "./style.scss";
 import MultipleCustomSelect from "./MultipleCustomSelect";
 
 export const handleSelectChange = (selectedOptions, users, setSelectedUser) => {
-  const selectedUserIds = selectedOptions.map((option) => option.value);
+  const selectedUserId = selectedOptions.map((option) => option.value);
   const selectedUsers = users.filter((user) =>
-    selectedUserIds.includes(user._id)
+    selectedUserId.includes(user._id)
   );
   setSelectedUser(selectedUsers);
-  console.log(selectedUserIds);
-  return selectedUserIds;
+  console.log(selectedUserId);
+  return selectedUserId;
 };
 
 const MultipleUserFollowing = ({ onSave }) => {
@@ -112,7 +112,7 @@ const MultipleUserFollowing = ({ onSave }) => {
         onMenuOpen={handleMenuOpen} // Add event handler for when menu is opened
         onMenuClose={handleMenuClose}
       />
-      {selectedUser && (
+      {selectedUser && selectedUser.length > 1 && (
         <>
           <div style={{ marginTop: "10px" }}>
             <label>Location: </label>

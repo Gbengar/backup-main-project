@@ -168,6 +168,15 @@ function App() {
           />
 
           <Route
+            path="/addneweventmultipleinvitees"
+            element={
+              <Layout>
+                <NewEventMultipleUsers setNewEvent={setNewEvent} />
+              </Layout>
+            }
+          />
+
+          <Route
             path="/completeSchedule"
             element={
               storedEvent ? (
@@ -194,15 +203,6 @@ function App() {
             element={
               <Layout>
                 <EventOptions />
-              </Layout>
-            }
-          />
-
-          <Route
-            path="/follow"
-            element={
-              <Layout>
-                <NewEventMultipleUsers />
               </Layout>
             }
           />

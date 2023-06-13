@@ -70,7 +70,7 @@ const EventSchema = new mongoose.Schema(
       required: true,
     },
     selectedUserId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: [mongoose.Schema.Types.ObjectId],
       ref: "User",
       required: true,
     },

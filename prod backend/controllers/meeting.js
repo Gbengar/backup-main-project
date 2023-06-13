@@ -8,9 +8,19 @@ const Meeting = require("../models/Meeting");
 
 const meetingRoute = asyncHandler(async (req, res) => {
   const { senderId, receiverId } = req.body; // Assuming senderId and receiverId are the correct property names
+  let receiverIds = [];
+
+  // Check if receiverId is an array of user IDs
+  if (Array.isArray(receiverId)) {
+    receiverIds = receiverId;
+  } else {
+    receiverIds.push(receiverId);
+  }
+
   const newMeeting = new Meeting({
-    members: [senderId, receiverId],
+    members: [senderId, ...receiverIds],
   });
+
   try {
     const savedMeeting = await newMeeting.save();
     res.status(200).json(savedMeeting);
