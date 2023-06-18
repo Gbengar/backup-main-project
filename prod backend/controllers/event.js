@@ -27,6 +27,7 @@ const createEvent = asyncHandler(async (req, res) => {
     meetingDescription,
     selectedUserId,
     additionalInfo,
+
     meetingId,
     start,
     end,
@@ -42,6 +43,8 @@ const createEvent = asyncHandler(async (req, res) => {
     (value === "SetPhoneNumber" && !callOption) ||
     (value === "SetCustom" && !customize) ||
     (value === "AskInvitee" &&
+      (location || locationAdd || callOption || customize)) ||
+    (value === "SetReminder" &&
       (location || locationAdd || callOption || customize)) ||
     !start ||
     !end ||

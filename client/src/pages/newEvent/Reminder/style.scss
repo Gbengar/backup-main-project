@@ -1,0 +1,419 @@
+@import url("https://fonts.googleapis.com/css2?family=Encode+Sans+Condensed&display=swap");
+
+.tophead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.title-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.title-container h3 {
+  margin: 0;
+}
+
+.tophead > * {
+  flex-shrink: 0;
+  margin: 0 5px;
+}
+
+.settings {
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+}
+
+.containerer {
+  display: flex;
+  justify-content: center;
+}
+
+.form-section {
+  position: relative;
+
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 40px;
+  margin: 20px auto; /* use auto for left and right margins */
+  width: 80%;
+}
+.section-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0 40px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+
+  border-radius: 5px;
+  background-color: rgb(211, 222, 240);
+}
+
+.section-header > div {
+  flex: 1;
+}
+
+.section-header h5 {
+  margin: 0;
+}
+
+.--flat-header {
+  top: 0;
+  right: 0;
+  margin: 0;
+  border-bottom: solid black;
+}
+
+.buttin {
+  margin: 10px 10px 10px 0;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 30px;
+  background-color: #ccc;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.buttin:hover {
+  background-color: #ddd;
+}
+
+.buttin button {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1rem;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: #333;
+  padding: 0;
+}
+
+.buttin button svg {
+  height: 1em;
+  width: 1em;
+  margin-right: 0.5em;
+  align-items: center;
+}
+
+.buttinnext {
+  margin: 30px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 30px;
+
+  cursor: pointer;
+  width: fit-content;
+}
+
+.buttinnext:hover {
+  background-color: lightblue;
+}
+
+.buttinnext button {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1rem;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: #333;
+  padding: 0;
+}
+
+.buttinnext button svg {
+  height: 1em;
+  width: 1em;
+  margin-right: 0.5em;
+  align-items: center;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+.margin-from-top {
+  margin-top: 50px;
+}
+
+.form-control,
+.Select,
+.input-style,
+.CustomSelect {
+  display: block;
+  width: 50%;
+  padding: 6px 12px;
+  margin: 20px 0 0 0;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #a65959;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out 0.15s,
+    -webkit-box-shadow ease-in-out 0.15s;
+  -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+
+.Select {
+  height: 34px;
+}
+
+.btn {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.select-container {
+  border: none;
+  padding: 0;
+  width: 50%;
+  margin: 20px 0 0 0;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #a65959;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out 0.15s,
+    -webkit-box-shadow ease-in-out 0.15s;
+  -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+
+.prop-label {
+  font-size: 10px;
+  font-weight: bold;
+  margin-top: 4px;
+}
+
+.prop-text {
+  font-size: 7px;
+  margin-top: 2px;
+}
+
+.prop-container {
+  display: flex;
+  align-items: center;
+}
+
+.prop-icon {
+  width: 20px;
+  margin-right: 8px;
+}
+
+.prop-details {
+  display: flex;
+  flex-direction: column;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.App {
+  margin: 20px;
+  max-width: 300px;
+}
+
+pre {
+  line-height: normal;
+}
+
+.newText {
+  font-family: "Encode Sans Condensed", sans-serif;
+}
+
+.select-control .Select-arrow,
+.select-control.open .Select-arrow {
+  transform: rotate(-180deg);
+}
+
+.updatebtn {
+  margin: 10px 10px 10px 0;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 30px;
+  background-color: rgb(73, 121, 225);
+  cursor: pointer;
+  width: fit-content;
+}
+
+.updatebtn:hover {
+  background-color: rgb(215, 140, 34);
+}
+
+.updatebtn button {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1rem;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: #333;
+  padding: 0;
+}
+
+.updatebtn button svg {
+  height: 1em;
+  width: 1em;
+  margin-right: 0.5em;
+  align-items: center;
+}
+
+.modal-content {
+  
+  margin: auto;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.modal-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  
+}
+
+.modal-label {
+  margin: 0 0 0 10px;
+}
+.modal-span{
+  margin: 0 0 0 25px;
+  font-size: 1.2rem;
+  opacity: 0.5;
+
+}
+
+.modal-call{
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.moddall{
+margin-top: 20px;
+
+}
+
+h4.modal-row {
+  font-weight: normal;
+}
+
+
+.input-css {
+  width: 34rem;
+  padding: 1rem;
+  animation: slide-up 0.5s ease;
+  background-color: #fff;
+  height: fit-content;
+  color: #a65959;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out 0.15s,
+    -webkit-box-shadow ease-in-out 0.15s;
+  -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+
+  &:active {
+    border-color: blue;
+  }
+}
+
+
+  .onHover{
+    color: blue;
+  text-decoration: none;
+  cursor: pointer;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+  
+
+  }
+
+  .Cancelmodal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .Canceloverlay {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+  
+  .Cancelmodal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+  }
+  
+  .Cancelmodal-buttons button:first-child {
+    margin-right: 10px;
+  }
+  
+  .completesche {
+    display: block;
+    width: 50%;
+    height: 40px;
+    padding: 6px 12px;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #a65959;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  }
+  
+  
+  .completesche2 {
+    width: 30%;
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 1;
+    color: #a65959;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  }
+  
+  

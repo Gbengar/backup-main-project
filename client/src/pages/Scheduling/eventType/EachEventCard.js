@@ -59,8 +59,8 @@ const EachEventCard = ({ events, loading }) => {
     <div className="each-event-card-container">
       {visibleEvents.map((event, index) => (
         <Card
-          key={event.id}
-          cardClass={"card"}
+          key={event._id}
+          cardClass={`card ${event.value === "SetReminder" ? "lightblue" : ""}`}
           className="card-container"
           style={{
             marginLeft: index % 3 === 0 ? "0" : "1rem",
@@ -71,8 +71,8 @@ const EachEventCard = ({ events, loading }) => {
             <div className="parent-container">
               <div className="dropleft">
                 <Checkbox
-                  checked={checked[event.id] || false}
-                  onChange={(event) => handleCheckBoxChange(event, event.id)}
+                  checked={checked[event._id] || false}
+                  onChange={(event) => handleCheckBoxChange(event, event._id)}
                   icon={<CheckBoxOutlineBlankIcon />}
                   checkedIcon={<CheckBoxIcon />}
                 />
@@ -86,8 +86,12 @@ const EachEventCard = ({ events, loading }) => {
                 className="--fw-thin "
                 style={{ fontSize: "150%", whiteSpace: "nowrap" }}
               >
-                <span>{convertDurationToText(event.duration)},</span> One-on-One
+                <span>{convertDurationToText(event.duration)},</span>{" "}
+                {event.value === "SetReminder"
+                  ? "One-Off-Reminder"
+                  : "One-on-One"}
               </h4>
+
               <span style={{ display: "block", marginTop: "0.9rem" }}>
                 {event.eventName}
               </span>
@@ -97,7 +101,7 @@ const EachEventCard = ({ events, loading }) => {
               <span>
                 <NavLink
                   className="link-no-underline"
-                  to={`/meeting/${event.id}`}
+                  to={`/meeting/${event._id}`}
                 >
                   View Booking Page
                 </NavLink>

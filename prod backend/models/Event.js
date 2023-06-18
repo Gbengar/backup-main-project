@@ -21,7 +21,13 @@ const EventSchema = new mongoose.Schema(
     },
     value: {
       type: String,
-      enum: ["SetAddress", "SetPhoneNumber", "AskInvitee", "SetCustom"],
+      enum: [
+        "SetAddress",
+        "SetPhoneNumber",
+        "AskInvitee",
+        "SetCustom",
+        "SetReminder",
+      ],
     },
     status: {
       type: String,
@@ -86,9 +92,17 @@ const EventSchema = new mongoose.Schema(
 // Adding the AskInvitee value, which doesn't require any other fields to be filled in
 EventSchema.path("value").validate(function (value) {
   return (
-    value !== "AskInvitee" ||
-    (!this.location && !this.locationAdd && !this.callOption && !this.customize)
+    (value !== "AskInvitee" ||
+      (!this.location &&
+        !this.locationAdd &&
+        !this.callOption &&
+        !this.customize)) &&
+    (value !== "SetReminder" ||
+      (!this.location &&
+        !this.locationAdd &&
+        !this.callOption &&
+        !this.customize))
   );
-}, "No additional fields should be provided with AskInvitee value");
+}, "No additional fields should be provided with AskInvitee or SetReminder value");
 
 module.exports = mongoose.model("Event", EventSchema);

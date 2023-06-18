@@ -45,7 +45,6 @@
   padding: 20px;
 }
 
-
 .card {
   width: calc(33.33% - 20px); /* Adjust the width calculation as needed */
   max-width: 350px;
@@ -81,7 +80,6 @@
   width: 100%;
 }
 
-
 .each-event-card-container {
   display: flex;
   flex-wrap: wrap;
@@ -94,16 +92,17 @@
   flex-basis: 0;
 }
 
-
 .search-container {
   width: 200px; /* Adjust the width value to your preference */
   height: 10px;
   padding: 30px;
 }
 
-
 .link-no-underline:link,
 .link-no-underline:visited {
   color: inherit; /* Inherit the default text color */
   text-decoration: none; /* Remove underline */
+}
+.lightblue {
+  background-color: rgb(86, 200, 86);
 }
