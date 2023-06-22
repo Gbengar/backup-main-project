@@ -65,6 +65,31 @@ const PastEvent = ({ events, loading }) => {
     reminder: event.reminder,
   }));
 
+  const eventStyleGetter = (event, start, end, isSelected) => {
+    let backgroundColor = "black"; // Default background color
+
+    if (isSelected) {
+      backgroundColor = "gray"; // Set background color to gray for selected events
+    } else {
+      // Apply color only to non-agenda views
+      if (event.value === "AskInvitee") {
+        backgroundColor = "blue"; // Set background color to blue for "AskInvitee" events
+      } else if (event.value === "SetReminder") {
+        backgroundColor = "red"; // Set background color to red for "SetReminder" events
+      } else if (event.value === "SetAddress") {
+        backgroundColor = "green"; // Set background color to green for "SetAddress" events
+      } else if (event.value === "SetCustom") {
+        backgroundColor = "yellow"; // Set background color to yellow for "SetCustom" events
+      }
+    }
+
+    return {
+      style: {
+        backgroundColor,
+      },
+    };
+  };
+
   return (
     <div>
       {loading ? (
@@ -91,7 +116,9 @@ const PastEvent = ({ events, loading }) => {
                   startAccessor="start"
                   endAccessor="end"
                   style={{ height: 400 }}
+                  selectable
                   onSelectEvent={handleEventClick}
+                  eventPropGetter={eventStyleGetter}
                 />
               )
             )}

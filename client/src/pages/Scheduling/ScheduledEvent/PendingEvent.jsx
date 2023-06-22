@@ -5,6 +5,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import Loader from "../../../components/loader/Loader";
 import { Modal } from "react-overlays";
 import "./scheduledevents.scss";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarXmark } from "@fortawesome/free-solid-svg-icons";
 import Box from "@mui/material/Box";
@@ -64,6 +65,29 @@ const PendingEvent = ({ events, loading }) => {
     reminder: event.reminder,
   }));
 
+  const eventStyleGetter = (event, start, end, isSelected) => {
+    let backgroundColor = "black"; // Default background color
+
+    if (!isSelected) {
+      // Apply color only to non-agenda views
+      if (event.value === "AskInvitee") {
+        backgroundColor = "blue"; // Set background color to blue for "AskInvitee" events
+      } else if (event.value === "SetReminder") {
+        backgroundColor = "red"; // Set background color to red for "SetReminder" events
+      } else if (event.value === "SetAddress") {
+        backgroundColor = "green"; // Set background color to green for "SetAddress" events
+      } else if (event.value === "SetCustom") {
+        backgroundColor = "yellow"; // Set background color to yellow for "SetCustom" events
+      }
+    }
+
+    return {
+      style: {
+        backgroundColor,
+      },
+    };
+  };
+
   return (
     <div>
       {loading ? (
@@ -78,7 +102,7 @@ const PendingEvent = ({ events, loading }) => {
                 </Box>
                 <br />
                 <div style={{ textAlign: "center" }}>
-                  <h4>You have no events coming up yet.</h4>
+                  <h4>You have had no pending events yet.</h4>
                 </div>
               </div>
             ) : (
@@ -91,6 +115,7 @@ const PendingEvent = ({ events, loading }) => {
                   endAccessor="end"
                   style={{ height: 400 }}
                   onSelectEvent={handleEventClick}
+                  eventPropGetter={eventStyleGetter}
                 />
               )
             )}

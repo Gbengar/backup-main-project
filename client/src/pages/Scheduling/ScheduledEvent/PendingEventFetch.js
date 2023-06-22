@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import PastEvent from "./PastEvent";
 import moment from "moment";
+import PendingEvent from "./PendingEvent";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API_URL = `${BACKEND_URL}/api/users/`;
@@ -55,7 +56,7 @@ const PendingEventFetch = ({ user }) => {
     getAllEvents();
   }, [fetchMeeting]);
 
-  return <PastEvent events={fetchEvents} loading={loading} />;
+  return <PendingEvent events={fetchEvents} loading={loading} />;
 };
 
 export default PendingEventFetch;

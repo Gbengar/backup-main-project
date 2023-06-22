@@ -1,60 +1,70 @@
-.pageNo{
-    display: flex;
-    justify-content: flex-end;
+.pageNo {
+  display: flex;
+  justify-content: flex-end;
 }
 
-.othersec{
-    display: flex;
+.othersec {
+  display: flex;
 }
 
-.list{
-    padding: auto;
-    margin: 10px;
-    justify-content: flex-start;
+.list {
+  padding: auto;
+  margin: 10px;
+  justify-content: flex-start;
 }
 
 .home-linkes {
-    display: flex;
-    justify-content:  flex-start;
-    width:auto;
-    border-bottom: 1px solid black;
-    padding: 20px;
-    & li a {
-      color:gold;
-    }
-    & > * {
-      margin-left: 1rem;
-      color: gold;
-    }
+  display: flex;
+  justify-content: flex-start;
+  width: auto;
+  border-bottom: 1px solid black;
+  padding: 20px;
+  & li a {
+    color: gold;
   }
+  & > * {
+    margin-left: 1rem;
+    color: gold;
+  }
+}
 
-  .space{
-    padding: 0 10px;
-  }
+.space {
+  padding: 0 10px;
+}
 
-  .containerer {
-    display: flex;
-    justify-content: center;
-  }
+.containerer {
+  display: flex;
+  justify-content: center;
+}
 
-  .event-Modal h4 {
-    font-size: 14px; // Set the desired font size for the modal title
-  }
-  
-  .event-Modal p {
-    font-size: 12px; // Set the desired font size for the modal paragraphs
-  }
-  
-  .event-content {
-    position: relative;
-  }
-  
-  .event-date {
-    margin-bottom: 5px;
-  }
-  
-  .no-events {
-    color: #999;
-    font-style: italic;
-  }
-  
+.event-Modal h4 {
+  font-size: 14px; // Set the desired font size for the modal title
+}
+
+.event-Modal p {
+  font-size: 12px; // Set the desired font size for the modal paragraphs
+}
+
+.event-content {
+  position: relative;
+}
+
+.event-date {
+  margin-bottom: 5px;
+}
+
+.no-events {
+  color: #999;
+  font-style: italic;
+}
+.set-reminder-event {
+  background-color: yellow;
+}
+
+.set-phone-number-event {
+  background-color: lightblue;
+}
+
+.set-address-event {
+  background-color: lightgreen;
+}

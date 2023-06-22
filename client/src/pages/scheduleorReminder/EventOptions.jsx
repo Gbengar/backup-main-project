@@ -62,7 +62,7 @@ const EventOptions = () => {
               </span>
             </div>
           </NavLink>
-          <NavLink to="#" className="nav-link">
+          <NavLink to="/reminder" className="nav-link">
             <div className="icondiv">
               <FontAwesomeIcon
                 icon={faPersonCirclePlus}

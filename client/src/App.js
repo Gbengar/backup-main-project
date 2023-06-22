@@ -35,6 +35,7 @@ import AllEventFetch from "./pages/Scheduling/eventType/AllEventFetch";
 import EventOptions from "./pages/scheduleorReminder/EventOptions";
 import NewEventMultipleUsers from "./pages/newEvent/Add Multiple Users/NewEventMultipleUsers";
 import SingleReminder from "./pages/newEvent/Reminder/SingleReminder";
+import RecurringReminder from "./pages/newEvent/RecurringReminder/RecurringReminder";
 
 axios.defaults.withCredentials = true;
 
@@ -191,6 +192,15 @@ function App() {
           />
 
           <Route
+            path="/reminder"
+            element={
+              <Layout>
+                <SingleReminder />
+              </Layout>
+            }
+          />
+
+          <Route
             path="/otherusersevent"
             element={
               <Layout>
@@ -212,7 +222,7 @@ function App() {
             path="/follow"
             element={
               <Layout>
-                <SingleReminder />
+                <RecurringReminder />
               </Layout>
             }
           />

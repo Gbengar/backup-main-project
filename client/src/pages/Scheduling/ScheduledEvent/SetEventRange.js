@@ -65,6 +65,28 @@ const SetEventRange = ({ events, loading }) => {
     reminder: event.reminder,
   }));
 
+  const eventStyleGetter = (event, start, end, isSelected) => {
+    let backgroundColor = "black"; // Default background color
+
+    if (!isSelected) {
+      // Apply color only to non-agenda views
+      if (event.value === "AskInvitee") {
+        backgroundColor = "blue"; // Set background color to blue for "AskInvitee" events
+      } else if (event.value === "SetReminder") {
+        backgroundColor = "red"; // Set background color to red for "SetReminder" events
+      } else if (event.value === "SetAddress") {
+        backgroundColor = "green"; // Set background color to green for "SetAddress" events
+      } else if (event.value === "SetCustom") {
+        backgroundColor = "yellow"; // Set background color to yellow for "SetCustom" events
+      }
+    }
+
+    return {
+      style: {
+        backgroundColor,
+      },
+    };
+  };
   const CustomToolbar = (toolbar) => {
     const { label } = toolbar;
     return (
@@ -103,6 +125,7 @@ const SetEventRange = ({ events, loading }) => {
                   style={{ height: 400 }}
                   onSelectEvent={handleEventClick}
                   toolbar={CustomToolbar}
+                  eventPropGetter={eventStyleGetter}
                 />
               )
             )}
