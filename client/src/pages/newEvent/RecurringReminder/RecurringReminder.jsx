@@ -75,6 +75,7 @@ const RecurringReminder = () => {
     weekly: RRule.WEEKLY,
     biweekly: RRule.WEEKLY,
     monthly: RRule.MONTHLY,
+    quarterly: RRule.MONTHLY,
     yearly: RRule.YEARLY,
   };
 

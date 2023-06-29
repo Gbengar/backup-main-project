@@ -8,18 +8,27 @@ const localizer = momentLocalizer(moment);
 
 const TestEventCal = ({ events, loading }) => {
   const eventList = events.flatMap((event) => {
-    if (event.value === "SetRecurring" && event.rrule) {
+    if (event.rrule) {
       const { rrule, start, end, ...rest } = event;
       const rruleObject = rrulestr(rrule, {
         dtstart: moment.utc(start).toDate(),
       });
       const recurringDates = rruleObject.all();
-      const until = moment.utc(rruleObject.options.until).toDate();
-      const interval = rruleObject.options.interval || 1; // Get the interval or default to 1
+      const freq = rruleObject.options.freq;
+      const interval = rruleObject.options.interval || 1;
 
       return recurringDates
-        .filter((date, index) => index % interval === 0) // Include every second date based on the interval
-        .filter((date) => date <= until)
+        .filter((date, index) => {
+          if (freq === "WEEKLY") {
+            // Skip next week if the interval is 2
+            return index % interval === 0 && index % (interval * 2) !== 1;
+          } else if (freq === "MONTHLY") {
+            // Skip next two months if the interval is 3
+            return index % interval === 0 && index % (interval * 3) !== 2;
+          } else {
+            return true; // For other frequencies, include all recurring dates
+          }
+        })
         .map((date) => {
           const eventStart = moment(date).toDate();
           const eventEnd = moment(date)
