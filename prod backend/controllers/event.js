@@ -27,7 +27,7 @@ const createEvent = asyncHandler(async (req, res) => {
     meetingDescription,
     selectedUserId,
     additionalInfo,
-
+    rrule,
     meetingId,
     start,
     end,
@@ -39,6 +39,7 @@ const createEvent = asyncHandler(async (req, res) => {
   if (
     !value ||
     (value === "SetAddress" && !location) ||
+    (value === "SetRecurring" && !rrule) ||
     (value === "SetAddress" && additionalInfo && !locationAdd) ||
     (value === "SetPhoneNumber" && !callOption) ||
     (value === "SetCustom" && !customize) ||
@@ -63,6 +64,7 @@ const createEvent = asyncHandler(async (req, res) => {
       value === "SetAddress" && additionalInfo ? locationAdd : undefined,
     callOption: value === "SetPhoneNumber" ? callOption : undefined,
     customize: value === "SetCustom" ? customize : undefined,
+    rrule: value === "SetRecurring" ? rrule : undefined,
     eventName,
     meetingDescription,
     selectedUserId,

@@ -8,11 +8,13 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { createEvent } from "../../../redux-app/features/auth/authSlice";
-import RecurringSelect from "./RecurringSelect";
+import { RRule } from "rrule";
+import SetRecurringReminder from "./SetRecurringReminder";
 
 const modules = {
   toolbar: [
@@ -37,6 +39,15 @@ const options = [
   { value: 60, label: "1 hour" },
 ];
 
+const frequencyOptions = [
+  { value: "daily", label: "Daily" },
+  { value: "weekly", label: "Weekly" },
+  { value: "biweekly", label: "Bi-Weekly" },
+  { value: "monthly", label: "Monthly" },
+  { value: "quarterly", label: "Quarterly" },
+  { value: "yearly", label: "Yearly" },
+];
+
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API_URL = `${BACKEND_URL}/api/users/`;
 
@@ -44,13 +55,12 @@ const initialState = {
   eventName: "",
   meetingDescription: "",
   meetingId: "",
-  value: "Reminder",
+  value: "SetRecurring",
   selectedUserId: null,
   start: null,
   end: null,
   reminder: null,
   duration: null, // Add duration state variable
-  recurring: null, // Add recurring state variable
 };
 
 const RecurringReminder = () => {
@@ -60,8 +70,18 @@ const RecurringReminder = () => {
     (state) => state.auth
   );
 
+  const frequencyMap = {
+    daily: RRule.DAILY,
+    weekly: RRule.WEEKLY,
+    biweekly: RRule.WEEKLY,
+    monthly: RRule.MONTHLY,
+    yearly: RRule.YEARLY,
+  };
+
   const [completeMeeting, setCompleteMeeting] = useState(initialState);
   const [isDurationChanged, setIsDurationChanged] = useState(false);
+  const [recurringFrequency, setRecurringFrequency] = useState(null);
+  const [recurringUntil, setRecurringUntil] = useState(null);
 
   const {
     eventName,
@@ -73,7 +93,6 @@ const RecurringReminder = () => {
     end,
     reminder,
     duration,
-    recurring,
   } = completeMeeting;
 
   const handleInputChange = (e) => {
@@ -109,17 +128,10 @@ const RecurringReminder = () => {
     }));
   };
 
-  const handleRecurringChange = (selectedOption) => {
-    setCompleteMeeting((prevState) => ({
-      ...prevState,
-      recurring: selectedOption,
-    }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!start || !end || !duration || !reminder || !recurring) {
+    if (!start || !end || !duration || !reminder || !recurringFrequency) {
       toast.error("Please fill all input fields.");
       return;
     }
@@ -128,8 +140,42 @@ const RecurringReminder = () => {
 
     const durationValue = duration ? duration.value : null;
 
+    let rrule;
+
+    if (recurringFrequency.value === "biweekly") {
+      // Bi-Weekly (Once every 2 weeks)
+
+      const dayOfWeek = start.getDay(); // Get the day of the week of the event
+      const weekStartDay = 0;
+
+      rrule = new RRule({
+        freq: frequencyMap[recurringFrequency.value],
+        until: recurringUntil,
+        dtstart: start,
+        interval: 2, // Set the interval to 2 for bi-weekly
+        byweekday: [dayOfWeek === weekStartDay ? 6 : dayOfWeek - 1],
+      });
+    } else if (recurringFrequency.value === "quarterly") {
+      // Quarterly (Once every 3 months)
+      rrule = new RRule({
+        freq: frequencyMap[recurringFrequency.value],
+        until: recurringUntil,
+        dtstart: start,
+        interval: 3, // Set the interval to 3 for quarterly
+      });
+    } else {
+      // Other frequencies (daily, weekly, monthly, yearly)
+      rrule = new RRule({
+        freq: frequencyMap[recurringFrequency.value],
+        until: recurringUntil,
+        dtstart: start,
+      });
+    }
+
+    const rruleString = rrule.toString();
+
     const data = {
-      value: recurring ? "Recurring" : "SetReminder",
+      value: "SetRecurring",
       eventName,
       meetingDescription,
       location,
@@ -140,14 +186,32 @@ const RecurringReminder = () => {
       meetingId,
       start,
       end: new Date(start.getTime() + duration.value * 60000),
-      aReminder: "null",
       duration: durationValue,
       reminder,
+      rrule: rruleString,
     };
 
     await handleSave(data);
-    await dispatch(createEvent(data)); // Call newEvent with the data object
+    await dispatch(createEvent(data));
   };
+
+  useEffect(() => {
+    // Update recurringUntil based on the selected frequency
+    if (recurringFrequency) {
+      if (
+        recurringFrequency.value === "quarterly" ||
+        recurringFrequency.value === "yearly"
+      ) {
+        setRecurringUntil(
+          new Date(start.getFullYear() + 5, start.getMonth(), start.getDate())
+        );
+      } else {
+        setRecurringUntil(
+          new Date(start.getFullYear() + 2, start.getMonth(), start.getDate())
+        );
+      }
+    }
+  }, [recurringFrequency, start]);
 
   const handleSave = (newEvent) => {
     // Save the event data
@@ -244,33 +308,50 @@ const RecurringReminder = () => {
                   }));
                 }}
                 showTimeSelect
-                dateFormat="Pp"
+                timeFormat="HH:mm"
+                timeIntervals={15}
+                dateFormat="yyyy-MM-dd HH:mm"
+                className="completesche"
+                placeholderText="YYYY-MM-DD HH:MM"
+                style={{ width: "250%" }}
+                name="start"
+                autoComplete="off"
               />
             </div>
             <div className="form-group">
-              <label>Duration</label>
-              <RecurringSelect
+              <label>Duration:</label>
+              <Select
                 options={options}
-                value={duration}
+                className="completesche2"
+                menuShouldScrollIntoView={true}
+                menuPlacement="top"
                 onChange={handleDurationChange}
               />
             </div>
+
             <div className="form-group">
-              <label>Reminder</label>
-              <RecurringSelect
-                options={options}
-                value={reminder}
-                onChange={handleReminderChange}
-              />
+              <label>Duration:</label>
+              <SetRecurringReminder onReminderChange={handleReminderChange} />
             </div>
             <div className="form-group">
-              <label>Recurring</label>
-              <RecurringSelect
-                options={options}
-                value={recurring}
-                onChange={handleRecurringChange}
+              <label>Recurring Frequency:</label>
+              <Select
+                options={frequencyOptions}
+                value={recurringFrequency}
+                onChange={setRecurringFrequency}
               />
             </div>
+            {recurringFrequency && (
+              <div className="form-group">
+                <label>Recurring Until:</label>
+                <DatePicker
+                  selected={recurringUntil}
+                  onChange={setRecurringUntil}
+                  dateFormat="yyyy-MM-dd"
+                  placeholderText="YYYY-MM-DD"
+                />
+              </div>
+            )}
           </form>
         </div>
       </div>

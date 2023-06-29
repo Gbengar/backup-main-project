@@ -10,7 +10,6 @@ const EventSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.Number,
       required: true,
     },
-
     start: {
       type: Date,
       required: true,
@@ -27,6 +26,7 @@ const EventSchema = new mongoose.Schema(
         "AskInvitee",
         "SetCustom",
         "SetReminder",
+        "SetRecurring", // Add the new value "SetRecurring"
       ],
     },
     status: {
@@ -80,28 +80,34 @@ const EventSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    // Add the recurringRule field for SetRecurring
+    rrule: {
+      type: String,
+      required: function () {
+        return this.value === "SetRecurring";
+      },
+    },
   },
   {
-    // Adding the "strict" option to prevent unexpected fields
-    // and "timestamps" option to add "createdAt" and "updatedAt" fields
     strict: true,
     timestamps: true,
   }
 );
 
-// Adding the AskInvitee value, which doesn't require any other fields to be filled in
 EventSchema.path("value").validate(function (value) {
   return (
     (value !== "AskInvitee" ||
       (!this.location &&
         !this.locationAdd &&
         !this.callOption &&
-        !this.customize)) &&
+        !this.customize &&
+        !this.recurringRule)) &&
     (value !== "SetReminder" ||
       (!this.location &&
         !this.locationAdd &&
         !this.callOption &&
-        !this.customize))
+        !this.customize &&
+        !this.recurringRule))
   );
 }, "No additional fields should be provided with AskInvitee or SetReminder value");
 

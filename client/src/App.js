@@ -36,6 +36,7 @@ import EventOptions from "./pages/scheduleorReminder/EventOptions";
 import NewEventMultipleUsers from "./pages/newEvent/Add Multiple Users/NewEventMultipleUsers";
 import SingleReminder from "./pages/newEvent/Reminder/SingleReminder";
 import RecurringReminder from "./pages/newEvent/RecurringReminder/RecurringReminder";
+import TestCalendar from "./pages/userList/TestCalendar";
 
 axios.defaults.withCredentials = true;
 
@@ -223,6 +224,15 @@ function App() {
             element={
               <Layout>
                 <RecurringReminder />
+              </Layout>
+            }
+          />
+
+          <Route
+            path="/testfollow"
+            element={
+              <Layout>
+                <TestCalendar />
               </Layout>
             }
           />
