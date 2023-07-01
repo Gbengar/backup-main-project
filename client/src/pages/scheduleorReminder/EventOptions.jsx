@@ -81,7 +81,7 @@ const EventOptions = () => {
               </span>
             </div>
           </NavLink>
-          <NavLink to="#" className="nav-link last-link">
+          <NavLink to="/recurringreminder" className="nav-link last-link">
             <div className="icondiv">
               <FontAwesomeIcon
                 icon={faPersonCirclePlus}

@@ -80,6 +80,8 @@ const PastEvent = ({ events, loading }) => {
         backgroundColor = "green"; // Set background color to green for "SetAddress" events
       } else if (event.value === "SetCustom") {
         backgroundColor = "yellow"; // Set background color to yellow for "SetCustom" events
+      } else if (event.value === "SetRecurring") {
+        backgroundColor = "purple"; // Set background color to yellow for "SetCustom" events
       }
     }
 

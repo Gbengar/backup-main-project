@@ -13,48 +13,53 @@ const PendingEventFetch = ({ user }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const getMeetings = async () => {
-      if (user) {
+    if (user) {
+      const getMeetings = async () => {
         try {
           const res = await axios.get(`${API_URL}meeting/` + user._id);
-          setFetchMeeting(res.data);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
-    getMeetings();
-  }, [user]);
+          const meetingIds = res.data.map((meeting) => meeting._id);
 
-  useEffect(() => {
-    const getAllEvents = async () => {
-      setLoading(true);
-      if (fetchMeeting) {
-        try {
-          const events = [];
-          for (let meeting of fetchMeeting) {
-            const res = await axios.get(`${API_URL}events/` + meeting._id);
-            events.push(res.data);
+          if (meetingIds.length > 0) {
+            const fetchEventPromises = meetingIds.map((meetingId) =>
+              axios.get(`${API_URL}events/` + meetingId)
+            );
+
+            setLoading(true);
+
+            Promise.all(fetchEventPromises)
+              .then((results) => {
+                const events = results.map((res) => res.data);
+                setFetchEvents(events);
+
+                // Filter events based on start and end dates
+                const currentDate = moment().startOf("day");
+                const filteredEvents = events.flat().filter((event) => {
+                  const eventStartDate = moment(event.start).startOf("day");
+                  const eventEndDate = moment(event.end).endOf("day");
+                  return (
+                    eventStartDate.isAfter(currentDate) &&
+                    (eventEndDate.isSameOrAfter(currentDate) ||
+                      event.end === null)
+                  );
+                });
+
+                setFetchEvents(filteredEvents);
+              })
+              .catch((error) => {
+                console.log(error);
+              })
+              .finally(() => {
+                setLoading(false);
+              });
           }
-
-          const allEvents = events.flat();
-          // Filter events based on start and end dates
-          const filteredEvents = allEvents.filter((event) => {
-            const currentDate = moment().startOf("day");
-            const eventEndDate = moment(event.end).endOf("day");
-            return eventEndDate.isAfter(currentDate) || event.end === null;
-          });
-
-          setFetchEvents(filteredEvents);
-          setLoading(false); // Set loading to false when the events are fetched
-          console.log(filteredEvents);
         } catch (error) {
           console.log(error);
         }
-      }
-    };
-    getAllEvents();
-  }, [fetchMeeting]);
+      };
+
+      getMeetings();
+    }
+  }, [user]);
 
   return <PendingEvent events={fetchEvents} loading={loading} />;
 };

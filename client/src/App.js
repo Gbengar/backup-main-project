@@ -220,7 +220,7 @@ function App() {
           />
 
           <Route
-            path="/follow"
+            path="/recurringreminder"
             element={
               <Layout>
                 <RecurringReminder />

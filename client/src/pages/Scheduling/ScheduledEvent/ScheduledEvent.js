@@ -3,7 +3,6 @@ import Card from "../../../components/card/Card";
 import Button from "../../../components/TImeline/createButton/CreateButton";
 import EventCard from "../../../components/TImeline/eventCard/EventCard";
 import PageMenuTimeline from "../../../components/TImeline/PageMenuTimeline";
-import Upcoming from "./subEvent/Upcoming";
 import "./scheduledevents.scss";
 import { NavLink } from "react-router-dom";
 import EventMenu from "../../../components/TImeline/EventSchedule/EventMenu";
@@ -36,9 +35,10 @@ const ScheduledEvent = () => {
             <p> Displaying 0 – 0 of 0 Events </p>
           </div>
         </div>
-
         <div className="container">
-          <EventMenu />
+          <Card cardClass={"eventcard"}>
+            <EventMenu />
+          </Card>
         </div>
       </section>
     </>

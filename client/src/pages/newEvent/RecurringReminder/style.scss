@@ -1,5 +1,24 @@
 @import url("https://fonts.googleapis.com/css2?family=Encode+Sans+Condensed&display=swap");
 
+
+.flex-container {
+  display: flex;
+  justify-content: space-between; /* Add space between the elements */
+  
+}
+.flow-left {
+  width: 100%;
+  padding: 0%;
+  order: 1; 
+  
+}
+
+.flow-right {
+  width: 100%;
+  order: 2; 
+}
+
+
 .tophead {
   display: flex;
   justify-content: space-between;
@@ -153,12 +172,11 @@
 .input-style,
 .CustomSelect {
   display: block;
-  width: 50%;
+  width: 90%;
   padding: 6px 12px;
   margin: 20px 0 0 0;
   font-size: 14px;
   line-height: 1.42857143;
-  color: #a65959;
   background-color: #fff;
   background-image: none;
   border: 1px solid #ccc;
@@ -190,11 +208,10 @@
 .select-container {
   border: none;
   padding: 0;
-  width: 50%;
+  width: 90%;
   margin: 20px 0 0 0;
   font-size: 14px;
   line-height: 1.42857143;
-  color: #a65959;
   background-color: #fff;
   background-image: none;
   border: 1px solid #ccc;
@@ -389,12 +406,11 @@ h4.modal-row {
   
   .completesche {
     display: block;
-    width: 50%;
-    height: 40px;
+    width: 90%;
+    height: 35px;
     padding: 6px 12px;
     margin-top: 20px;
     font-size: 14px;
-    color: #a65959;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -404,9 +420,11 @@ h4.modal-row {
   
   
   .completesche2 {
-    width: 30%;
+    width: 90%;
     margin-top: 20px;
     font-size: 14px;
+    height: 35px;
+
     line-height: 1;
     color: #a65959;
     background-color: #fff;
@@ -415,5 +433,7 @@ h4.modal-row {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
   }
+  
+
   
   

@@ -10,47 +10,43 @@ const API_URL = `${BACKEND_URL}/api/users/`;
 
 const FetchEvents = () => {
   const { user } = useSelector((state) => state.auth);
-
-  const [fetchMeeting, setFetchMeeting] = useState([]);
   const [fetchEvents, setFetchEvents] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const getMeetings = async () => {
-      if (user) {
+    if (user) {
+      const getMeetings = async () => {
         try {
           const res = await axios.get(`${API_URL}meeting/` + user._id);
-          setFetchMeeting(res.data);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
-    getMeetings();
-  }, [user]);
+          const meetingIds = res.data.map((meeting) => meeting._id);
 
-  useEffect(() => {
-    const getAllEvents = async () => {
-      setLoading(true);
-      if (fetchMeeting) {
-        try {
-          const events = [];
-          for (let meeting of fetchMeeting) {
-            const res = await axios.get(`${API_URL}events/` + meeting._id);
-            events.push(res.data);
+          if (meetingIds.length > 0) {
+            const fetchEventPromises = meetingIds.map((meetingId) =>
+              axios.get(`${API_URL}events/` + meetingId)
+            );
+
+            setLoading(true);
+
+            Promise.all(fetchEventPromises)
+              .then((results) => {
+                const events = results.map((res) => res.data);
+                setFetchEvents(events);
+              })
+              .catch((error) => {
+                console.log(error);
+              })
+              .finally(() => {
+                setLoading(false);
+              });
           }
-
-          setFetchEvents(events);
-          setLoading(false); // Set loading to false when the events are fetched
-          console.log(events);
         } catch (error) {
           console.log(error);
         }
-      }
-    };
-    getAllEvents();
-  }, [fetchMeeting]);
+      };
 
+      getMeetings();
+    }
+  }, [user]);
   return <Timeline events={fetchEvents.flat()} loading={loading} />;
 };
 

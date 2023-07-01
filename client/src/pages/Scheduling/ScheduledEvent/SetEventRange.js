@@ -9,10 +9,11 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarXmark } from "@fortawesome/free-solid-svg-icons";
 import Box from "@mui/material/Box";
+import { rrulestr, RRule } from "rrule"; // Import rrulestr function
 
 const localizer = momentLocalizer(moment);
 
-const SetEventRange = ({ events, loading }) => {
+const SetEventRange = ({ events, loading, endDay }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [eventPosition, setEventPosition] = useState({ top: 0, left: 0 });
   const [loadingComplete, setLoadingComplete] = useState(false);
@@ -55,15 +56,42 @@ const SetEventRange = ({ events, loading }) => {
     };
   }, []);
 
-  const eventList = events.map((event) => ({
-    title: event.eventName,
-    start: moment(event.start).toDate(),
-    end: moment(event.end).toDate(),
-    value: event.value,
-    meetingDescription: event.meetingDescription,
-    duration: event.duration,
-    reminder: event.reminder,
-  }));
+  const eventList = events.flatMap((event) => {
+    if (event.rrule) {
+      const { rrule, start, end, ...rest } = event;
+      const rruleObject = RRule.fromString(rrule);
+      rruleObject.options.dtstart = moment.utc(start).toDate();
+      rruleObject.options.until = moment.utc(endDay).toDate(); // Set the until value to endDay
+      const recurringDates = rruleObject.all();
+
+      return recurringDates.map((date) => {
+        const eventStart = moment(date).toDate();
+        const eventEnd = moment(date)
+          .add(moment(end).diff(moment(start)))
+          .toDate();
+
+        return {
+          title: event.eventName,
+          start: eventStart,
+          end: eventEnd,
+          ...rest,
+        };
+      });
+    }
+
+    return [
+      {
+        title: event.eventName,
+        start: moment(event.start).toDate(),
+        end: moment(event.end).toDate(),
+        value: event.value,
+        meetingDescription: event.meetingDescription,
+        duration: event.duration,
+        reminder: event.reminder,
+        rrule: event.rrule,
+      },
+    ];
+  });
 
   const eventStyleGetter = (event, start, end, isSelected) => {
     let backgroundColor = "black"; // Default background color
@@ -78,6 +106,8 @@ const SetEventRange = ({ events, loading }) => {
         backgroundColor = "green"; // Set background color to green for "SetAddress" events
       } else if (event.value === "SetCustom") {
         backgroundColor = "yellow"; // Set background color to yellow for "SetCustom" events
+      } else if (event.value === "SetRecurring") {
+        backgroundColor = "purple"; // Set background color to yellow for "SetCustom" events
       }
     }
 
@@ -87,6 +117,7 @@ const SetEventRange = ({ events, loading }) => {
       },
     };
   };
+
   const CustomToolbar = (toolbar) => {
     const { label } = toolbar;
     return (

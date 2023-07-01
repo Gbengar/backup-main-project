@@ -5,10 +5,10 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import Loader from "../../../components/loader/Loader";
 import { Modal } from "react-overlays";
 import "./scheduledevents.scss";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarXmark } from "@fortawesome/free-solid-svg-icons";
 import Box from "@mui/material/Box";
+import { rrulestr } from "rrule"; // Import rrulestr function
 
 const localizer = momentLocalizer(moment);
 
@@ -55,15 +55,42 @@ const PendingEvent = ({ events, loading }) => {
     };
   }, []);
 
-  const eventList = events.map((event) => ({
-    title: event.eventName,
-    start: moment(event.start).toDate(),
-    end: moment(event.end).toDate(),
-    value: event.value,
-    meetingDescription: event.meetingDescription,
-    duration: event.duration,
-    reminder: event.reminder,
-  }));
+  const eventList = events.flatMap((event) => {
+    if (event.rrule) {
+      const { rrule, start, end, ...rest } = event;
+      const rruleObject = rrulestr(rrule, {
+        dtstart: moment.utc(start).toDate(),
+      });
+      const recurringDates = rruleObject.all();
+
+      return recurringDates.map((date) => {
+        const eventStart = moment(date).toDate();
+        const eventEnd = moment(date)
+          .add(moment(end).diff(moment(start)))
+          .toDate();
+
+        return {
+          title: event.eventName,
+          start: eventStart,
+          end: eventEnd,
+          ...rest,
+        };
+      });
+    }
+
+    return [
+      {
+        title: event.eventName,
+        start: moment(event.start).toDate(),
+        end: moment(event.end).toDate(),
+        value: event.value,
+        meetingDescription: event.meetingDescription,
+        duration: event.duration,
+        reminder: event.reminder,
+        rrule: event.rrule,
+      },
+    ];
+  });
 
   const eventStyleGetter = (event, start, end, isSelected) => {
     let backgroundColor = "black"; // Default background color
@@ -78,6 +105,8 @@ const PendingEvent = ({ events, loading }) => {
         backgroundColor = "green"; // Set background color to green for "SetAddress" events
       } else if (event.value === "SetCustom") {
         backgroundColor = "yellow"; // Set background color to yellow for "SetCustom" events
+      } else if (event.value === "SetRecurring") {
+        backgroundColor = "purple"; // Set background color to yellow for "SetCustom" events
       }
     }
 
@@ -86,6 +115,16 @@ const PendingEvent = ({ events, loading }) => {
         backgroundColor,
       },
     };
+  };
+
+  const CustomToolbar = (toolbar) => {
+    const { label } = toolbar;
+    return (
+      <div className="custom-toolbar">
+        <h6>Date Range</h6>
+        <span>{label}</span>
+      </div>
+    );
   };
 
   return (
@@ -102,7 +141,7 @@ const PendingEvent = ({ events, loading }) => {
                 </Box>
                 <br />
                 <div style={{ textAlign: "center" }}>
-                  <h4>You have had no pending events yet.</h4>
+                  <h4>You currently have no Pending Event.</h4>
                 </div>
               </div>
             ) : (
@@ -115,6 +154,7 @@ const PendingEvent = ({ events, loading }) => {
                   endAccessor="end"
                   style={{ height: 400 }}
                   onSelectEvent={handleEventClick}
+                  toolbar={CustomToolbar}
                   eventPropGetter={eventStyleGetter}
                 />
               )

@@ -12,53 +12,57 @@ const EventFetcher = ({ startDay, endDay, user }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const getMeetings = async () => {
-      if (user) {
+    if (user) {
+      const getMeetings = async () => {
         try {
           const res = await axios.get(`${API_URL}meeting/` + user._id);
-          setFetchMeeting(res.data);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
-    getMeetings();
-  }, [user]);
+          const meetingIds = res.data.map((meeting) => meeting._id);
 
-  useEffect(() => {
-    const getAllEvents = async () => {
-      setLoading(true);
-
-      if (fetchMeeting) {
-        try {
-          const events = [];
-          for (let meeting of fetchMeeting) {
-            const res = await axios.get(`${API_URL}events/` + meeting._id);
-            events.push(res.data);
-          }
-
-          const allEvents = events.flat();
-
-          const filteredEvents = allEvents.filter((event) => {
-            const eventStartDate = moment(event.start).startOf("day");
-            const eventEndDate = moment(event.end).endOf("day");
-            return (
-              eventStartDate.isBetween(startDay, endDay, null, "[]") &&
-              eventEndDate.isBetween(startDay, endDay, null, "[]")
+          if (meetingIds.length > 0) {
+            const fetchEventPromises = meetingIds.map((meetingId) =>
+              axios.get(`${API_URL}events/` + meetingId)
             );
-          });
 
-          setFetchEvents(filteredEvents);
-          setLoading(false); // Set loading to false after events are fetched
+            setLoading(true);
+
+            Promise.all(fetchEventPromises)
+              .then((results) => {
+                const events = results.map((res) => res.data);
+                const allEvents = events.flat();
+
+                const filteredEvents = allEvents.filter((event) => {
+                  const eventStartDate = moment(event.start).startOf("day");
+                  const eventEndDate = moment(event.end).endOf("day");
+                  return (
+                    eventStartDate.isBetween(startDay, endDay, null, "[]") &&
+                    eventEndDate.isBetween(startDay, endDay, null, "[]")
+                  );
+                });
+
+                setFetchEvents(filteredEvents);
+              })
+              .catch((error) => {
+                console.log(error);
+              })
+              .finally(() => {
+                setLoading(false);
+              });
+          } else {
+            setFetchEvents([]);
+            setLoading(false);
+          }
         } catch (error) {
           console.log(error);
         }
-      }
-    };
-    getAllEvents();
-  }, [fetchMeeting, startDay, endDay]);
+      };
 
-  return <SetEventRange events={fetchEvents} loading={loading} />;
+      getMeetings();
+    }
+  }, [user, startDay, endDay]);
+
+  return (
+    <SetEventRange events={fetchEvents} loading={loading} endDay={endDay} />
+  );
 };
 
 export default EventFetcher;

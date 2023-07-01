@@ -83,6 +83,7 @@ const RecurringReminder = () => {
   const [isDurationChanged, setIsDurationChanged] = useState(false);
   const [recurringFrequency, setRecurringFrequency] = useState(null);
   const [recurringUntil, setRecurringUntil] = useState(null);
+  const [nextClicked, setNextClicked] = useState(false);
 
   const {
     eventName,
@@ -194,6 +195,7 @@ const RecurringReminder = () => {
 
     await handleSave(data);
     await dispatch(createEvent(data));
+    navigate("/timeline");
   };
 
   useEffect(() => {
@@ -241,12 +243,22 @@ const RecurringReminder = () => {
     }
   }, [isDurationChanged, user]);
 
+  useEffect(() => {
+    if (nextClicked) {
+      const handleFormSubmit = async () => {
+        await handleSubmit(); // Call the handleSubmit function when nextClicked is true
+      };
+
+      handleFormSubmit();
+    }
+  }, [nextClicked]);
+
   return (
     <div>
       <div className="tophead">
         <Back />
         <div className="title-container">
-          <h3>Single Schedule</h3>
+          <h3>Recurring Schedule/Reminder</h3>
         </div>
         <Share />
       </div>
@@ -266,93 +278,110 @@ const RecurringReminder = () => {
                   <button>Cancel</button>
                 </div>
                 <div className="buttin">
-                  <button type="submit">Next</button>
+                  <button onChange={() => setNextClicked(true)}>Next</button>
                 </div>
               </div>
             </div>
-            <div className="margin-from-top">
-              <div className="form-group">
-                <label>Event Name</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="eventName"
-                  autoComplete="off"
-                  value={eventName}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
-            <div className="form-group">
-              <label>Description/ Instructions</label>
-              <ReactQuill
-                className="select-container"
-                name="meetingDescription"
-                modules={modules}
-                placeholder="Write a summary and any details your invitee should know about the event"
-                value={meetingDescription}
-                onChange={handleMeetingDescriptionChange}
-              />
-            </div>
-            <div className="form-group">
-              <label>Date Picker</label>
-              <DatePicker
-                selected={start}
-                onChange={(date) => {
-                  const newEndDate = new Date(
-                    date.getTime() + (duration || 0) * 60000
-                  );
-                  setCompleteMeeting((prevState) => ({
-                    ...prevState,
-                    start: date,
-                    end: newEndDate,
-                  }));
-                }}
-                showTimeSelect
-                timeFormat="HH:mm"
-                timeIntervals={15}
-                dateFormat="yyyy-MM-dd HH:mm"
-                className="completesche"
-                placeholderText="YYYY-MM-DD HH:MM"
-                style={{ width: "250%" }}
-                name="start"
-                autoComplete="off"
-              />
-            </div>
-            <div className="form-group">
-              <label>Duration:</label>
-              <Select
-                options={options}
-                className="completesche2"
-                menuShouldScrollIntoView={true}
-                menuPlacement="top"
-                onChange={handleDurationChange}
-              />
-            </div>
 
-            <div className="form-group">
-              <label>Duration:</label>
-              <SetRecurringReminder onReminderChange={handleReminderChange} />
-            </div>
-            <div className="form-group">
-              <label>Recurring Frequency:</label>
-              <Select
-                options={frequencyOptions}
-                value={recurringFrequency}
-                onChange={setRecurringFrequency}
-              />
-            </div>
-            {recurringFrequency && (
-              <div className="form-group">
-                <label>Recurring Until:</label>
-                <DatePicker
-                  selected={recurringUntil}
-                  onChange={setRecurringUntil}
-                  dateFormat="yyyy-MM-dd"
-                  placeholderText="YYYY-MM-DD"
-                />
+            <div className="margin-from-top flex-container">
+              <div className="flow-left">
+                <div className="form-group">
+                  <label>Event Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="eventName"
+                    autoComplete="off"
+                    value={eventName}
+                    onChange={handleInputChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Description/ Instructions</label>
+                  <ReactQuill
+                    className="select-container"
+                    name="meetingDescription"
+                    modules={modules}
+                    placeholder="Write a summary and any details your invitee should know about the event"
+                    value={meetingDescription}
+                    onChange={handleMeetingDescriptionChange}
+                  />
+                </div>
               </div>
-            )}
+              <div className="flow-right">
+                <div className="date-picker-duration">
+                  <div className="form-group">
+                    <label>Date Picker</label>
+                    <DatePicker
+                      selected={start}
+                      onChange={(date) => {
+                        const newEndDate = new Date(
+                          date.getTime() + (duration || 0) * 60000
+                        );
+                        setCompleteMeeting((prevState) => ({
+                          ...prevState,
+                          start: date,
+                          end: newEndDate,
+                        }));
+                      }}
+                      showTimeSelect
+                      timeFormat="HH:mm"
+                      timeIntervals={15}
+                      dateFormat="yyyy-MM-dd HH:mm"
+                      className="completesche"
+                      placeholderText="YYYY-MM-DD HH:MM"
+                      name="start"
+                      autoComplete="off"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Duration:</label>
+                    <Select
+                      options={options}
+                      className="completesche2"
+                      menuShouldScrollIntoView={true}
+                      menuPlacement="top"
+                      onChange={handleDurationChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label>Reminder:</label>
+                  <SetRecurringReminder
+                    className="completesche2"
+                    onReminderChange={handleReminderChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Recurring Frequency:</label>
+                  <Select
+                    options={frequencyOptions}
+                    className="completesche2"
+                    menuShouldScrollIntoView={true}
+                    menuPlacement="top"
+                    value={recurringFrequency}
+                    onChange={setRecurringFrequency}
+                  />
+                </div>
+                {recurringFrequency && (
+                  <div className="form-group">
+                    <label>Recurring Until:</label>
+                    <DatePicker
+                      selected={recurringUntil}
+                      onChange={setRecurringUntil}
+                      minDate={new Date()}
+                      dateFormat="yyyy-MM-dd"
+                      className="completesche"
+                      placeholderText="YYYY-MM-DD"
+                      name="recurringUntil"
+                      autoComplete="off"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
           </form>
         </div>
       </div>
