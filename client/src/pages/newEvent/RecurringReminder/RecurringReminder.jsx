@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { createEvent } from "../../../redux-app/features/auth/authSlice";
 import { RRule } from "rrule";
 import SetRecurringReminder from "./SetRecurringReminder";
+import Loader from "../../../components/loader/Loader";
 
 const modules = {
   toolbar: [
@@ -49,6 +50,7 @@ const frequencyOptions = [
 ];
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const API_URL = `${BACKEND_URL}/api/users/`;
 
 const initialState = {
@@ -83,7 +85,7 @@ const RecurringReminder = () => {
   const [isDurationChanged, setIsDurationChanged] = useState(false);
   const [recurringFrequency, setRecurringFrequency] = useState(null);
   const [recurringUntil, setRecurringUntil] = useState(null);
-  const [nextClicked, setNextClicked] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // Add a state to track form submission
 
   const {
     eventName,
@@ -137,65 +139,74 @@ const RecurringReminder = () => {
       toast.error("Please fill all input fields.");
       return;
     }
+    setIsSubmitting(true);
 
     const { location, locationAdd, callOption, customize } = completeMeeting;
 
     const durationValue = duration ? duration.value : null;
+    try {
+      const { location, locationAdd, callOption, customize } = completeMeeting;
 
-    let rrule;
+      let rrule;
 
-    if (recurringFrequency.value === "biweekly") {
-      // Bi-Weekly (Once every 2 weeks)
+      if (recurringFrequency.value === "biweekly") {
+        // Bi-Weekly (Once every 2 weeks)
 
-      const dayOfWeek = start.getDay(); // Get the day of the week of the event
-      const weekStartDay = 0;
+        const dayOfWeek = start.getDay(); // Get the day of the week of the event
+        const weekStartDay = 0;
 
-      rrule = new RRule({
-        freq: frequencyMap[recurringFrequency.value],
-        until: recurringUntil,
-        dtstart: start,
-        interval: 2, // Set the interval to 2 for bi-weekly
-        byweekday: [dayOfWeek === weekStartDay ? 6 : dayOfWeek - 1],
-      });
-    } else if (recurringFrequency.value === "quarterly") {
-      // Quarterly (Once every 3 months)
-      rrule = new RRule({
-        freq: frequencyMap[recurringFrequency.value],
-        until: recurringUntil,
-        dtstart: start,
-        interval: 3, // Set the interval to 3 for quarterly
-      });
-    } else {
-      // Other frequencies (daily, weekly, monthly, yearly)
-      rrule = new RRule({
-        freq: frequencyMap[recurringFrequency.value],
-        until: recurringUntil,
-        dtstart: start,
-      });
+        rrule = new RRule({
+          freq: frequencyMap[recurringFrequency.value],
+          until: recurringUntil,
+          dtstart: start,
+          interval: 2, // Set the interval to 2 for bi-weekly
+          byweekday: [dayOfWeek === weekStartDay ? 6 : dayOfWeek - 1],
+        });
+      } else if (recurringFrequency.value === "quarterly") {
+        // Quarterly (Once every 3 months)
+        rrule = new RRule({
+          freq: frequencyMap[recurringFrequency.value],
+          until: recurringUntil,
+          dtstart: start,
+          interval: 3, // Set the interval to 3 for quarterly
+        });
+      } else {
+        // Other frequencies (daily, weekly, monthly, yearly)
+        rrule = new RRule({
+          freq: frequencyMap[recurringFrequency.value],
+          until: recurringUntil,
+          dtstart: start,
+        });
+      }
+
+      const rruleString = rrule.toString();
+
+      const data = {
+        value: "SetRecurring",
+        eventName,
+        meetingDescription,
+        location,
+        locationAdd,
+        callOption,
+        customize,
+        selectedUserId: user._id,
+        meetingId,
+        start,
+        end: new Date(start.getTime() + duration.value * 60000),
+        duration: durationValue,
+        reminder,
+        rrule: rruleString,
+      };
+
+      await dispatch(createEvent(data)); // Dispatch the action and wait for it to finish
+      handleSave(data);
+      navigate("/timeline");
+    } catch (error) {
+      console.error("Error occurred during form submission:", error);
+      toast.error("An error occurred while submitting the form.");
+    } finally {
+      setIsSubmitting(false); // Reset isSubmitting after the async operation is completed
     }
-
-    const rruleString = rrule.toString();
-
-    const data = {
-      value: "SetRecurring",
-      eventName,
-      meetingDescription,
-      location,
-      locationAdd,
-      callOption,
-      customize,
-      selectedUserId: user._id,
-      meetingId,
-      start,
-      end: new Date(start.getTime() + duration.value * 60000),
-      duration: durationValue,
-      reminder,
-      rrule: rruleString,
-    };
-
-    await handleSave(data);
-    await dispatch(createEvent(data));
-    navigate("/timeline");
   };
 
   useEffect(() => {
@@ -243,16 +254,6 @@ const RecurringReminder = () => {
     }
   }, [isDurationChanged, user]);
 
-  useEffect(() => {
-    if (nextClicked) {
-      const handleFormSubmit = async () => {
-        await handleSubmit(); // Call the handleSubmit function when nextClicked is true
-      };
-
-      handleFormSubmit();
-    }
-  }, [nextClicked]);
-
   return (
     <div>
       <div className="tophead">
@@ -278,7 +279,14 @@ const RecurringReminder = () => {
                   <button>Cancel</button>
                 </div>
                 <div className="buttin">
-                  <button onChange={() => setNextClicked(true)}>Next</button>
+                  <button
+                    type="submit"
+                    className="--btn --btn-primary --btn-block"
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Submitting..." : "Next"}
+                  </button>
                 </div>
               </div>
             </div>
@@ -294,6 +302,7 @@ const RecurringReminder = () => {
                     autoComplete="off"
                     value={eventName}
                     onChange={handleInputChange}
+                    placeholder="Event Name"
                   />
                 </div>
 
@@ -330,7 +339,7 @@ const RecurringReminder = () => {
                       timeIntervals={15}
                       dateFormat="yyyy-MM-dd HH:mm"
                       className="completesche"
-                      placeholderText="YYYY-MM-DD HH:MM"
+                      placeholderText="Choose a date and time"
                       name="start"
                       autoComplete="off"
                     />
@@ -343,6 +352,7 @@ const RecurringReminder = () => {
                       menuShouldScrollIntoView={true}
                       menuPlacement="top"
                       onChange={handleDurationChange}
+                      placeholder="Select the length of the event"
                     />
                   </div>
                 </div>
@@ -363,6 +373,7 @@ const RecurringReminder = () => {
                     menuPlacement="top"
                     value={recurringFrequency}
                     onChange={setRecurringFrequency}
+                    placeholder="Set the Frequency of event"
                   />
                 </div>
                 {recurringFrequency && (
@@ -374,7 +385,7 @@ const RecurringReminder = () => {
                       minDate={new Date()}
                       dateFormat="yyyy-MM-dd"
                       className="completesche"
-                      placeholderText="YYYY-MM-DD"
+                      placeholderText="Choose a date"
                       name="recurringUntil"
                       autoComplete="off"
                     />

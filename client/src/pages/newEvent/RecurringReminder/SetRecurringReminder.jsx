@@ -27,6 +27,7 @@ const SetRecurringReminder = ({ onReminderChange }) => {
     <Select
       value={selectedOption}
       onChange={handleChange}
+      placeholder="Set the reminder"
       options={options}
       className="completesche2"
       menuShouldScrollIntoView={true} // set this to true to scroll to the top of the menu

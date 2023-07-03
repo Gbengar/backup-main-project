@@ -4,6 +4,9 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Settings, ArrowDropUp, ArrowDropDown } from "@mui/icons-material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import FileCopyIcon from "@mui/icons-material/FileCopy";
 
 const DropdownButton = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -36,9 +39,31 @@ const DropdownButton = () => {
           horizontal: "right",
         }}
       >
-        <MenuItem onClick={handleClose}>Option 1</MenuItem>
-        <MenuItem onClick={handleClose}>Option 2</MenuItem>
-        <MenuItem onClick={handleClose}>Option 3</MenuItem>
+        <MenuItem onClick={handleClose}>
+          <div
+            style={{ display: "flex", alignItems: "center", padding: "4px" }}
+          >
+            <span style={{ marginRight: "4px" }}>Edit</span>
+            <EditIcon style={{ fontSize: 10 }} />
+          </div>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <div
+            style={{ display: "flex", alignItems: "center", padding: "4px" }}
+          >
+            <span style={{ marginRight: "4px" }}>Delete</span>
+            <DeleteIcon style={{ fontSize: 10 }} />
+          </div>
+        </MenuItem>
+
+        <MenuItem onClick={handleClose}>
+          <div
+            style={{ display: "flex", alignItems: "center", padding: "4px" }}
+          >
+            <span style={{ marginRight: "4px" }}>Clone </span>
+            <FileCopyIcon style={{ fontSize: 10 }} />
+          </div>
+        </MenuItem>
       </Menu>
     </div>
   );

@@ -4,7 +4,12 @@ const {
   getConversation,
   startConvosFollowings,
 } = require("../controllers/conversation");
-const { addEvent, getEvents, createEvent } = require("../controllers/event");
+const {
+  addEvent,
+  getEvents,
+  createEvent,
+  updateEvent,
+} = require("../controllers/event");
 const {
   meetingRoute,
   getMeeting,
@@ -71,6 +76,7 @@ router.post("/events", addEvent);
 router.post("/postevents", createEvent);
 
 router.get("/events/:meetingId", getEvents);
+router.patch("/updateuser", protect, updateEvent);
 
 // Add Event Setup
 
