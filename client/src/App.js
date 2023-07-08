@@ -229,10 +229,10 @@ function App() {
           />
 
           <Route
-            path="/testfollow"
+            path="/follow"
             element={
               <Layout>
-                <TestCalendar />
+                <RecurringReminder />
               </Layout>
             }
           />

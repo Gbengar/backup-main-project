@@ -78,7 +78,7 @@ const EachEventCard = ({ events, loading }) => {
                 />
               </div>
               <div className="dropright">
-                <DropdownButton />
+                <DropdownButton event={event} />
               </div>
             </div>
             <div>

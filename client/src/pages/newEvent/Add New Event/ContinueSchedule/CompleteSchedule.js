@@ -146,9 +146,7 @@ const CompleteSchedule = ({ newEvent }) => {
         </div>
         <Share />
       </div>
-      <div className="settings">
-        <DropdownButton />
-      </div>
+      <div className="settings"></div>
       <div className="container">
         <div className="form-section">
           <form onSubmit={handleSubmit}>

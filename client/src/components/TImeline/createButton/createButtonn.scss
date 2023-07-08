@@ -43,3 +43,64 @@
   background-color: #0d3d71;
   transform: scale(1.1);
 }
+// Modal
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h4 {
+    margin-bottom: 20px;
+  }
+
+  form {
+    width: 100%;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+
+  label {
+    margin-bottom: 5px;
+    font-size: 9px; /* Adjust the font size as desired */
+  }
+
+  input,
+  .Select__control {
+    width: 100%;
+    height: 30px; /* Adjust the height as desired */
+    padding: 6px 10px; /* Adjust the padding as desired */
+    font-size: 12px; /* Adjust the font size as desired */
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+
+  .completesche input {
+    cursor: pointer;
+  }
+
+  .Select__control {
+    height: 30px; /* Adjust the height as desired */
+    padding: 6px 10px; /* Adjust the padding as desired */
+  }
+
+  .Select__single-value,
+  .Select__placeholder {
+    font-size: 12px; /* Adjust the font size as desired */
+    line-height: 1;
+    padding: 0 2px; /* Adjust the padding as desired */
+  }
+
+  .Select__menu {
+    font-size: 12px; /* Adjust the font size as desired */
+  }
+
+  .save-button {
+    margin-top: 10px;
+  }
+}
+
