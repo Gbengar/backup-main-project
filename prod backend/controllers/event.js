@@ -87,36 +87,10 @@ const createEvent = asyncHandler(async (req, res) => {
 
 const updateEvent = asyncHandler(async (req, res) => {
   const eventId = req.params.id;
-  const {
-    value,
-    location,
-    locationAdd,
-    callOption,
-    customize,
-    eventName,
-    meetingDescription,
-    selectedUserId,
-    additionalInfo,
-    rrule,
-    start,
-    end,
-    duration,
-    reminder,
-  } = req.body;
+  const { eventName, start, end, duration, reminder } = req.body;
 
   // Validation
-  if (
-    !value ||
-    (value === "SetAddress" && !location) ||
-    (value === "SetRecurring" && !rrule) ||
-    (value === "SetAddress" && additionalInfo && !locationAdd) ||
-    (value === "SetPhoneNumber" && !callOption) ||
-    (value === "SetCustom" && !customize) ||
-    !start ||
-    !end ||
-    !duration ||
-    !reminder
-  ) {
+  if (!eventName || !start || !end || !duration || !reminder) {
     res.status(400);
     throw new Error("Please provide valid options");
   }
@@ -130,16 +104,7 @@ const updateEvent = asyncHandler(async (req, res) => {
   }
 
   // Update event
-  event.value = value;
-  event.location = value === "SetAddress" ? location : undefined;
-  event.locationAdd =
-    value === "SetAddress" && additionalInfo ? locationAdd : undefined;
-  event.callOption = value === "SetPhoneNumber" ? callOption : undefined;
-  event.customize = value === "SetCustom" ? customize : undefined;
-  event.rrule = value === "SetRecurring" ? rrule : undefined;
   event.eventName = eventName;
-  event.meetingDescription = meetingDescription;
-  event.selectedUserId = selectedUserId;
   event.start = start;
   event.end = end;
   event.duration = duration;

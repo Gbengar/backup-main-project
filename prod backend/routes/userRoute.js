@@ -76,7 +76,7 @@ router.post("/events", addEvent);
 router.post("/postevents", createEvent);
 
 router.get("/events/:meetingId", getEvents);
-router.patch("/updateuser/:id", updateEvent);
+router.patch("/updateevent/:id", updateEvent);
 
 // Add Event Setup
 

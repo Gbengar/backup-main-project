@@ -15,6 +15,7 @@ import "./createButtonn.scss";
 import axios from "axios";
 
 import "react-datepicker/dist/react-datepicker.css";
+import { toast } from "react-toastify";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -71,7 +72,11 @@ const DropdownButton = ({ event }) => {
   const [selectedDuration, setSelectedDuration] = useState(
     options.find((option) => option.value === event.duration)
   );
-  const [selectedReminder, setSelectedReminder] = useState(event.reminder);
+  const [selectedReminder, setSelectedReminder] = useState(
+    event.reminder
+      ? remiderOption.find((option) => option.value === event.reminder)
+      : { value: "", label: "" }
+  );
 
   const eventNameRef = useRef(null);
   const reminderRef = useRef(null);
@@ -102,10 +107,16 @@ const DropdownButton = ({ event }) => {
     setIsModalOpen(false);
   };
 
-  const handleSaveClick = async () => {
+  const handleSaveClick = () => {
     const endTime = momentStartDate
       .add(selectedDuration.value, "minutes")
       .toDate();
+
+    // Check if the selectedReminder is different from the event's current reminder
+    const newReminder =
+      selectedReminder.value !== event.reminder
+        ? selectedReminder.value
+        : event.reminder;
 
     const updatedEvent = {
       ...event,
@@ -113,15 +124,14 @@ const DropdownButton = ({ event }) => {
       start: startDate,
       end: endTime,
       duration: selectedDuration.value,
-      reminder: selectedReminder.value,
+      reminder: newReminder, // Use the newReminder value instead of selectedReminder.value
     };
 
     console.log("Updated Event:", updatedEvent);
     console.log(event._id);
 
-    await axios.patch(`${API_URL}/updateuser/${event._id}`, updatedEvent);
-    // Pass the updated event back to the parent component or perform any other necessary action
-    // ...
+    axios.patch(`${API_URL}/updateevent/${event._id}`, updatedEvent);
+    toast.success("Event updated successfully");
 
     handleModalClose();
   };
