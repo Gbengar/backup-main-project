@@ -46,7 +46,11 @@ io.on("connection", (socket) => {
 */
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  // Set the appropriate Access-Control-Allow-Origin header based on the requesting origin
+  // In this case, you can use the requesting origin directly, as you're not handling credentials
+  res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
+
+  // Set other CORS-related headers
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
@@ -55,6 +59,12 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, PATCH, OPTIONS"
   );
+
+  // Set Access-Control-Allow-Credentials to true if your requests include credentials (e.g., cookies, HTTP authentication)
+  // If you're not handling credentials, you can omit this line or set it to 'false'
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+
+  // Continue with the request handling
   next();
 });
 
