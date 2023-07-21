@@ -12,19 +12,28 @@ const app = express();
 
 // Middlewares
 
-app.use(express.json());
-app.use(cookieParser());
-app.use(express.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(
-  cors({
-    origin: [
-      "https://main-project-backend-8rc2.onrender.com",
-      "http://localhost:3000",
-    ],
-    credentials: true,
-  })
-);
+// `app.use(express.json());
+// app.use(cookieParser());
+// app.use(express.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
+// app.use(
+//   cors({
+//     origin: [
+//       "https://main-project-backend-8rc2.onrender.com",
+//       "http://localhost:3000",
+//     ],
+//     credentials: true,
+//   })
+// );`
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000"); // Replace this with your frontend URL
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 

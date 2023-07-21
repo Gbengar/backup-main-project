@@ -3,8 +3,6 @@ import axios from "axios";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API_URL = `${BACKEND_URL}/api/users/`;
 
-console.log(API_URL);
-
 // Validate email
 export const validateEmail = (email) => {
   return email.match(
@@ -33,8 +31,6 @@ const logout = async () => {
 // Login Status
 const getLoginStatus = async () => {
   const res = await axios.get(API_URL + "loggedin");
-  console.log(res.data);
-
   return res.data;
 };
 
