@@ -13,11 +13,12 @@ const app = express();
 
 // Middlewares
 
+app.use(bodyParser.json());
+/* 
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-/* app.use(
+app.use(
   cors({
     origin: [
       "https://main-project-backend-8rc2.onrender.com",
