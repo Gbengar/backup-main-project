@@ -13,9 +13,10 @@ const app = express();
 
 // Middlewares
 
-app.use(bodyParser.json());
 /* 
 app.use(express.json());
+app.use(bodyParser.json());
+
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(
