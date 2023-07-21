@@ -17,6 +17,7 @@ function EventButton(props) {
           <FaPlus style={{ fontSize: "1.2rem", cursor: "pointer" }} />
         </button>
       </NavLink>
+
       <button
         style={{
           padding: "10px",
@@ -32,7 +33,10 @@ function EventButton(props) {
             borderRadius: "20px",
           }}
         >
-          Settings <FaCog style={{ fontSize: "1.2rem", marginLeft: "5px" }} />
+          Settings{" "}
+          <NavLink to="/eventsetting">
+            <FaCog style={{ fontSize: "1.2rem", marginLeft: "5px" }} />
+          </NavLink>
         </span>
       </button>
     </div>

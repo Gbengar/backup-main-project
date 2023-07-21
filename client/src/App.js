@@ -37,6 +37,9 @@ import NewEventMultipleUsers from "./pages/newEvent/Add Multiple Users/NewEventM
 import SingleReminder from "./pages/newEvent/Reminder/SingleReminder";
 import RecurringReminder from "./pages/newEvent/RecurringReminder/RecurringReminder";
 import TestCalendar from "./pages/userList/TestCalendar";
+import EventSettings from "./pages/eventSetting/EventSettings";
+import TimezoneSelector from "./pages/eventSetting/TimezoneSelector";
+import CountrySelect from "./pages/eventSetting/CountrySelect";
 
 axios.defaults.withCredentials = true;
 
@@ -229,10 +232,19 @@ function App() {
           />
 
           <Route
+            path="/eventsetting"
+            element={
+              <Layout>
+                <EventSettings />
+              </Layout>
+            }
+          />
+
+          <Route
             path="/follow"
             element={
               <Layout>
-                <RecurringReminder />
+                <CountrySelect />
               </Layout>
             }
           />

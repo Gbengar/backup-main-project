@@ -16,6 +16,7 @@ import { createEvent } from "../../../redux-app/features/auth/authSlice";
 import { RRule } from "rrule";
 import SetRecurringReminder from "./SetRecurringReminder";
 import Loader from "../../../components/loader/Loader";
+import Button from "@mui/material/Button";
 
 const modules = {
   toolbar: [
@@ -276,17 +277,17 @@ const RecurringReminder = () => {
               </div>
               <div className="--flex-end">
                 <div className="buttinnext">
-                  <button>Cancel</button>
+                  <Button>Cancel</Button>
                 </div>
                 <div className="buttin">
-                  <button
+                  <Button
                     type="submit"
                     className="--btn --btn-primary --btn-block"
                     onClick={handleSubmit}
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? "Submitting..." : "Next"}
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>

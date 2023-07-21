@@ -9,11 +9,13 @@ const {
   getEvents,
   createEvent,
   updateEvent,
+  deleteEvent,
 } = require("../controllers/event");
 const {
   meetingRoute,
   getMeeting,
   startMeetFollowings,
+  deleteMeeting,
 } = require("../controllers/meeting");
 const { addMessages, getMessages } = require("../controllers/messages");
 const router = express.Router();
@@ -67,17 +69,19 @@ router.put("/:id/unfollow", unfollowUser);
 router.post("/meeting", meetingRoute);
 router.get("/meeting/:userId", getMeeting);
 router.get("/findmeeting/:firstUserId/:secondUserId", startMeetFollowings);
+router.delete("/meetingdelete/:id", deleteMeeting);
 
 // Event routers
 
 router.post("/events", addEvent);
 
-// create Event
+// create Even
 router.post("/postevents", createEvent);
 
 router.get("/events/:meetingId", getEvents);
 router.patch("/updateevent/:id", updateEvent);
+router.delete("/eventdelete/:id", deleteEvent);
 
-// Add Event Setup
+// Add Event Setups
 
 module.exports = router;
