@@ -16,16 +16,13 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-// app.use(
-//   cors({
-//     origin: [
-//       "https://main-project-backend-8rc2.onrender.com",
-//       "http://localhost:3000",
-//     ],
-//     credentials: true,
-//   })
-// );`
-app.use((req, res, next) => {
+app.use(
+  cors({
+    origin: ["http://localhost:5000", "http://localhost:3000"],
+    credentials: true,
+  })
+);
+/* app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -34,7 +31,7 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.setHeader("Access-Control-Allow-Credentials", "true"); // Allow requests with credentials
   next();
-});
+}); */
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
