@@ -66,6 +66,8 @@ const CountrySelect = ({ onCountryChange }) => {
                 // Combine holidays from both years
                 let allHolidays = [...currentYearHolidays, ...nextYearHolidays];
                 setHolidays(allHolidays);
+                onCountryChange(allHolidays);
+                console.log(allHolidays);
               } else {
                 console.error("Error fetching holidays for next year.");
               }
@@ -96,14 +98,6 @@ const CountrySelect = ({ onCountryChange }) => {
         getOptionValue={(option) => option.value}
         styles={customStyles}
       />
-
-      {/* Remove the list and just log the holidays */}
-      {holidays.length > 0 && (
-        <div>
-          {console.log(holidays)} {/* Log the holidays array */}
-          <h2>Holidays in {selectedCountry && selectedCountry.label}</h2>
-        </div>
-      )}
     </div>
   );
 };
