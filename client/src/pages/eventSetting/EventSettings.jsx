@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment";
+import Select from "react-select";
 import Back from "../../components/Buttons/Back/Back";
 import Share from "../../components/Buttons/Share/Share";
-import moment from "moment"; // Import Moment.js
-import momentTz from "moment-timezone"; // Import Moment-Timezone for timezone support
 import Card from "../../components/card/Card";
-import "./style.scss";
 import Button from "@mui/material/Button";
-import Select from "react-select";
 import TimezoneSelector from "./TimezoneSelector";
 import CountrySelect from "./CountrySelect";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { createEvent } from "../../redux-app/features/auth/authSlice";
+import { toast } from "react-toastify";
 
 const time = [
   { value: 12, label: "12h (am/pm)" },
@@ -35,18 +34,16 @@ const initialState = {
   start: null,
   end: null,
   reminder: null,
-  duration: null, // Add duration state variable
+  duration: null,
 };
+
 const EventSettings = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [completeMeeting, setCompleteMeeting] = useState(initialState);
   const [holidays, setHolidays] = useState([]);
-  const { user, isLoading, isLoggedIn, isSuccess } = useSelector(
-    (state) => state.auth
-  );
-  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
-  // Use useEffect to handle the state update when selected country changes
   useEffect(() => {
     const fetchMeetingData = async () => {
       if (user && holidays.length > 0) {
@@ -55,21 +52,18 @@ const EventSettings = () => {
         const initialStatesForHolidays = holidays.map((holiday) => {
           const eventDate = moment(holiday.date.iso); // Use iso datetime here
 
-          // Check if the eventDate contains hour, minute, and second information
           const hasTimeInfo =
             eventDate.hour() !== 0 ||
             eventDate.minute() !== 0 ||
             eventDate.second() !== 0;
 
           if (!hasTimeInfo) {
-            // If there is no time info, set start to the beginning of the day (00:00:00) and end to end of the day (23:59:59)
             eventDate.startOf("day");
           }
 
           const start = eventDate.toDate(); // Convert back to JavaScript Date object
           const end = eventDate.endOf("day").toDate();
 
-          // Calculate duration in minutes
           const duration = moment.duration(moment(end).diff(start)).asMinutes();
 
           return {
@@ -89,23 +83,68 @@ const EventSettings = () => {
           ...prevState,
           initialStatesForHolidays: initialStatesForHolidays,
         }));
-
-        initialStatesForHolidays.forEach(async (holidayData) => {
-          await dispatch(createEvent(holidayData));
-        });
       }
     };
 
     fetchMeetingData();
   }, [user, holidays]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    console.log("Form data entered:", completeMeeting);
+    if (user && holidays.length > 0) {
+      const meetingId = await fetchMeetingId();
 
-    setIsSubmitting(false);
+      const initialStatesForHolidays = holidays.map((holiday) => {
+        const eventDate = moment(holiday.date.iso); // Use iso datetime here
+
+        const hasTimeInfo =
+          eventDate.hour() !== 0 ||
+          eventDate.minute() !== 0 ||
+          eventDate.second() !== 0;
+
+        if (!hasTimeInfo) {
+          eventDate.startOf("day");
+        }
+
+        const start = eventDate.toDate(); // Convert back to JavaScript Date object
+        const end = eventDate.endOf("day").toDate();
+
+        const duration = moment.duration(moment(end).diff(start)).asMinutes();
+
+        return {
+          eventName: holiday.name,
+          meetingDescription: holiday.description,
+          meetingId: meetingId,
+          value: holiday.primary_type,
+          selectedUserId: user._id,
+          start: start,
+          end: end,
+          reminder: 1440,
+          duration: Math.round(duration),
+        };
+      });
+
+      try {
+        // Use Promise.all to post all events in parallel
+        await Promise.all(
+          initialStatesForHolidays.map((holidayData) =>
+            axios.post(API_URL + "postevents", holidayData)
+          )
+        );
+
+        // Handle successful submission
+        setIsSubmitting(false);
+        toast.success("Events posted successfully!"); // Show success toast
+        navigate("/timeline"); // Use navigate to redirect to a success page or any other route you want
+      } catch (error) {
+        // Handle error if necessary
+        setIsSubmitting(false);
+        console.error("Error posting events:", error);
+        toast.error("Error posting events."); // Show error toast
+      }
+    }
   };
 
   const fetchMeetingId = async () => {

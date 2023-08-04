@@ -32,6 +32,7 @@ const EventSchema = new mongoose.Schema(
         "Observance",
         "Season",
         "Local holiday",
+        "Clock change/Daylight Saving Time",
       ],
     },
     status: {

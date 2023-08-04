@@ -53,7 +53,18 @@ const EachEventCard = ({ events, loading }) => {
     setShowAllEvents(true);
   };
 
-  const visibleEvents = showAllEvents ? events : events.slice(0, 6);
+  const excludedValues = [
+    "Public Holiday",
+    "Christian",
+    "Observance",
+    "Season",
+    "Local holiday",
+  ];
+  const visibleEvents = showAllEvents
+    ? events.filter((event) => !excludedValues.includes(event.value))
+    : events.filter(
+        (event, index) => !excludedValues.includes(event.value) && index < 6
+      );
 
   return (
     <div className="each-event-card-container">
