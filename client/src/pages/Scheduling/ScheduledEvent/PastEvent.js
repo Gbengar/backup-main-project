@@ -73,15 +73,27 @@ const PastEvent = ({ events, loading }) => {
     } else {
       // Apply color only to non-agenda views
       if (event.value === "AskInvitee") {
-        backgroundColor = "blue"; // Set background color to blue for "AskInvitee" events
+        backgroundColor = "#090C9B"; // Set background color to blue for "AskInvitee" events
       } else if (event.value === "SetReminder") {
-        backgroundColor = "red"; // Set background color to red for "SetReminder" events
+        backgroundColor = "#FF6B6C"; // Set background color to red for "SetReminder" events
       } else if (event.value === "SetAddress") {
-        backgroundColor = "green"; // Set background color to green for "SetAddress" events
+        backgroundColor = "#1C0B19"; // Set background color to green for "SetAddress" events
       } else if (event.value === "SetCustom") {
         backgroundColor = "yellow"; // Set background color to yellow for "SetCustom" events
       } else if (event.value === "SetRecurring") {
         backgroundColor = "purple"; // Set background color to yellow for "SetCustom" events
+      } else if (event.value === "Public Holiday") {
+        backgroundColor = "#CB958E"; // Set background color to yellow for "SetCustom" events
+      } else if (event.value === "Christian") {
+        backgroundColor = "#240B36"; // Set background color to yellow for "SetCustom" events
+      } else if (event.value === "Observance") {
+        backgroundColor = "#40798C"; // Set background color to yellow for "SetCustom" events
+      } else if (event.value === "Season") {
+        backgroundColor = "#48435C"; // Set background color to yellow for "SetCustom" events
+      } else if (event.value === "Local holiday") {
+        backgroundColor = "#9AC4F8"; // Set background color to yellow for "SetCustom" events
+      } else if (event.value === "Clock change/Daylight Saving Time") {
+        backgroundColor = "#E36588"; // Set background color to yellow for "SetCustom" events
       }
     }
 

@@ -139,6 +139,7 @@ const SingleReminder = () => {
 
     await handleSave(data);
     await dispatch(createEvent(data)); // Call newEvent with the data object
+    navigate("/timeline")
   };
 
   const handleSave = (newEvent) => {

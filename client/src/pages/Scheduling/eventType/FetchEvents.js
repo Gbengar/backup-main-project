@@ -30,7 +30,7 @@ const FetchEvents = () => {
             Promise.all(fetchEventPromises)
               .then((results) => {
                 const events = results.map((res) => res.data);
-                setFetchEvents(events);
+                setFetchEvents(events.flat()); // Flatten the events array
               })
               .catch((error) => {
                 console.log(error);
@@ -47,7 +47,20 @@ const FetchEvents = () => {
       getMeetings();
     }
   }, [user]);
-  return <Timeline events={fetchEvents.flat()} loading={loading} />;
+
+  // Filter events based on the unwanted values
+  const filteredEvents = fetchEvents.filter((event) => {
+    const unwantedValues = [
+      "Public Holiday",
+      "Christian",
+      "Observance",
+      "Season",
+      "Local holiday",
+    ];
+    return !unwantedValues.includes(event.value);
+  });
+
+  return <Timeline events={filteredEvents} loading={loading} />;
 };
 
 export default FetchEvents;

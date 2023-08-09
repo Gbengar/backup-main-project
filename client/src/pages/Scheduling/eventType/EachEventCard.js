@@ -71,7 +71,18 @@ const EachEventCard = ({ events, loading }) => {
       {visibleEvents.map((event, index) => (
         <Card
           key={event._id}
-          cardClass={`card ${event.value === "SetReminder" ? "lightblue" : ""}`}
+          cardClass={`card ${
+            event.value === "SetReminder"
+              ? "lightblue"
+              : event.value === "SetAddress"
+              ? "lightyellow"
+              : event.value === "AskInvitee"
+              ? "lightold"
+              : event.value === "SetCustom"
+              ? "lightcus": event.value === "SetRecurring"
+              ? "lightrecu"
+              : ""
+          }`}
           className="card-container"
           style={{
             marginLeft: index % 3 === 0 ? "0" : "1rem",
@@ -94,7 +105,7 @@ const EachEventCard = ({ events, loading }) => {
             </div>
             <div>
               <h4
-                className="--fw-thin "
+                className=""
                 style={{ fontSize: "150%", whiteSpace: "nowrap" }}
               >
                 <span>{convertDurationToText(event.duration)},</span>{" "}

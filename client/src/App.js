@@ -40,6 +40,7 @@ import TestCalendar from "./pages/userList/TestCalendar";
 import EventSettings from "./pages/eventSetting/EventSettings";
 import TimezoneSelector from "./pages/eventSetting/TimezoneSelector";
 import CountrySelect from "./pages/eventSetting/CountrySelect";
+import CircleOptions from "./pages/Scheduling/eventType/CircleOptions";
 
 axios.defaults.withCredentials = true;
 
@@ -244,7 +245,7 @@ function App() {
             path="/follow"
             element={
               <Layout>
-                <CountrySelect />
+                <CircleOptions />
               </Layout>
             }
           />

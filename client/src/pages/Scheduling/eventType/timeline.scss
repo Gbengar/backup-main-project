@@ -46,16 +46,22 @@
 }
 
 .card {
-  width: calc(33.33% - 20px); /* Adjust the width calculation as needed */
+  width: calc(33.33% - 20px);
   max-width: 350px;
   margin: 10px;
   padding: 5px 0;
-  border: 50% solid #030b6b;
-  -webkit-background-clip: padding-box;
-  -moz-background-clip: padding;
-  background-clip: padding-box;
+  backdrop-filter: blur(10px); /* Add the glass blur effect */
+  /* From https://css.glass */
+background: rgba(255, 255, 255, 0.15);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(14px);
+-webkit-backdrop-filter: blur(14px);
+border: 5px solid rgba(255, 255, 255, 0.5);
   justify-content: center;
+  color: rgb(255, 253, 253);
 }
+
 
 .withincard {
   padding: 10px;
@@ -104,5 +110,16 @@
   text-decoration: none; /* Remove underline */
 }
 .lightblue {
-  background-color: rgb(86, 200, 86);
+  background-color: #ade8af;
+}
+.lightyellow {
+  background-color: #d5d2bc;
+}
+.lightold {
+  background-color: #c1b3b3;
+}
+.lightcus {
+  background-color:  #b0b093;
+}.lightrecu {
+  background-color:  #e4c1e4;
 }

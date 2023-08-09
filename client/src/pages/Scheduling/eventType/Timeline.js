@@ -14,6 +14,7 @@ import Loader from "../../../components/loader/Loader";
 import Fuse from "fuse.js";
 import SearchBox from "react-search-box";
 import ReactPaginate from "react-paginate";
+import CircleOptions from "./CircleOptions";
 
 const Timeline = ({ events, loading }) => {
   useRedirectLoggedOutUser("/login");
@@ -36,6 +37,7 @@ const Timeline = ({ events, loading }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const eventsPerPage = 6;
+  const [showAllEvents, setShowAllEvents] = useState(false);
 
   useEffect(() => {
     dispatch(getUser());
@@ -108,6 +110,19 @@ const Timeline = ({ events, loading }) => {
   const endIndex = startIndex + eventsPerPage;
   const displayedEvents = filteredEvents.slice(startIndex, endIndex);
 
+  const excludedValues = [
+    "Public Holiday",
+    "Christian",
+    "Observance",
+    "Season",
+    "Local holiday",
+  ];
+  const visibleEvents = showAllEvents
+    ? events.filter((event) => !excludedValues.includes(event.value))
+    : events.filter(
+        (event, index) => !excludedValues.includes(event.value) && index < 6
+      );
+
   return (
     <div>
       <div className="button-style">
@@ -139,29 +154,35 @@ const Timeline = ({ events, loading }) => {
                 inputBoxHeight="10px"
               />
             </div>
+            <div className="--flex-end ">
+              <CircleOptions />
+            </div>
           </div>
           <div>
             <div className="filterforname">
               <EachEventCard events={displayedEvents} loading={loading} />
             </div>
           </div>
-          <div className="pagination-container">
-            <ReactPaginate
-              previousLabel="Prev"
-              breakLabel="..."
-              nextLabel="Next"
-              pageCount={pageCount}
-              marginPagesDisplayed={1}
-              pageRangeDisplayed={3}
-              renderOnZeroPageCount={null}
-              onPageChange={handlePageChange}
-              containerClassName="pagination"
-              pageLinkClassName="page-num"
-              previousLinkClassName="page-num"
-              nextLinkClassName="page-num"
-              activeLinkClassName="activePage"
-            />
-          </div>
+          {filteredEvents.length > 0 &&
+            filteredEvents.length > eventsPerPage && (
+              <div className="pagination-container">
+                <ReactPaginate
+                  previousLabel="Prev"
+                  breakLabel="..."
+                  nextLabel="Next"
+                  pageCount={pageCount}
+                  marginPagesDisplayed={1}
+                  pageRangeDisplayed={3}
+                  renderOnZeroPageCount={null}
+                  onPageChange={handlePageChange}
+                  containerClassName="pagination"
+                  pageLinkClassName="page-num"
+                  previousLinkClassName="page-num"
+                  nextLinkClassName="page-num"
+                  activeLinkClassName="activePage"
+                />
+              </div>
+            )}
         </section>
       )}
     </div>

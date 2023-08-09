@@ -7,6 +7,8 @@ import EventFetcher from "../../../pages/Scheduling/ScheduledEvent/EventFetcher"
 import { useSelector } from "react-redux";
 import PendingEventFetch from "../../../pages/Scheduling/ScheduledEvent/PendingEventFetch";
 import PastEventFetcher from "../../../pages/Scheduling/ScheduledEvent/PastEventFetcher";
+import CircleOptions from "../../../pages/Scheduling/eventType/CircleOptions";
+import MeetingDescriptor from "./MeetingDescriptor";
 
 const EventMenu = () => {
   const { user } = useSelector((state) => state.auth);
@@ -115,7 +117,9 @@ const EventMenu = () => {
           )}
         </div>
       </ul>
-
+      <div className="--flex-end addpadd">
+        <MeetingDescriptor />
+      </div>
       <br />
       <br />
       <br />
