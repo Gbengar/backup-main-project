@@ -6,13 +6,13 @@ const MeetingDescriptor = () => {
     <div className={styles["circle-options-container"]}>
       <div
         className={`${styles.circle}`}
-        style={{ backgroundColor: "#E8FCC2" }}
+        style={{ backgroundColor: "#ade8af" }}
       >
         <div className={`${styles.tooltip}`}>Reminder</div>
       </div>
       <div
         className={`${styles.circle}`}
-        style={{ backgroundColor: "#FEFAE0" }}
+        style={{ backgroundColor: "#d5d2bc" }}
       >
         <div className={`${styles.tooltip}`}>Address</div>
       </div>
@@ -24,10 +24,18 @@ const MeetingDescriptor = () => {
       </div>
       <div
         className={`${styles.circle}`}
-        style={{ backgroundColor: "#DFDFDF" }}
+        style={{ backgroundColor: "#eed8ee" }}
       >
         <div className={`${styles.tooltip}`}>Customized</div>
       </div>
+
+      <div
+        className={`${styles.circle}`}
+        style={{ backgroundColor: "#eed8ee" }}
+      >
+        <div className={`${styles.tooltip}`}>Recurring</div>
+      </div>
+
       <div
         className={`${styles.circle}`}
         style={{ backgroundColor: "#CB958E" }}

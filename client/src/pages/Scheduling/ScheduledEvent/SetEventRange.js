@@ -94,26 +94,28 @@ const SetEventRange = ({ events, loading, endDay }) => {
   });
 
   const eventStyleGetter = (event, start, end, isSelected) => {
-    let backgroundColor = "black"; // Default background color
+    let backgroundColor = "blue"; // Default background color
+    let fontColor = "black"; // Default font
+    let borderColor = "red"; // Default border color
 
     if (isSelected) {
       backgroundColor = "gray"; // Set background color to gray for selected events
     } else {
       // Apply color only to non-agenda views
       if (event.value === "AskInvitee") {
-        backgroundColor = "#090C9B"; // Set background color to blue for "AskInvitee" events
+        backgroundColor = "#c1b3b3"; // Set background color to blue for "AskInvitee" events
       } else if (event.value === "SetReminder") {
-        backgroundColor = "#FF6B6C"; // Set background color to red for "SetReminder" events
+        backgroundColor = "#ade8af"; // Set background color to red for "SetReminder" events
       } else if (event.value === "SetAddress") {
-        backgroundColor = "#1C0B19"; // Set background color to green for "SetAddress" events
+        backgroundColor = "#d5d2bc"; // Set background color to green for "SetAddress" events
       } else if (event.value === "SetCustom") {
-        backgroundColor = "yellow"; // Set background color to yellow for "SetCustom" events
+        backgroundColor = "#b0b093"; // Set background color to yellow for "SetCustom" events
       } else if (event.value === "SetRecurring") {
-        backgroundColor = "purple"; // Set background color to yellow for "SetCustom" events
+        backgroundColor = "#eed8ee"; // Set background color to yellow for "SetCustom" events
       } else if (event.value === "Public Holiday") {
         backgroundColor = "#CB958E"; // Set background color to yellow for "SetCustom" events
       } else if (event.value === "Christian") {
-        backgroundColor = "##240B36"; // Set background color to yellow for "SetCustom" events
+        backgroundColor = "#240B36"; // Set background color to yellow for "SetCustom" events
       } else if (event.value === "Observance") {
         backgroundColor = "#40798C"; // Set background color to yellow for "SetCustom" events
       } else if (event.value === "Season") {
@@ -123,14 +125,18 @@ const SetEventRange = ({ events, loading, endDay }) => {
       } else if (event.value === "Clock change/Daylight Saving Time") {
         backgroundColor = "#E36588"; // Set background color to yellow for "SetCustom" events
       }
+      fontColor = "white";
     }
 
     return {
       style: {
         backgroundColor,
+        color: fontColor,
+        border: `px solid ${borderColor}`, // Add a border around the text
       },
     };
   };
+
   const CustomToolbar = (toolbar) => {
     const { label } = toolbar;
     return (
