@@ -125,9 +125,6 @@ const Timeline = ({ events, loading }) => {
 
   return (
     <div>
-      <div className="button-style">
-        <Button buttonText="Create" />
-      </div>
       {loading ? (
         <Loader />
       ) : (
@@ -138,7 +135,7 @@ const Timeline = ({ events, loading }) => {
           <div className="filter">
             <div className="filter-container">
               <div className="filterforname">
-                <h4 className="--color-success --fw-thin">
+                <h4 className="">
                   {greeting}, {profile?.name}
                 </h4>
               </div>

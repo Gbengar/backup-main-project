@@ -25,9 +25,6 @@ const ScheduledEvent = () => {
 
   return (
     <>
-      <div className="button-style">
-        <Button buttonText="Create" />
-      </div>
       <section>
         <div className="container">
           <PageMenuTimeline />
