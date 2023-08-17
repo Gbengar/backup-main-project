@@ -46,12 +46,6 @@ const createEvent = asyncHandler(async (req, res) => {
     (value === "AskInvitee" &&
       (location || locationAdd || callOption || customize)) ||
     (value === "SetReminder" &&
-      value === "Public Holiday" &&
-      value === "Christian" &&
-      value === "Observance" &&
-      value === "Season" &&
-      value === "Local holiday" &&
-      value === "Clock change/Daylight Saving Time" &&
       (location || locationAdd || callOption || customize)) ||
     !start ||
     !end ||

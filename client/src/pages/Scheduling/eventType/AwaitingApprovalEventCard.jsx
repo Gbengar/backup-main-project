@@ -10,7 +10,7 @@ import Loader from "../../../components/loader/Loader";
 import moment from "moment";
 import "./timeline.scss";
 
-const EachEventCard = ({ events, loading }) => {
+const AwaitingApprovalEventCard = ({ events, loading }) => {
   const [checked, setChecked] = useState({});
   const [showAllEvents, setShowAllEvents] = useState(false);
 
@@ -60,11 +60,9 @@ const EachEventCard = ({ events, loading }) => {
     "Season",
     "Local holiday",
   ];
-  const acceptedEvents = events.filter((event) => event.status === "accept");
-
   const visibleEvents = showAllEvents
-    ? acceptedEvents.filter((event) => !excludedValues.includes(event.value))
-    : acceptedEvents.filter(
+    ? events.filter((event) => !excludedValues.includes(event.value))
+    : events.filter(
         (event, index) => !excludedValues.includes(event.value) && index < 6
       );
 
@@ -155,4 +153,4 @@ const EachEventCard = ({ events, loading }) => {
   );
 };
 
-export default EachEventCard;
+export default AwaitingApprovalEventCard;
