@@ -41,6 +41,9 @@ import EventSettings from "./pages/eventSetting/EventSettings";
 import TimezoneSelector from "./pages/eventSetting/TimezoneSelector";
 import CountrySelect from "./pages/eventSetting/CountrySelect";
 import CircleOptions from "./pages/Scheduling/eventType/CircleOptions";
+import AwaitingApprovalEventCard from "./pages/Scheduling/eventType/Awaiting/AwaitingApprovalEventCard";
+import Testcomp from "./pages/Scheduling/eventType/Awaiting/userStats/AllEventProp";
+import AwaitFetchEvent from "./pages/Scheduling/eventType/Awaiting/Fetch/AwaitFetchEvent";
 
 axios.defaults.withCredentials = true;
 
@@ -233,6 +236,15 @@ function App() {
           />
 
           <Route
+            path="/await"
+            element={
+              <Layout>
+                <AwaitFetchEvent />
+              </Layout>
+            }
+          />
+
+          <Route
             path="/eventsetting"
             element={
               <Layout>
@@ -245,7 +257,7 @@ function App() {
             path="/follow"
             element={
               <Layout>
-                <CircleOptions />
+                <AwaitFetchEvent />
               </Layout>
             }
           />
