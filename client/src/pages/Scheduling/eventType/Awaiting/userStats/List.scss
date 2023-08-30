@@ -76,3 +76,11 @@
       outline: none;
     }
   }
+
+  /* In your List.scss or a separate CSS file */
+/* In your List.scss or a separate CSS file */
+.event-description-cell {
+  max-width: 700px; /* Adjust this width as needed */
+  word-wrap: break-word;
+}
+

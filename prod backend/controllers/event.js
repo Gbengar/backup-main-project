@@ -116,6 +116,56 @@ const updateEvent = asyncHandler(async (req, res) => {
   res.status(200).json(updatedEvent);
 });
 
+// update status.
+const updateEventUserStatus = asyncHandler(async (req, res) => {
+  const eventId = req.params.id;
+  const { userId, status } = req.body;
+
+  // Validation
+  if (!userId || (status !== "accept" && status !== "reject")) {
+    res.status(400);
+    throw new Error(
+      "Please provide a valid userId and status (accept or reject)."
+    );
+  }
+
+  try {
+    // Find the event by ID
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      res.status(404);
+      throw new Error("Event not found");
+    }
+
+    // Check if the userStatuses contain the given userId
+    const userStatus = event.userStatuses.find((userStatus) =>
+      userStatus.userId.equals(userId)
+    );
+
+    if (!userStatus) {
+      res.status(404);
+      throw new Error("User not found in event userStatuses");
+    }
+
+    // Update the userStatus with the new status
+    userStatus.status = status;
+
+    // Save the updated event
+    await event.save();
+
+    // Update the overall event status
+    await event.updateStatuses();
+
+    res.status(200).json({ message: "User status updated successfully" });
+  } catch (error) {
+    res.status(500);
+    throw new Error(error.message);
+  }
+});
+
+// ... Other code remains the same
+
 // get
 const getEvents = asyncHandler(async (req, res) => {
   try {
@@ -142,4 +192,11 @@ const deleteEvent = asyncHandler(async (req, res) => {
     message: "User deleted successfully",
   });
 });
-module.exports = { addEvent, getEvents, createEvent, updateEvent, deleteEvent };
+module.exports = {
+  addEvent,
+  getEvents,
+  createEvent,
+  updateEvent,
+  deleteEvent,
+  updateEventUserStatus,
+};

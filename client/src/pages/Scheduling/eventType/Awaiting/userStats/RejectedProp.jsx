@@ -16,7 +16,7 @@ import { shortenText } from "../../../../profile/EditProfile";
 import ReactPaginate from "react-paginate";
 import { Spinner } from "../../../../../components/loader/Loader";
 
-const HolidayEventProp = ({ events }) => {
+const RejectedProp = ({ events }) => {
   const dispatch = useDispatch();
   const { users, isLoading, isLoggedIn, isSuccess, message } = useSelector(
     (state) => state.auth
@@ -35,30 +35,29 @@ const HolidayEventProp = ({ events }) => {
 
   const endOffset = itemOffset + itemsPerPage;
 
-  const currentItems = filteredUsers.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(filteredUsers.length / itemsPerPage);
+  const currentItems = events.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(events.length / itemsPerPage);
 
-  // Invoke when user click to request another page.
+  // Invoke when user clicks to request another page.
   const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % filteredUsers.length;
+    const newOffset = (event.selected * itemsPerPage) % events.length;
     setItemOffset(newOffset);
   };
 
   const [search, setSearch] = useState("");
 
-  const removeUser = async (id) => {
-    await dispatch(deleteUser(id));
-    dispatch(getUsers());
+  const removeEvent = async (id) => {
+    // Implement your event removal logic here
   };
 
   const confirmDelete = (id) => {
     confirmAlert({
-      title: "Delete This User",
-      message: "Are you sure to do delete this user?",
+      title: "Delete This Event",
+      message: "Are you sure you want to delete this event?",
       buttons: [
         {
           label: "Delete",
-          onClick: () => removeUser(id),
+          onClick: () => removeEvent(id),
         },
         {
           label: "Cancel",
@@ -67,35 +66,44 @@ const HolidayEventProp = ({ events }) => {
       ],
     });
   };
-  console.log(events);
+
+  const stripHtmlTags = (html) => {
+    const tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
+  };
+
   return (
     <div className="user-list">
       {isLoading && <Spinner />}
       <div className="table">
         <div className="--flex-between">
           <span>
-            <h3>All Users</h3>
+            <h4>Rejected Events</h4>
           </span>
         </div>
-        {!isLoading && users.length === 0 ? (
-          <p>No user found...</p>
+        {!isLoading && events.length === 0 ? (
+          <p>No event found...</p>
         ) : (
           <table>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Email</th>
+                <th>Event Name</th>
+                <th>Event Description</th>
+                <th>Date of Event</th>
+
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((user, index) => {
-                const { _id, name, email } = user;
+              {currentItems.map((event, index) => {
+                const { eventName, meetingDescription, _id, start } = event;
 
                 return (
                   <tr key={_id}>
-                    <td>{shortenText(name, 8)}</td>
-                    <td>{email}</td>
+                    <td>{eventName}</td>
+                    <td>{stripHtmlTags(meetingDescription)}</td>
+                    <td>{start.split("T")[0]}</td>
 
                     <td>
                       <span>
@@ -132,4 +140,4 @@ const HolidayEventProp = ({ events }) => {
   );
 };
 
-export default HolidayEventProp;
+export default RejectedProp;

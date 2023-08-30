@@ -15,8 +15,9 @@ import { FaTrashAlt } from "react-icons/fa";
 import { shortenText } from "../../../../profile/EditProfile";
 import ReactPaginate from "react-paginate";
 import { Spinner } from "../../../../../components/loader/Loader";
+import { FcApprove } from "react-icons/fc";
 
-const AllEventProp = ({ events }) => {
+const AccepttedProp = ({ events }) => {
   const dispatch = useDispatch();
   const { users, isLoading, isLoggedIn, isSuccess, message } = useSelector(
     (state) => state.auth
@@ -79,8 +80,7 @@ const AllEventProp = ({ events }) => {
       <div className="table">
         <div className="--flex-between">
           <span>
-            <h4>All Events</h4>
-            
+            <h4>Approved Events</h4>
           </span>
         </div>
         {!isLoading && events.length === 0 ? (
@@ -103,13 +103,19 @@ const AllEventProp = ({ events }) => {
                 return (
                   <tr key={_id}>
                     <td>{eventName}</td>
-                    <td className="event-description-cell">{stripHtmlTags(meetingDescription)}</td>
-
+                    <td>{stripHtmlTags(meetingDescription)}</td>
                     <td>{start.split("T")[0]}</td>
 
                     <td>
                       <span>
                         <FaTrashAlt
+                          size={18}
+                          color="red"
+                          onClick={() => confirmDelete(_id)}
+                        />
+                      </span>
+                      <span>
+                        <FcApprove
                           size={18}
                           color="red"
                           onClick={() => confirmDelete(_id)}
@@ -142,4 +148,4 @@ const AllEventProp = ({ events }) => {
   );
 };
 
-export default AllEventProp;
+export default AccepttedProp;

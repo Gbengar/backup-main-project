@@ -10,6 +10,8 @@ const {
   createEvent,
   updateEvent,
   deleteEvent,
+
+  updateEventUserStatus,
 } = require("../controllers/event");
 const {
   meetingRoute,
@@ -81,6 +83,7 @@ router.post("/postevents", createEvent);
 router.get("/events/:meetingId", getEvents);
 router.patch("/updateevent/:id", updateEvent);
 router.delete("/eventdelete/:id", deleteEvent);
+router.patch("/updateUserStatus/:id", updateEventUserStatus);
 
 // Add Event Setups
 
