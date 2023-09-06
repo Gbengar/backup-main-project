@@ -15,6 +15,9 @@ import { FaTrashAlt } from "react-icons/fa";
 import { shortenText } from "../../../../profile/EditProfile";
 import ReactPaginate from "react-paginate";
 import { Spinner } from "../../../../../components/loader/Loader";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+
 
 const AllEventProp = ({ events }) => {
   const dispatch = useDispatch();
@@ -109,11 +112,8 @@ const AllEventProp = ({ events }) => {
 
                     <td>
                       <span>
-                        <FaTrashAlt
-                          size={18}
-                          color="red"
-                          onClick={() => confirmDelete(_id)}
-                        />
+                      <FontAwesomeIcon icon={faTrashCan} beatFade onClick={() => confirmDelete(_id)}/>
+                        
                       </span>
                     </td>
                   </tr>

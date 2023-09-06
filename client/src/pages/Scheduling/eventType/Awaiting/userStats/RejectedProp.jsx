@@ -11,7 +11,8 @@ import {
   FILTER_USERS,
   selectUsers,
 } from "../../../../../redux-app/features/auth/filterSlice";
-import { FaTrashAlt } from "react-icons/fa";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { shortenText } from "../../../../profile/EditProfile";
 import ReactPaginate from "react-paginate";
 import { Spinner } from "../../../../../components/loader/Loader";
@@ -107,11 +108,8 @@ const RejectedProp = ({ events }) => {
 
                     <td>
                       <span>
-                        <FaTrashAlt
-                          size={18}
-                          color="red"
-                          onClick={() => confirmDelete(_id)}
-                        />
+                      <FontAwesomeIcon icon={faTrashCan} beatFade onClick={() => confirmDelete(_id)}/>
+
                       </span>
                     </td>
                   </tr>

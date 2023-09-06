@@ -16,6 +16,8 @@ import { shortenText } from "../../../../profile/EditProfile";
 import ReactPaginate from "react-paginate";
 import { Spinner } from "../../../../../components/loader/Loader";
 import { FcApprove } from "react-icons/fc";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 const AccepttedProp = ({ events }) => {
   const dispatch = useDispatch();
@@ -107,21 +109,24 @@ const AccepttedProp = ({ events }) => {
                     <td>{start.split("T")[0]}</td>
 
                     <td>
-                      <span>
-                        <FaTrashAlt
-                          size={18}
-                          color="red"
+                      <span className="hover-icons" data-text="Delete">
+                        <FontAwesomeIcon
+                          icon={faTrashCan}
+                          beatFade
                           onClick={() => confirmDelete(_id)}
                         />
                       </span>
-                      <span>
-                        <FcApprove
-                          size={18}
-                          color="red"
+                      {" "}
+                      <span className="hover-icons" data-text="Edit">
+                        <FontAwesomeIcon
+                          icon={faPenToSquare}
+                          flip
+                          style={{ color: "#c11f86" }}
                           onClick={() => confirmDelete(_id)}
                         />
                       </span>
                     </td>
+
                   </tr>
                 );
               })}

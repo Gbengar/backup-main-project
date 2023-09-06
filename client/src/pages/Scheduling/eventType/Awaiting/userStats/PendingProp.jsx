@@ -16,6 +16,14 @@ import { FaTrashAlt } from "react-icons/fa";
 import ReactPaginate from "react-paginate";
 import { Spinner } from "../../../../../components/loader/Loader";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCheckCircle,
+  faCircleXmark,
+  faSpinner,
+  faTrashCan,
+  faCircleCheck,
+} from "@fortawesome/free-solid-svg-icons"; // Import FontAwesome icons
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API_URL = `${BACKEND_URL}/api/users/`;
@@ -65,7 +73,7 @@ const PendingProp = ({ events }) => {
       await updateEventUserStatus(eventId, userId, "accept");
       // Perform any necessary UI updates.
       console.log(eventId, userId);
-      navigateToNewPage(); // Navigate to a different page on completion
+      window.location.reload(); // Refresh the current page
     } catch (error) {
       console.error("Error accepting event:", error);
     }
@@ -75,7 +83,7 @@ const PendingProp = ({ events }) => {
     try {
       await updateEventUserStatus(eventId, userId, "reject");
       // Perform any necessary UI updates.
-      navigateToNewPage(); // Navigate to a different page on completion
+      window.location.reload(); // Refresh the current page
     } catch (error) {
       console.error("Error rejecting event:", error);
     }
@@ -112,7 +120,7 @@ const PendingProp = ({ events }) => {
       <div className="table">
         <div className="--flex-between">
           <span>
-            <h4>All Events</h4>
+            <h4>Pending Events</h4>
           </span>
         </div>
         {!isLoading && events.length === 0 ? (
@@ -149,29 +157,42 @@ const PendingProp = ({ events }) => {
                     </td>
                     <td>{start.split("T")[0]}</td>
                     <td>
-                      <span>
-                        {userStatus && userStatus.status === "pending" && (
-                          <>
-                            <button
-                              className="accept-button"
-                              onClick={() => handleAccept(_id, user._id)}
-                            >
-                              Accept
-                            </button>
-                            <button
-                              className="reject-button"
-                              onClick={() => handleReject(_id, user._id)}
-                            >
-                              Reject
-                            </button>
-                          </>
-                        )}
-                        <FaTrashAlt
-                          size={18}
-                          color="red"
-                          onClick={() => confirmDelete(_id)}
-                        />
-                      </span>
+                      <div className="button-container">
+                        <div className="status-buttons">
+                          {userStatus && userStatus.status === "pending" ? (
+                            <>
+                              <span className="hover-icons" data-text="Accept">
+                                <FontAwesomeIcon
+                                  icon={faCircleCheck}
+                                  bounce
+                                  style={{ color: "#1c039b" }}
+                                  onClick={() => handleAccept(_id, user._id)}
+                                />
+                              </span>
+
+                              {"    "}
+                              <span className="hover-icons" data-text="Reject">
+                                <FontAwesomeIcon
+                                  icon={faCircleXmark}
+                                  onClick={() => handleReject(_id, user._id)}
+                                  flip
+                                  style={{ color: "#e72a08" }}
+                                />
+                              </span>
+                            </>
+                          ) : (
+                            <span className="hover-icons" data-text="Awaiting other user's approval">
+
+                            <FontAwesomeIcon
+                              icon={faSpinner}
+                              spin
+                              style={{ color: "#35c06a" }}
+                              className="spinner-icon"
+                            />
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </td>
                   </tr>
                 );
