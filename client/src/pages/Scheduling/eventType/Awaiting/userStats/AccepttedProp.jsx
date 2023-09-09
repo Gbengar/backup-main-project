@@ -1,26 +1,14 @@
-import React, { useEffect, useState } from "react";
-import Search from "../../../../../components/search/Search";
+import React, { useState } from "react";
 import "./List.scss";
 import { confirmAlert } from "react-confirm-alert";
-import {
-  deleteUser,
-  getUsers,
-} from "../../../../../redux-app/features/auth/authSlice";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  FILTER_USERS,
-  selectUsers,
-} from "../../../../../redux-app/features/auth/filterSlice";
-import { FaTrashAlt } from "react-icons/fa";
-import { shortenText } from "../../../../profile/EditProfile";
+import { useSelector } from "react-redux";
 import ReactPaginate from "react-paginate";
 import { Spinner } from "../../../../../components/loader/Loader";
-import { FcApprove } from "react-icons/fc";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import EditEventModal from "./Modal/EditEventModal";
 
 const AccepttedProp = ({ events }) => {
-  const dispatch = useDispatch();
   const { users, isLoading, isLoggedIn, isSuccess, message } = useSelector(
     (state) => state.auth
   );
@@ -30,11 +18,20 @@ const AccepttedProp = ({ events }) => {
   const itemsPerPage = 5;
   const [itemOffset, setItemOffset] = useState(0);
 
-  useEffect(() => {
-    dispatch(FILTER_USERS({ users, search }));
-  }, [dispatch, users]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const filteredUsers = useSelector(selectUsers);
+  // Function to open the modal with the selected event
+  const openModal = (event) => {
+    setSelectedEvent(event);
+    setIsModalOpen(true);
+  };
+
+  // Function to close the modal
+  const closeModal = () => {
+    setSelectedEvent(null); // Clear the selected event
+    setIsModalOpen(false);
+  };
 
   const endOffset = itemOffset + itemsPerPage;
 
@@ -115,18 +112,16 @@ const AccepttedProp = ({ events }) => {
                           beatFade
                           onClick={() => confirmDelete(_id)}
                         />
-                      </span>
-                      {" "}
+                      </span>{" "}
                       <span className="hover-icons" data-text="Edit">
                         <FontAwesomeIcon
                           icon={faPenToSquare}
                           flip
                           style={{ color: "#c11f86" }}
-                          onClick={() => confirmDelete(_id)}
+                          onClick={() => openModal(event)}
                         />
                       </span>
                     </td>
-
                   </tr>
                 );
               })}
@@ -148,6 +143,12 @@ const AccepttedProp = ({ events }) => {
         previousLinkClassName="page-num"
         nextLinkClassName="page-num"
         activeLinkClassName="activePage"
+      />
+
+      <EditEventModal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        selectedEvent={selectedEvent || {}} // Pass an empty object if selectedEvent is null
       />
     </div>
   );
