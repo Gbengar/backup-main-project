@@ -28,28 +28,30 @@ const customModalStyles = {
 };
 
 const style = {
-  control: (base, state) => ({
+  control: (base, state, provided) => ({
     ...base,
+    ...provided,
+    display: "flex",
     width: "100%",
-    height: "40px",
+    height: 7,
     fontSize: "15px",
-    boxSizing: "border-box",
-    borderRadius: "5px",
+    textAlign: "left", // Center the content horizontally
     border: state.isFocused ? "3px solid black" : "2px solid #808080",
-    boxShadow: state.isFocused ? 0 : 0,
+    boxShadow: state.isFocused ? "0" : "0",
+
     "&:hover": {
       border: state.isFocused ? "3px solid black" : "2px solid #808080",
     },
   }),
   menu: (base) => ({
     ...base,
-    marginBottom: "-2px", // Move the menu up by adjusting the bottom margin
-    marginTop: 0, // Remove any top margin
-    position: "absolute", // Position the menu absolutely
+    marginBottom: "0",
+    marginTop: "0",
+    position: "absolute",
   }),
 
   indicatorSeparator: () => ({
-    display: "none", // Hide the vertical line
+    display: "none",
   }),
 };
 
