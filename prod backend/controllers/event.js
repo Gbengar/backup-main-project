@@ -87,7 +87,19 @@ const createEvent = asyncHandler(async (req, res) => {
 
 const updateEvent = asyncHandler(async (req, res) => {
   const eventId = req.params.id;
-  const { eventName, start, end, duration, reminder } = req.body;
+  const {
+    eventName,
+    start,
+    end,
+    duration,
+    reminder,
+    value, // This field determines the type of event
+    location, // This is the previous location
+    locationAdd,
+    callOption,
+    meetingDescription,
+    customize, // This is the new field for custom location
+  } = req.body;
 
   // Validation
   if (!eventName || !start || !end || !duration || !reminder) {
@@ -103,17 +115,84 @@ const updateEvent = asyncHandler(async (req, res) => {
     throw new Error("Event not found");
   }
 
-  // Update event
-  event.eventName = eventName;
-  event.start = start;
-  event.end = end;
-  event.duration = duration;
-  event.reminder = reminder;
+  // Check if any fields have changed
+  let updated = false;
 
-  // Save the updated event
-  const updatedEvent = await event.save();
+  if (event.eventName !== eventName) {
+    event.eventName = eventName;
+    updated = true;
+  }
 
-  res.status(200).json(updatedEvent);
+  if (event.start !== start) {
+    event.start = start;
+    updated = true;
+  }
+
+  if (event.end !== end) {
+    event.end = end;
+    updated = true;
+  }
+
+  if (event.duration !== duration) {
+    event.duration = duration;
+    updated = true;
+  }
+
+  if (event.reminder !== reminder) {
+    event.reminder = reminder;
+    updated = true;
+  }
+
+  if (event.value !== value) {
+    event.value = value;
+    updated = true;
+
+    // Handle the removal of fields based on the new value
+    if (value === "SetCustom") {
+      // Remove the previous location and set customize
+      event.location = undefined;
+      event.locationAdd = undefined;
+      event.customize = customize;
+    } else {
+      // If the value is not "SetCustom," delete the location field
+      event.location = undefined;
+      event.locationAdd = undefined;
+    }
+
+    if (value === "SetAddress") {
+      // Remove the previous location and set customize
+      event.location = location;
+      event.locationAdd = locationAdd;
+      event.customize = undefined;
+    } else {
+      // If the value is not "SetCustom," delete the location field
+      event.location = undefined;
+    }
+  }
+
+  if (event.locationAdd !== locationAdd) {
+    event.locationAdd = locationAdd;
+    updated = true;
+  }
+
+  if (event.callOption !== callOption) {
+    event.callOption = callOption;
+    updated = true;
+  }
+
+  if (event.meetingDescription !== meetingDescription) {
+    event.meetingDescription = meetingDescription;
+    updated = true;
+  }
+
+  if (updated) {
+    // Save the updated event only if any fields have changed
+    const updatedEvent = await event.save();
+    res.status(200).json(updatedEvent);
+  } else {
+    // No updates were made
+    res.status(200).json(event);
+  }
 });
 
 // update status.

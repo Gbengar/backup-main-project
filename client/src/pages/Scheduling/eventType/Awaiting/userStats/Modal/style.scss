@@ -25,7 +25,7 @@
     font-size: 14px; /* Adjust the font size as desired */
   }
 
-  input {
+  input, textarea {
     width: 100%;
     padding: 10px; /* Adjust the padding as desired */
     font-size: 15px; /* Adjust the font size as desired */
@@ -35,6 +35,21 @@
     
     
   }
+
+  .reactQuill{
+    width: 100%;
+    padding: 10px; /* Adjust the padding as desired */
+    font-size: 15px; /* Adjust the font size as desired */
+    border: 2px solid #808080    ;
+    box-sizing: border-box;
+    border-radius: 5px; /* Adjust the radius as needed */
+  }
+
+  .reactQuill:focus {
+    border: 3px solid black	; /* Change the border color to blue */
+  }
+  
+
 
   input:focus {
     border: 3px solid black	; /* Change the border color to blue */
