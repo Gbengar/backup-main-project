@@ -58,3 +58,79 @@
   
 }
 
+/* Add these styles to your SCSS file */
+
+.radio-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adjust the gap as needed */
+}
+
+.radio-option {
+  font-family: system-ui, sans-serif;
+  font-size: 2rem;
+  font-weight: bold;
+  line-height: 1.1;
+  display: grid;
+  grid-template-columns: 1em auto;
+  gap: 0.5em;
+
+}
+
+.radio-option label {
+  white-space: nowrap; /* Prevent labels from wrapping to the next line */
+  margin-left: 5px; /* Adjust the spacing between the radio button and label */
+  line-height: 1; /* Ensure the label is vertically centered */
+}
+
+.radio-option input[type="radio"] {
+  margin-right: 5px; /* Adjust the spacing between the radio button and label */
+}
+
+/* Style for the checked radio button label */
+.radio-option input[type="radio"]:checked + label {
+  font-weight: bold; /* Make the label bold when the radio button is checked */
+  color: #007bff; /* Change the color of the label when the radio button is checked */
+}
+
+.save-button {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px; /* Adjust the margin as needed */
+}
+
+.button-container {
+  display: flex;
+  gap: 10px; /* Adjust the gap between buttons as needed */
+}
+
+
+
+/* CSS */
+.button-88 {
+  display: flex !important;
+  align-items: center !important;
+  font-family: inherit !important;
+  font-weight: 500 !important;
+  font-size: 10px !important;
+  padding: 0.7em 1.4em 0.7em 1.1em !important;
+  color: rgb(168, 12, 38) !important;
+  background: #ad5389 !important;
+  background: radial-gradient(circle, rgba(182,177,0,1) 0%, rgba(218,61,88,0.22172619047619047) 35%, rgba(61, 114, 77, 0.112) 100%) !important;
+  border: none !important;
+  box-shadow: 0 0.7em 1.5em -0.5em rgba(182,177,0,1) !important;
+  letter-spacing: 0.05em !important;
+  border-radius: 20em !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  touch-action: manipulation !important;
+}
+
+.button-88:hover {
+  box-shadow: 0 0.5em 1.5em -0.5em #14a73e98 !important;
+}
+
+.button-88:active {
+  box-shadow: 0 0.3em 1em -0.5em #14a73e98 !important;
+}

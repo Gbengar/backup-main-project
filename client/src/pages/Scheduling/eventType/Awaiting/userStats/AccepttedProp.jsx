@@ -7,6 +7,11 @@ import { Spinner } from "../../../../../components/loader/Loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import EditEventModal from "./Modal/EditEventModal";
+import { toast } from "react-toastify";
+import axios from "axios";
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API_URL = `${BACKEND_URL}/api/users/`;
 
 const AccepttedProp = ({ events }) => {
   const { users, isLoading, isLoggedIn, isSuccess, message } = useSelector(
@@ -38,7 +43,7 @@ const AccepttedProp = ({ events }) => {
   const currentItems = events.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(events.length / itemsPerPage);
 
-  // Invoke when user clicks to request another page.
+  // Invoke when the user clicks to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % events.length;
     setItemOffset(newOffset);
@@ -46,18 +51,31 @@ const AccepttedProp = ({ events }) => {
 
   const [search, setSearch] = useState("");
 
-  const removeEvent = async (id) => {
-    // Implement your event removal logic here
+  const removeEvent = async (id, meetingId) => {
+    try {
+      // Delete the event
+      await axios.delete(`${API_URL}/eventdelete/${id}`);
+
+      // Delete the meeting after deleting the event
+      await axios.delete(`${API_URL}/meetingdelete/${meetingId}`);
+
+      toast.success("Event deleted successfully");
+      closeModal(); // Call the closeModal function to close the modal
+      window.location.reload(); // Refresh the page
+    } catch (error) {
+      console.log(error);
+      toast.error("Delete not successful");
+    }
   };
 
-  const confirmDelete = (id) => {
+  const confirmDelete = (id, meetingId) => {
     confirmAlert({
       title: "Delete This Event",
       message: "Are you sure you want to delete this event?",
       buttons: [
         {
           label: "Delete",
-          onClick: () => removeEvent(id),
+          onClick: () => removeEvent(id, meetingId), // Call removeEvent with the event ID and meeting ID
         },
         {
           label: "Cancel",
@@ -97,7 +115,8 @@ const AccepttedProp = ({ events }) => {
             </thead>
             <tbody>
               {currentItems.map((event, index) => {
-                const { eventName, meetingDescription, _id, start } = event;
+                const { eventName, meetingDescription, _id, start, meetingId } =
+                  event;
 
                 return (
                   <tr key={_id}>
@@ -110,7 +129,7 @@ const AccepttedProp = ({ events }) => {
                         <FontAwesomeIcon
                           icon={faTrashCan}
                           beatFade
-                          onClick={() => confirmDelete(_id)}
+                          onClick={() => confirmDelete(_id, meetingId)}
                         />
                       </span>{" "}
                       <span className="hover-icons" data-text="Edit">

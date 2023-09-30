@@ -93,12 +93,12 @@ const updateEvent = asyncHandler(async (req, res) => {
     end,
     duration,
     reminder,
-    value, // This field determines the type of event
-    location, // This is the previous location
+    value,
+    location,
     locationAdd,
     callOption,
     meetingDescription,
-    customize, // This is the new field for custom location
+    customize,
   } = req.body;
 
   // Validation
@@ -123,50 +123,35 @@ const updateEvent = asyncHandler(async (req, res) => {
     updated = true;
   }
 
-  if (event.start !== start) {
-    event.start = start;
-    updated = true;
-  }
-
-  if (event.end !== end) {
-    event.end = end;
-    updated = true;
-  }
-
-  if (event.duration !== duration) {
-    event.duration = duration;
-    updated = true;
-  }
-
-  if (event.reminder !== reminder) {
-    event.reminder = reminder;
-    updated = true;
-  }
+  // Similar checks for other fields (start, end, duration, reminder) if they are date or time values
 
   if (event.value !== value) {
     event.value = value;
     updated = true;
 
-    // Handle the removal of fields based on the new value
     if (value === "SetCustom") {
-      // Remove the previous location and set customize
+      // Handle changes from "SetCustom" to something else
       event.location = undefined;
       event.locationAdd = undefined;
-      event.customize = customize;
-    } else {
-      // If the value is not "SetCustom," delete the location field
-      event.location = undefined;
-      event.locationAdd = undefined;
-    }
-
-    if (value === "SetAddress") {
-      // Remove the previous location and set customize
+      event.callOption = undefined;
+      event.customize = customize; // Clear the customize field
+    } else if (value === "SetAddress") {
+      event.customize = undefined;
+      event.callOption = undefined;
       event.location = location;
       event.locationAdd = locationAdd;
+      console.log("Changing to SetAddress");
+    } else if (value === "SetPhoneNumber") {
       event.customize = undefined;
-    } else {
-      // If the value is not "SetCustom," delete the location field
       event.location = undefined;
+      event.locationAdd = undefined;
+      event.callOption = callOption;
+    } else if (value === "AskInvitee") {
+      event.customize = undefined;
+      event.location = undefined;
+      event.locationAdd = undefined;
+      event.callOption = undefined;
+      console.log("Changing to AskInvitee");
     }
   }
 
@@ -185,8 +170,8 @@ const updateEvent = asyncHandler(async (req, res) => {
     updated = true;
   }
 
+  // Save the updated event if any fields have changed
   if (updated) {
-    // Save the updated event only if any fields have changed
     const updatedEvent = await event.save();
     res.status(200).json(updatedEvent);
   } else {

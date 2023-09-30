@@ -5,14 +5,14 @@ import Select from "react-select";
 import { toast } from "react-toastify";
 import axios from "axios";
 import moment from "moment";
-import Button from "@mui/material/Button";
 import ReactQuill from "react-quill";
-import "react-datepicker/dist/react-datepicker.css";
-import "react-quill/dist/quill.snow.css";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneInTalkIcon from "@mui/icons-material/PhoneInTalk";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import ConstructionIcon from "@mui/icons-material/Construction";
+import DOMPurify from "dompurify";
+import "react-datepicker/dist/react-datepicker.css";
+import "react-quill/dist/quill.snow.css";
 import "./style.scss";
 
 const modules = {
@@ -117,7 +117,7 @@ const options = [
   { label: "3 hours", value: 180 },
 ];
 
-const remiderOption = [
+const reminderOptions = [
   { value: 15, label: "15 min" },
   { value: 30, label: "30 min" },
   { value: 60, label: "1 hour" },
@@ -135,18 +135,18 @@ const EditEventModal = ({ isOpen, onRequestClose, selectedEvent }) => {
       (option) => option.value === selectedEvent.duration
     ),
     selectedReminder: selectedEvent.reminder
-      ? remiderOption.find((option) => option.value === selectedEvent.reminder)
+      ? reminderOptions.find(
+          (option) => option.value === selectedEvent.reminder
+        )
       : null,
-    selectedValue: selectedEvent.value
-      ? optionsLocation.find((option) => option.value === selectedEvent.value)
-      : null,
-    additionalInput: selectedEvent.additionalInput || "",
-    optionalInput: selectedEvent.optionalInput || "",
-    additionalTextArea: "",
-    isAdditionalAddressVisible: false,
+    selectedValue: optionsLocation.find(
+      (option) => option.value === selectedEvent.value
+    ),
+    additionalInput: selectedEvent.location || "",
+    additionalTextArea: selectedEvent.locationAdd || "",
+    isAdditionalInputVisible: false,
     isAdditionalInfoButtonVisible: false,
     isAdditionalTextAreaVisible: false,
-    isAdditionalInputVisible: false,
     isOptionalInputVisible: false,
     isOptionalCustomVisible: false,
   });
@@ -162,15 +162,15 @@ const EditEventModal = ({ isOpen, onRequestClose, selectedEvent }) => {
         (option) => option.value === selectedEvent.duration
       ),
       selectedReminder: selectedEvent.reminder
-        ? remiderOption.find(
+        ? reminderOptions.find(
             (option) => option.value === selectedEvent.reminder
           )
         : null,
       selectedValue: selectedEvent.value
         ? optionsLocation.find((option) => option.value === selectedEvent.value)
         : null,
-      location: selectedEvent.additionalInput || "",
-      locationAdd: selectedEvent.optionalInput || "",
+      additionalInput: selectedEvent.additionalInput || "",
+      additionalTextArea: selectedEvent.additionalTextArea || "",
     }));
   }, [selectedEvent]);
 
@@ -180,28 +180,25 @@ const EditEventModal = ({ isOpen, onRequestClose, selectedEvent }) => {
         case "SetAddress":
           setFormData((prevData) => ({
             ...prevData,
-            location: selectedEvent.location,
-            locationAdd: selectedEvent.locationAdd,
-            callOption: "", // Reset callOption and customize
-            customize: "",
+            additionalInput: selectedEvent.location,
+            additionalTextArea: selectedEvent.locationAdd,
           }));
           break;
         case "SetPhoneNumber":
           setFormData((prevData) => ({
             ...prevData,
-            callOption: selectedEvent.callOption,
-            location: "", // Reset location and locationAdd
-            locationAdd: "",
-            customize: "", // Reset customize
+            additionalInput: selectedEvent.callOption,
           }));
           break;
         case "SetCustom":
           setFormData((prevData) => ({
             ...prevData,
-            customize: selectedEvent.customize,
-            location: "", // Reset location and locationAdd
-            locationAdd: "",
-            callOption: "", // Reset callOption
+            additionalInput: selectedEvent.customize,
+          }));
+          break;
+        case "AskInvitee":
+          setFormData((prevData) => ({
+            ...prevData,
           }));
           break;
         default:
@@ -230,53 +227,55 @@ const EditEventModal = ({ isOpen, onRequestClose, selectedEvent }) => {
       reminder: newReminder,
       start: formData.startDate,
       end: endTime,
-      value: formData.selectedValue.value, // Set value to the selected option
+      value: formData.selectedValue.value,
       eventName: eventNameRef.current.value,
-      meetingDescription: meetingDescription.current.value,
       selectedUserId: selectedEvent.selectedUserId,
     };
 
-    if (formData.selectedValue.value === "SetCustom") {
-      updatedEvent.customize = formData.optionalCustom; // Update the customize field
-    } else {
-      // Set customize to undefined if it's not "SetCustom"
-      updatedEvent.customize = undefined;
+    switch (formData.selectedValue.value) {
+      case "AskInvitee":
+        delete updatedEvent.customize;
+        delete updatedEvent.location;
+        delete updatedEvent.locationAdd;
+        delete updatedEvent.callOption;
+        break;
+      case "SetAddress":
+        updatedEvent.location = formData.additionalInput;
+        updatedEvent.locationAdd = formData.additionalTextArea;
+        delete updatedEvent.callOption;
+        delete updatedEvent.customize;
+        break;
+      case "SetPhoneNumber":
+        updatedEvent.callOption = formData.additionalInput;
+        delete updatedEvent.location;
+        delete updatedEvent.locationAdd;
+        delete updatedEvent.customize;
+        break;
+      case "SetCustom":
+        updatedEvent.customize = formData.additionalInput;
+        delete updatedEvent.location;
+        delete updatedEvent.locationAdd;
+        delete updatedEvent.callOption;
+        break;
+      default:
+        break;
     }
 
-    if (formData.selectedValue.value === "SetAddress") {
-      updatedEvent.location = formData.additionalInput; // Update the location field
-      updatedEvent.locationAdd = formData.additionalTextArea; // Update the locationAdd field
-    } else {
-      // Set location and locationAdd to undefined if it's not "SetAddress"
-      updatedEvent.location = undefined;
-      updatedEvent.locationAdd = undefined;
-    }
+    const meetingDescriptionHtml =
+      meetingDescription.current.getEditor().root.innerHTML;
 
-    // Remove the callOption field for all options except "SetPhoneNumber"
-    if (formData.selectedValue.value !== "SetPhoneNumber") {
-      updatedEvent.callOption = undefined;
-    }
+    const sanitizedMeetingDescription = DOMPurify.sanitize(
+      meetingDescriptionHtml,
+      { USE_PROFILES: { html: true } }
+    );
 
-    if (formData.selectedValue.value === "SetPhoneNumber") {
-      // Check which radio option is selected and store it in callOption
-      if (
-        formData.optionalInput === "call_me" ||
-        formData.optionalInput === "i_call"
-      ) {
-        updatedEvent.callOption = formData.optionalInput;
-      } else {
-        // Handle the case when none of the radio options is selected
-        updatedEvent.callOption = null;
-      }
-    } else {
-      // Reset callOption for other options
-      updatedEvent.callOption = null;
-    }
+    updatedEvent.meetingDescription = sanitizedMeetingDescription;
 
     axios
       .patch(`${API_URL}updateevent/${selectedEvent._id}`, updatedEvent)
       .then(() => {
         toast.success("Event updated successfully");
+        window.location.reload();
         handleModalClose();
       })
       .catch((error) => {
@@ -295,6 +294,7 @@ const EditEventModal = ({ isOpen, onRequestClose, selectedEvent }) => {
       isAdditionalTextAreaVisible: !prevData.isAdditionalTextAreaVisible,
     }));
   };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -302,11 +302,21 @@ const EditEventModal = ({ isOpen, onRequestClose, selectedEvent }) => {
       ariaHideApp={false}
       style={customModalStyles}
       contentLabel="Edit Event"
+      shouldCloseOnOverlayClick={false}
     >
+      <h1
+        style={{
+          fontSize: "8px",
+          color: "red",
+        }}
+      >
+        *modal can only be closed on cancel or save button
+      </h1>
       <div className="modal-contents">
         <h4>Edit Event</h4>
+
         <form>
-          <div className="--form-control">
+          <div className="form-group">
             <label className="--fw-bold">Event Name</label>
             <input
               type="text"
@@ -315,21 +325,21 @@ const EditEventModal = ({ isOpen, onRequestClose, selectedEvent }) => {
             />
           </div>
           <div className="form-group">
-            <label>Start Date/Time</label>
+            <label className="--fw-bold">Start Date/Time</label>
             <DatePicker
               selected={formData.startDate}
               onChange={(date) =>
                 setFormData((prevData) => ({ ...prevData, startDate: date }))
               }
               showTimeSelect
-              timeFormat="HH:mm"
+              timeFormat="HH:mm:ss"
               timeIntervals={15}
               dateFormat="MMMM d, yyyy h:mm aa"
-              className="form-control"
             />
           </div>
+
           <div className="form-group">
-            <label>Location</label>
+            <label className="--fw-bold">Location</label>
             <Select
               options={optionsLocation}
               value={formData.selectedValue}
@@ -342,10 +352,24 @@ const EditEventModal = ({ isOpen, onRequestClose, selectedEvent }) => {
                   isAdditionalInfoButtonVisible:
                     selectedOption && selectedOption.value === "SetAddress",
                   isOptionalInputVisible:
-                    selectedOption && selectedOption.value === "SetPhoneNumber", // Show Optional for "Phone Call"
+                    selectedOption && selectedOption.value === "SetPhoneNumber",
                   isOptionalCustomVisible:
-                    selectedOption && selectedOption.value === "SetCustom", // Show Custom for "Custom"
+                    selectedOption && selectedOption.value === "SetCustom",
                 }));
+
+                if (selectedOption && selectedOption.value === "AskInvitee") {
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    isAdditionalInputVisible: true,
+                    isAdditionalTextAreaVisible: true,
+                  }));
+                } else {
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    isAdditionalInputVisible: false,
+                    isAdditionalTextAreaVisible: false,
+                  }));
+                }
               }}
               menuPlacement="top"
               styles={style}
@@ -354,7 +378,7 @@ const EditEventModal = ({ isOpen, onRequestClose, selectedEvent }) => {
 
           {formData.isAdditionalAddressVisible && (
             <div className="form-group">
-              <label>Additional Address</label>
+              <label className="--fw-bold">Additional Address</label>
               <input
                 type="text"
                 value={formData.additionalInput}
@@ -368,21 +392,21 @@ const EditEventModal = ({ isOpen, onRequestClose, selectedEvent }) => {
             </div>
           )}
 
-          {formData.isAdditionalInfoButtonVisible &&
-            !formData.isAdditionalTextAreaVisible && (
-              <label className="onHover" onClick={handleButtonClick}>
-                + include additional Information:
-              </label>
-            )}
+          {formData.isAdditionalInfoButtonVisible && (
+            <label className="onHover" onClick={handleButtonClick}>
+              + include additional Information:
+            </label>
+          )}
 
           {formData.isAdditionalInfoButtonVisible &&
             formData.isAdditionalTextAreaVisible && (
               <div className="form-group">
-                <label>Location Additional Information</label>
+                <label className="--fw-bold">
+                  Location Additional Information
+                </label>
                 <textarea
                   rows="5"
                   cols="50"
-                  type="text"
                   value={formData.additionalTextArea}
                   onChange={(e) =>
                     setFormData((prevData) => ({
@@ -396,52 +420,52 @@ const EditEventModal = ({ isOpen, onRequestClose, selectedEvent }) => {
 
           {formData.isOptionalInputVisible && (
             <div className="form-group">
-              <label>Optional</label>
-              <div>
-                <label>
+              <label className="--fw-bold">Optional</label>
+              <div className="radio-container">
+                <div className="radio-option">
                   <input
                     type="radio"
                     name="optionalInput"
                     value="call_me"
-                    checked={formData.optionalInput === "call_me"}
+                    checked={formData.additionalInput === "call_me"}
                     onChange={() =>
                       setFormData((prevData) => ({
                         ...prevData,
-                        optionalInput: "call_me",
+                        additionalInput: "call_me",
                       }))
                     }
-                  />{" "}
-                  Call Me
-                </label>
-                <label>
+                  />
+                  <label>Call Me</label>
+                </div>
+                <div className="radio-option">
                   <input
                     type="radio"
                     name="optionalInput"
                     value="i_call"
-                    checked={formData.optionalInput === "i_call"}
+                    checked={formData.additionalInput === "i_call"}
                     onChange={() =>
                       setFormData((prevData) => ({
                         ...prevData,
-                        optionalInput: "i_call",
+                        additionalInput: "i_call",
                       }))
                     }
-                  />{" "}
-                  I Call
-                </label>
+                  />
+                  <label>I Call</label>
+                </div>
               </div>
             </div>
           )}
 
           {formData.isOptionalCustomVisible && (
             <div className="form-group">
-              <label>Custom</label>
+              <label className="--fw-bold">Custom</label>
               <input
                 type="text"
-                value={formData.optionalCustom}
+                value={formData.additionalInput}
                 onChange={(e) =>
                   setFormData((prevData) => ({
                     ...prevData,
-                    optionalCustom: e.target.value,
+                    additionalInput: e.target.value,
                   }))
                 }
               />
@@ -449,7 +473,7 @@ const EditEventModal = ({ isOpen, onRequestClose, selectedEvent }) => {
           )}
 
           <div className="form-group">
-            <label>Duration</label>
+            <label className="--fw-bold">Duration</label>
             <Select
               options={options}
               value={formData.selectedDuration}
@@ -464,9 +488,9 @@ const EditEventModal = ({ isOpen, onRequestClose, selectedEvent }) => {
             />
           </div>
           <div className="form-group">
-            <label>Reminder</label>
+            <label className="--fw-bold">Reminder</label>
             <Select
-              options={remiderOption}
+              options={reminderOptions}
               value={formData.selectedReminder}
               inputRef={reminderRef}
               onChange={(selectedOption) =>
@@ -481,7 +505,7 @@ const EditEventModal = ({ isOpen, onRequestClose, selectedEvent }) => {
           </div>
 
           <div className="form-group">
-            <label>Description/ Instructions</label>
+            <label className="--fw-bold">Description/ Instructions</label>
             <ReactQuill
               modules={modules}
               className="reactQuill"
@@ -489,12 +513,18 @@ const EditEventModal = ({ isOpen, onRequestClose, selectedEvent }) => {
               ref={meetingDescription}
             />
           </div>
-
-          <div className="save-button">
-            <Button onClick={handleCancelClick}>Cancel</Button>
-            <Button onClick={handleSaveClick}>Save</Button>
-          </div>
         </form>
+
+        <div className="save-button">
+          <div className="button-container">
+            <button className="button-88" onClick={handleCancelClick}>
+              Cancel
+            </button>
+            <button className="button-88" onClick={handleSaveClick}>
+              Save
+            </button>
+          </div>
+        </div>
       </div>
     </Modal>
   );
