@@ -1,0 +1,54 @@
+.info-oval {
+  width: 17rem; /* Increase the width for more stretching */
+  height: 3rem; /* Adjust the height as needed */
+  max-width: 22rem;
+  margin-right: 2rem; /* Increase margin-right as desired */
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center; /* Center the content horizontally */
+  align-items: center;
+  color: #fff;
+  background-color: ash; /* Set the background color to "ash" */
+  border-radius: 20px; /* Adjust border-radius to shape as needed */
+  overflow: hidden; /* Hide any content that goes beyond the oval shape */
+  transition: all 0.3s;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); /* Add a shadow effect */
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5); /* Enhance the shadow on hover */
+  }
+
+  &.active {
+    transform: translateY(-10px); /* Adjust the floating distance as needed */
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5); /* Enhance the shadow when active */
+    z-index: 1; /* Raise the active button above others */
+  }
+
+
+  
+  
+  .info-text {
+    text-align: center; /* Center the text horizontally */
+    padding: 0 1rem; /* Add padding to the text */
+    display: flex; /* Display text on the same line */
+    flex-direction: column; /* Stack text vertically */
+    align-items: center; /* Center text vertically */
+  }
+
+  p, h4 {
+    margin: 0; /* Remove default margins from paragraphs and headings */
+    color: white;
+  }
+}
+
+
+
+@media screen and (max-width: 600px) {
+  .info-oval {
+    max-width: 100%;
+  }
+}

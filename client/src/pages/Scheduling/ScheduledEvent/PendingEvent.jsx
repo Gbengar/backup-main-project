@@ -12,7 +12,7 @@ import { rrulestr } from "rrule"; // Import rrulestr function
 
 const localizer = momentLocalizer(moment);
 
-const PendingEvent = ({ events, loading }) => {
+const PendingEvent = ({ events }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [eventPosition, setEventPosition] = useState({ top: 0, left: 0 });
   const [loadingComplete, setLoadingComplete] = useState(false);
@@ -21,12 +21,9 @@ const PendingEvent = ({ events, loading }) => {
   const modalRef = useRef();
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setLoadingComplete(true);
-      setShowCalendar(true);
-    }, 2000);
-
-    return () => clearTimeout(timeout);
+    // Remove the timeout for loading, and directly set loadingComplete and showCalendar to true
+    setLoadingComplete(true);
+    setShowCalendar(true);
   }, []);
 
   const handleEventClick = (event, e) => {
@@ -145,69 +142,66 @@ const PendingEvent = ({ events, loading }) => {
 
   return (
     <div>
-      {loading ? (
-        <Loader />
-      ) : (
-        <div style={{ position: "relative" }}>
-          <div style={{ maxWidth: "400px", margin: "0 auto" }}>
-            {loadingComplete && eventList.length === 0 ? (
-              <div>
-                <Box display="flex" justifyContent="center" alignItems="center">
-                  <FontAwesomeIcon icon={faCalendarXmark} bounce size="10x" />
-                </Box>
-                <br />
-                <div style={{ textAlign: "center" }}>
-                  <h4>You currently have no Pending Event.</h4>
-                </div>
+      <div style={{ position: "relative" }}>
+        <div style={{ maxWidth: "400px", margin: "0 auto" }}>
+          {loadingComplete && eventList.length === 0 ? (
+            <div>
+              <Box display="flex" justifyContent="center" alignItems="center">
+                <FontAwesomeIcon icon={faCalendarXmark} bounce size="10x" />
+              </Box>
+              <br />
+              <div style={{ textAlign: "center" }}>
+                <h4>You currently have no Pending Event.</h4>
               </div>
-            ) : (
-              // Show the calendar only if showCalendar state is true
-              showCalendar && (
-                <Calendar
-                  localizer={localizer}
-                  events={eventList}
-                  startAccessor="start"
-                  endAccessor="end"
-                  style={{ height: 400 }}
-                  onSelectEvent={handleEventClick}
-                  toolbar={CustomToolbar}
-                  eventPropGetter={eventStyleGetter}
-                />
-              )
-            )}
-          </div>
-
-          {selectedEvent && (
-            <div ref={modalRef}>
-              <Modal
-                show={true}
-                onHide={handleModalClose}
-                style={{
-                  position: "absolute",
-                  top: eventPosition.top - 20,
-                  left: eventPosition.left - 20,
-                  transform: "translate(-20%, -20%)",
-                  backgroundColor: "#f8f8f8", // Updated background color without transparency
-                  padding: "10px",
-                  borderRadius: "4px",
-                  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
-                  zIndex: 9999,
-                }}
-                backdrop={true}
-                keyboard={true}
-              >
-                <div className="event-Modal">
-                  <h4>Event Name: {selectedEvent.title}</h4>
-                  <p>Mode of Meeting: {selectedEvent.value}</p>
-                  <p>Description: {selectedEvent.meetingDescription}</p>
-                  <p>Duration: {selectedEvent.duration}</p>
-                  <p>Reminder: {selectedEvent.reminder}</p>
-                </div>
-              </Modal>
+            </div>
+          ) : (
+            // Show the calendar only if showCalendar state is true
+            <div>
+              <h4>Upcoming Event</h4> {/* Add the h1 element here as well */}
+              <Calendar
+                localizer={localizer}
+                events={eventList}
+                startAccessor="start"
+                endAccessor="end"
+                style={{ height: 400 }}
+                selectable
+                onSelectEvent={handleEventClick}
+                eventPropGetter={eventStyleGetter}
+              />
             </div>
           )}
         </div>
-      )}
+
+        {selectedEvent && (
+          <div ref={modalRef}>
+            <Modal
+              show={true}
+              onHide={handleModalClose}
+              style={{
+                position: "absolute",
+                top: eventPosition.top - 20,
+                left: eventPosition.left - 20,
+                transform: "translate(-20%, -20%)",
+                backgroundColor: "#f8f8f8", // Updated background color without transparency
+                padding: "10px",
+                borderRadius: "4px",
+                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
+                zIndex: 9999,
+              }}
+              backdrop={true}
+              keyboard={true}
+            >
+              <div className="event-Modal">
+                <h4>Event Name: {selectedEvent.title}</h4>
+                <p>Mode of Meeting: {selectedEvent.value}</p>
+                <p>Description: {selectedEvent.meetingDescription}</p>
+                <p>Duration: {selectedEvent.duration}</p>
+                <p>Reminder: {selectedEvent.reminder}</p>
+              </div>
+            </Modal>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

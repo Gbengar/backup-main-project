@@ -44,6 +44,9 @@ import CircleOptions from "./pages/Scheduling/eventType/CircleOptions";
 import AwaitingApprovalEventCard from "./pages/Scheduling/eventType/Awaiting/AwaitingApprovalEventCard";
 import Testcomp from "./pages/Scheduling/eventType/Awaiting/userStats/AllEventProp";
 import AwaitFetchEvent from "./pages/Scheduling/eventType/Awaiting/Fetch/AwaitFetchEvent";
+import PageNation from "./components/TImeline/EventSchedule/PageNation";
+import AwaitSchedule from "./pages/Scheduling/eventType/Awaiting/AwaitSchedule";
+import AwaitScheduleEvent from "./pages/Scheduling/eventType/Awaiting/Fetch/AwaitScheduleEvent";
 
 axios.defaults.withCredentials = true;
 
@@ -154,7 +157,7 @@ function App() {
             path="/scheduled"
             element={
               <Layout>
-                <ScheduledEvent />
+                <AwaitScheduleEvent />
               </Layout>
             }
           />

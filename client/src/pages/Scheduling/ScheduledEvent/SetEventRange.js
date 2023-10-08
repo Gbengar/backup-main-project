@@ -13,7 +13,7 @@ import { rrulestr, RRule } from "rrule"; // Import rrulestr function
 
 const localizer = momentLocalizer(moment);
 
-const SetEventRange = ({ events, loading, endDay }) => {
+const SetEventRange = ({ events, loading, endDay, selectedDateRange }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [eventPosition, setEventPosition] = useState({ top: 0, left: 0 });
   const [loadingComplete, setLoadingComplete] = useState(false);
@@ -22,12 +22,8 @@ const SetEventRange = ({ events, loading, endDay }) => {
   const modalRef = useRef();
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setLoadingComplete(true);
-      setShowCalendar(true);
-    }, 2000);
-
-    return () => clearTimeout(timeout);
+    setLoadingComplete(true);
+    setShowCalendar(true);
   }, []);
 
   const handleEventClick = (event, e) => {
@@ -61,7 +57,7 @@ const SetEventRange = ({ events, loading, endDay }) => {
       const { rrule, start, end, ...rest } = event;
       const rruleObject = RRule.fromString(rrule);
       rruleObject.options.dtstart = moment.utc(start).toDate();
-      rruleObject.options.until = moment.utc(endDay).toDate(); // Set the until value to endDay
+      rruleObject.options.until = moment.utc(endDay).toDate();
       const recurringDates = rruleObject.all();
 
       return recurringDates.map((date) => {
@@ -94,36 +90,35 @@ const SetEventRange = ({ events, loading, endDay }) => {
   });
 
   const eventStyleGetter = (event, start, end, isSelected) => {
-    let backgroundColor = "blue"; // Default background color
-    let fontColor = "black"; // Default font
-    let borderColor = "red"; // Default border color
+    let backgroundColor = "blue";
+    let fontColor = "black";
+    let borderColor = "red";
 
     if (isSelected) {
-      backgroundColor = "gray"; // Set background color to gray for selected events
+      backgroundColor = "gray";
     } else {
-      // Apply color only to non-agenda views
       if (event.value === "AskInvitee") {
-        backgroundColor = "#c1b3b3"; // Set background color to blue for "AskInvitee" events
+        backgroundColor = "#c1b3b3";
       } else if (event.value === "SetReminder") {
-        backgroundColor = "#ade8af"; // Set background color to red for "SetReminder" events
+        backgroundColor = "#ade8af";
       } else if (event.value === "SetAddress") {
-        backgroundColor = "#d5d2bc"; // Set background color to green for "SetAddress" events
+        backgroundColor = "#d5d2bc";
       } else if (event.value === "SetCustom") {
-        backgroundColor = "#b0b093"; // Set background color to yellow for "SetCustom" events
+        backgroundColor = "#b0b093";
       } else if (event.value === "SetRecurring") {
-        backgroundColor = "#eed8ee"; // Set background color to yellow for "SetCustom" events
+        backgroundColor = "#eed8ee";
       } else if (event.value === "Public Holiday") {
-        backgroundColor = "#CB958E"; // Set background color to yellow for "SetCustom" events
+        backgroundColor = "#CB958E";
       } else if (event.value === "Christian") {
-        backgroundColor = "#240B36"; // Set background color to yellow for "SetCustom" events
+        backgroundColor = "#240B36";
       } else if (event.value === "Observance") {
-        backgroundColor = "#40798C"; // Set background color to yellow for "SetCustom" events
+        backgroundColor = "#40798C";
       } else if (event.value === "Season") {
-        backgroundColor = "#48435C"; // Set background color to yellow for "SetCustom" events
+        backgroundColor = "#48435C";
       } else if (event.value === "Local holiday") {
-        backgroundColor = "#9AC4F8"; // Set background color to yellow for "SetCustom" events
+        backgroundColor = "#9AC4F8";
       } else if (event.value === "Clock change/Daylight Saving Time") {
-        backgroundColor = "#E36588"; // Set background color to yellow for "SetCustom" events
+        backgroundColor = "#E36588";
       }
       fontColor = "white";
     }
@@ -132,7 +127,7 @@ const SetEventRange = ({ events, loading, endDay }) => {
       style: {
         backgroundColor,
         color: fontColor,
-        border: `px solid ${borderColor}`, // Add a border around the text
+        border: `px solid ${borderColor}`,
       },
     };
   };
@@ -147,6 +142,12 @@ const SetEventRange = ({ events, loading, endDay }) => {
     );
   };
 
+  const formatSelectedDateRange = (start, end) => {
+    const startDateFormatted = moment(start).format("Do MMM YYYY");
+    const endDateFormatted = moment(end).format("Do MMM YYYY");
+    return `${startDateFormatted} to ${endDateFormatted}`;
+  };
+
   return (
     <div>
       {loading ? (
@@ -156,6 +157,15 @@ const SetEventRange = ({ events, loading, endDay }) => {
           <div style={{ maxWidth: "400px", margin: "0 auto" }}>
             {loadingComplete && eventList.length === 0 ? (
               <div>
+                {selectedDateRange && (
+                  <h4>
+                    From :
+                    {formatSelectedDateRange(
+                      selectedDateRange.start,
+                      selectedDateRange.end
+                    )}
+                  </h4>
+                )}
                 <Box display="flex" justifyContent="center" alignItems="center">
                   <FontAwesomeIcon icon={faCalendarXmark} bounce size="10x" />
                 </Box>
@@ -165,22 +175,31 @@ const SetEventRange = ({ events, loading, endDay }) => {
                 </div>
               </div>
             ) : (
-              // Show the calendar only if showCalendar state is true
               showCalendar && (
-                <Calendar
-                  localizer={localizer}
-                  events={eventList}
-                  startAccessor="start"
-                  endAccessor="end"
-                  style={{ height: 400 }}
-                  onSelectEvent={handleEventClick}
-                  toolbar={CustomToolbar}
-                  eventPropGetter={eventStyleGetter}
-                />
+                <div>
+                  {selectedDateRange && (
+                    <h4>
+                      Range :
+                      {formatSelectedDateRange(
+                        selectedDateRange.start,
+                        selectedDateRange.end
+                      )}
+                    </h4>
+                  )}
+                  <Calendar
+                    localizer={localizer}
+                    events={eventList}
+                    startAccessor="start"
+                    endAccessor="end"
+                    style={{ height: 400 }}
+                    onSelectEvent={handleEventClick}
+                    toolbar={CustomToolbar}
+                    eventPropGetter={eventStyleGetter}
+                  />
+                </div>
               )
             )}
           </div>
-
           {selectedEvent && (
             <div ref={modalRef}>
               <Modal
@@ -191,7 +210,7 @@ const SetEventRange = ({ events, loading, endDay }) => {
                   top: eventPosition.top - 20,
                   left: eventPosition.left - 20,
                   transform: "translate(-20%, -20%)",
-                  backgroundColor: "#f8f8f8", // Updated background color without transparency
+                  backgroundColor: "#f8f8f8",
                   padding: "10px",
                   borderRadius: "4px",
                   boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
