@@ -38,7 +38,7 @@ const AwaitSchedule = ({ loading, events }) => {
   const [endDate, setEndDate] = useState(null);
   const [dateRangeSelectionInProgress, setDateRangeSelectionInProgress] =
     useState(false);
-  const [selectedDateRange, setSelectedDateRange] = useState(null); // Added
+  const [selectedDateRange, setSelectedDateRange] = useState(null);
 
   const currentDate = moment();
 
@@ -76,7 +76,15 @@ const AwaitSchedule = ({ loading, events }) => {
   const handleDateRangeChange = (start, end) => {
     setStartDate(start);
     setEndDate(end);
-    setSelectedDateRange({ start, end }); // Added
+    setSelectedDateRange({ start, end });
+  };
+
+  // Reset function to reset the selected date range and close SetEventRange
+  const handleResetDateRange = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setDateRangeSelectionInProgress(false);
+    setSelectedDateRange(null);
   };
 
   useEffect(() => {
@@ -143,7 +151,10 @@ const AwaitSchedule = ({ loading, events }) => {
                     selectsRange
                     inline
                   />
-                  <button onClick={() => setDateRangeSelectionInProgress(true)}>
+                  <button
+                    className="--btnschedule --btn-primary"
+                    onClick={() => setDateRangeSelectionInProgress(true)}
+                  >
                     Confirm Date Range
                   </button>
                 </div>
@@ -151,10 +162,16 @@ const AwaitSchedule = ({ loading, events }) => {
 
               {showPending && dateRangeSelectionInProgress && (
                 <div className="pending-event">
+                  <button
+                    className="--btnschedule --btn-danger contrl-btn"
+                    onClick={handleResetDateRange}
+                  >
+                    Reset Date Range
+                  </button>
                   <SetEventRange
                     events={filteredEventsRange}
                     loading={loading}
-                    selectedDateRange={selectedDateRange} // Pass selectedDateRange
+                    selectedDateRange={selectedDateRange}
                   />
                 </div>
               )}
