@@ -47,6 +47,8 @@ import AwaitFetchEvent from "./pages/Scheduling/eventType/Awaiting/Fetch/AwaitFe
 import PageNation from "./components/TImeline/EventSchedule/PageNation";
 import AwaitSchedule from "./pages/Scheduling/eventType/Awaiting/AwaitSchedule";
 import AwaitScheduleEvent from "./pages/Scheduling/eventType/Awaiting/Fetch/AwaitScheduleEvent";
+import Workflow from "./pages/Scheduling/eventType/Workflow/Workflow";
+import Page from "../src/redux-app/Page";
 
 axios.defaults.withCredentials = true;
 
@@ -83,7 +85,9 @@ function App() {
             path="/"
             element={
               <Layout>
-                <Home />
+                <Page pageTitle="Home">
+                  <Home />
+                </Page>
               </Layout>
             }
           />
@@ -91,7 +95,9 @@ function App() {
             path="/profile"
             element={
               <Layout>
-                <Profile />
+                <Page pageTitle="Profile">
+                  <Profile />
+                </Page>
               </Layout>
             }
           />
@@ -99,7 +105,9 @@ function App() {
             path="/profile/edit"
             element={
               <Layout>
-                <EditProfile />
+                <Page pageTitle="Edit Profile">
+                  <EditProfile />
+                </Page>
               </Layout>
             }
           />
@@ -116,7 +124,9 @@ function App() {
             path="/messenger"
             element={
               <Layout>
-                <Messenger />
+                <Page pageTitle="Messenger">
+                  <Messenger />
+                </Page>
               </Layout>
             }
           />
@@ -124,7 +134,9 @@ function App() {
             path="/changePassword"
             element={
               <Layout>
-                <ChangePassword />
+                <Page pageTitle="Change Password">
+                  <ChangePassword />
+                </Page>
               </Layout>
             }
           />
@@ -132,7 +144,9 @@ function App() {
             path="/users"
             element={
               <Layout>
-                <UserList />
+                <Page pageTitle="User Stat">
+                  <UserList />
+                </Page>
               </Layout>
             }
           />
@@ -141,7 +155,9 @@ function App() {
             path="/timeline"
             element={
               <Layout>
-                <FetchEvents />
+                <Page pageTitle="Timeline">
+                  <FetchEvents />
+                </Page>
               </Layout>
             }
           />
@@ -157,7 +173,9 @@ function App() {
             path="/scheduled"
             element={
               <Layout>
-                <AwaitScheduleEvent />
+                <Page pageTitle="Schedule">
+                  <AwaitScheduleEvent />
+                </Page>
               </Layout>
             }
           />
@@ -175,7 +193,9 @@ function App() {
             path="/addnewevent"
             element={
               <Layout>
-                <AddNewEvent setNewEvent={setNewEvent} />
+                <Page pageTitle="Create New Event">
+                  <AddNewEvent setNewEvent={setNewEvent} />
+                </Page>
               </Layout>
             }
           />
@@ -184,7 +204,9 @@ function App() {
             path="/addneweventmultipleinvitees"
             element={
               <Layout>
-                <NewEventMultipleUsers setNewEvent={setNewEvent} />
+                <Page pageTitle="Create New Event">
+                  <NewEventMultipleUsers setNewEvent={setNewEvent} />
+                </Page>
               </Layout>
             }
           />
@@ -194,7 +216,9 @@ function App() {
             element={
               storedEvent ? (
                 <Layout>
-                  <CompleteSchedule newEvent={storedEvent} />
+                  <Page pageTitle="Create New Event">
+                    <CompleteSchedule newEvent={storedEvent} />
+                  </Page>
                 </Layout>
               ) : (
                 <Navigate to="/addnewevent" />
@@ -206,7 +230,9 @@ function App() {
             path="/reminder"
             element={
               <Layout>
-                <SingleReminder />
+                <Page pageTitle="Create New Event">
+                  <SingleReminder />
+                </Page>
               </Layout>
             }
           />
@@ -224,7 +250,9 @@ function App() {
             path="/createeventype"
             element={
               <Layout>
-                <EventOptions />
+                <Page pageTitle="New Event Type">
+                  <EventOptions />
+                </Page>
               </Layout>
             }
           />
@@ -233,7 +261,9 @@ function App() {
             path="/recurringreminder"
             element={
               <Layout>
-                <RecurringReminder />
+                <Page pageTitle="Create New Event">
+                  <RecurringReminder />
+                </Page>
               </Layout>
             }
           />
@@ -242,7 +272,20 @@ function App() {
             path="/await"
             element={
               <Layout>
-                <AwaitFetchEvent />
+                <Page pageTitle="Events Stats">
+                  <AwaitFetchEvent />
+                </Page>
+              </Layout>
+            }
+          />
+
+          <Route
+            path="/flow"
+            element={
+              <Layout>
+                <Page pageTitle="Work Flow">
+                  <Workflow />
+                </Page>
               </Layout>
             }
           />
