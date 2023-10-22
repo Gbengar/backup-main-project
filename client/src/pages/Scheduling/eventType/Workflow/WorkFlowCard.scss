@@ -1,0 +1,91 @@
+.flowmargin{
+    margin-top: 5%;
+}
+
+  .cardforworkflow {
+    border: 1px solid #ccc;
+    
+    padding: 5px;
+    background-color: #f5f6fa;
+  }
+  
+  .info-box {
+    width: 50%;
+    height: 7rem;
+    max-width: 22rem;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    vertical-align: middle;
+    flex-wrap: wrap;
+    color: #fff;
+    transform: translateY(0);
+    transition: all 0.3s;
+  
+    // background-color: green;
+  
+    &:hover {
+      cursor: pointer;
+      // border: 3px solid #fff;
+      transform: translateY(-5px);
+    }
+  
+    .info-icon {
+      padding: 0 2rem;
+      color: #fff;
+    }
+    .info-text > * {
+      color: #fff;
+    }
+  
+  
+  }
+  .cardforworkflow{
+    border: 1px solid #ccc;
+    padding: 0px;
+    height: 250px;
+    width: calc(33.33% - 20px);
+    max-width: 350px;
+    margin: 10px;
+    padding: 5px 0;
+    backdrop-filter: blur(10px); /* Add the glass blur effect */
+    /* From https://css.glass */
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 5px solid rgba(255, 255, 255, 0.5);
+    justify-content: center;
+    color: rgb(255, 253, 253);
+  }
+
+  .divicon{
+    padding: 20px;
+  }
+  .divtit{
+    padding-left: 20px;
+  }
+  .divtit p {
+    font-weight: bold;
+  }
+  .div-content{
+    margin-top: 10px;
+    padding-left: 20px;
+    
+  }
+  .div-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding-right: 20px;
+    padding-bottom: 5px;
+  }
+  
+  @media screen and (max-width: 600px) {
+    .info-box {
+      max-width: 100%;
+    }
+  }

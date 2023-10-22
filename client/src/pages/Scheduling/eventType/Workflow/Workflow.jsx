@@ -4,6 +4,8 @@ import "./style.scss";
 import loginImg from "../../../../assets/images/image.svg";
 import useRedirectLoggedOutUser from "../../../../customHook/useRedirectLoggedOutUser";
 import { NavLink } from "react-router-dom";
+import WorkFlowCard from "./WorkFlowCard";
+import FlowCard from "./FlowCard/UserStats";
 
 const Workflow = () => {
   useRedirectLoggedOutUser("/login");
@@ -39,6 +41,11 @@ const Workflow = () => {
           </div>
           <div className="imagejpg">
             <img src={loginImg} alt="Auth" />
+          </div>
+        </div>
+        <div className="">
+          <div className="each-event-card-container">
+            <FlowCard />
           </div>
         </div>
       </div>

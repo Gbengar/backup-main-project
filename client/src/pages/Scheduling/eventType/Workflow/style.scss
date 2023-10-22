@@ -80,4 +80,16 @@ border-bottom: 1px solid lightgrey;  }
   }
   
   
+  .each-event-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .filterforname {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 30px;
+  }
+  
   
