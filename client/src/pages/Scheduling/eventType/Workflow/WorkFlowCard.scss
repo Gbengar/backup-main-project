@@ -42,25 +42,22 @@
   
   
   }
-  .cardforworkflow{
+  .cardforworkflow {
     border: 1px solid #ccc;
-    padding: 0px;
     height: 250px;
     width: calc(33.33% - 20px);
     max-width: 350px;
     margin: 10px;
     padding: 5px 0;
-    backdrop-filter: blur(10px); /* Add the glass blur effect */
-    /* From https://css.glass */
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 5px solid rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(100px); /* Increase the blur for a stronger glass effect */
+    background: rgba(255, 255, 255, 0.1); /* Adjust the background opacity */
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border: 5px solid rgba(255, 255, 255, 0.3); /* Adjust border opacity */
     justify-content: center;
-    color: rgb(255, 253, 253);
+    color: rgba(255, 253, 253, 0.9); /* Adjust text color and opacity */
   }
+  
 
   .divicon{
     padding: 20px;
@@ -83,9 +80,21 @@
     padding-right: 20px;
     padding-bottom: 5px;
   }
-  
+  .disabled {
+    pointer-events: none;
+    opacity: 0.6; /* You can adjust the opacity to make it visually disabled */
+  }
   @media screen and (max-width: 600px) {
     .info-box {
       max-width: 100%;
     }
   }
+
+  .modal-image {
+    width: 20%;
+    text-align: center;
+    
+  }
+  
+  
+  

@@ -1,11 +1,6 @@
 import React from "react";
 import "./FlowCard.scss";
-import { FaUserFriends } from "react-icons/fa";
-import { ImUserCheck, ImUserMinus } from "react-icons/im";
-import { BiUserX } from "react-icons/bi";
 import WorkFlowCard from "../WorkFlowCard";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelopeOpenText } from "@fortawesome/free-solid-svg-icons"; // Import the specific icon you want to use
 import { Icon } from "@iconify/react";
 
 // Icons
@@ -47,7 +42,9 @@ const icon6 = (
 
 const FlowCard = () => {
   return (
-    <div className="user-summ">
+    <div className="user-summ white-background">
+      {" "}
+      {/* Add the white background class */}
       <div className="info-summ">
         <WorkFlowCard
           icon={icon1}
@@ -56,25 +53,33 @@ const FlowCard = () => {
             "Reduce no-shows — send automated email reminders to invitees"
           }
           button={"Use workflow"}
+          disable
         />
+        {/* Add white background class to disable the button */}
         <WorkFlowCard
           icon={icon2}
           title={"Email reminder to host"}
           content={"Never miss an event — get automated email reminders"}
           button={"Use workflow"}
+          disable
         />
+        {/* Add white background class to disable the button */}
         <WorkFlowCard
           icon={icon3}
           title={"Send thank you email"}
           content={"Build relationships with a quick thanks"}
           button={"Use workflow"}
+          disable
         />
+        {/* Add white background class to disable the button */}
         <WorkFlowCard
           icon={icon4}
           title={"Send thank you email"}
           content={"Build relationships with a quick thanks"}
           button={"Use workflow"}
+          disable
         />
+        {/* Add white background class to disable the button */}
         <WorkFlowCard
           icon={icon5}
           title={"Text booking confirmation to host"}
@@ -82,6 +87,7 @@ const FlowCard = () => {
           button={"Use workflow"}
           disable
         />
+        {/* Add white background class to disable the button */}
         <WorkFlowCard
           icon={icon6}
           title={"Email your own feedback survey"}
@@ -89,6 +95,7 @@ const FlowCard = () => {
             "Email a survey link from a third party like Typeform or Google Forms to get feedback from invitees after your event"
           }
           button={"Use workflow"}
+          disable
         />
       </div>
     </div>

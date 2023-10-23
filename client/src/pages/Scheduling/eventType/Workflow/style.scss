@@ -37,6 +37,17 @@ border-bottom: 1px solid lightgrey;  }
   }
   
 
+  .modaljpg {
+    width: 100%;
+    display: flex;
+  }
+  
+  .modaljpg img {
+    max-width: 100%; /* Set a maximum width to fit the container */
+    max-height: 100%; /* Set a maximum height to fit the container */
+  }
+  
+
   .big-rounded-button {
     padding: 10px 16px; /* Adjust padding to make the button bigger */
     border: none;
@@ -93,3 +104,25 @@ border-bottom: 1px solid lightgrey;  }
   }
   
   
+  .insideMod{
+    padding: 20px;
+  }
+
+  /* Add this CSS to your stylesheet */
+.close-button {
+  position: absolute;
+  top: 10px; /* Adjust this value to set the desired distance from the top */
+  right: 10px; /* Adjust this value to set the desired distance from the right */
+  background-color: #fff; /* Background color of the button */
+  color: #333; /* Text color of the button */
+  border: none;
+  padding: 10px 15px;
+  border-radius: 50%; /* Makes it a circle */
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.close-button:hover {
+  background-color: #333; /* Change background color on hover */
+  color: #fff; /* Change text color on hover */
+}

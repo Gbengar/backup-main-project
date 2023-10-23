@@ -2,9 +2,12 @@ import React from "react";
 import Card from "../../../../components/card/Card";
 import "./WorkFlowCard.scss";
 
-const WorkFlowCard = ({ title, icon, onClick, content, button }) => {
+const WorkFlowCard = ({ title, icon, onClick, content, button, disable }) => {
   return (
-    <div className="cardforworkflow" onClick={onClick}>
+    <div
+      className={`cardforworkflow${disable ? " disabled" : ""}`}
+      onClick={onClick}
+    >
       <div className="divicon">
         <div>{icon}</div>
       </div>
@@ -16,7 +19,9 @@ const WorkFlowCard = ({ title, icon, onClick, content, button }) => {
         <p>{content}</p>
       </div>
       <div className="div-button">
-        <button className="big-rounded-button">{button}</button>
+        <button className={`big-rounded-button${disable ? " disabled" : ""}`}>
+          {button}
+        </button>
       </div>
     </div>
   );
