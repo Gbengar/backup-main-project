@@ -1,3 +1,5 @@
+
+
 .workflow {
     margin-top: 5%;
     border: black 3px solid;
@@ -104,8 +106,43 @@ border-bottom: 1px solid lightgrey;  }
   }
   
   
-  .insideMod{
-    padding: 20px;
+  .insideMod {
+    padding-top: 10%;
+    padding-left: 5%;
+    width: 70%;
+    position: relative; /* Added for positioning the button */
+  }
+  
+  .insideMod h4 {
+    font-weight: 500; /* Fixed font-weight value */
+  }
+  
+  .insideMod h3 {
+    font-weight: bolder;
+  }
+  
+  .insideMod button {
+    position: absolute;
+    top: 60%;
+    right: -50%;
+    width: 30%;
+    background: none; /* Remove button background */
+  border: none; /* Remove button border */
+  padding: 0; /* Remove button padding */
+  cursor: pointer; /* Add pointer cursor for the icon */
+
+  }
+  
+  .paragP{
+    margin-top: 5%;
+    margin-left: 20px;
+  }
+  .paragP p {
+    vertical-align: middle;
+    margin-bottom: 20px; /* Adjust the value to set the desired line spacing */
+  }
+  .paragP p > svg {
+    margin-right: 5px; /* Adjust the value to set the desired space between the icon and text */
   }
 
   /* Add this CSS to your stylesheet */

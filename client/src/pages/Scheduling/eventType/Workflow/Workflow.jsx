@@ -33,19 +33,21 @@ const customModalStyles = {
 };
 
 const modalImageStyles = {
-  marginBottom: "61%", // Adjust this value to set the desired distance from the top
-  width: "105%",
+  marginBottom: "30%", // Adjust this value to set the desired distance from the top
+  width: "100%",
 };
 
 const Workflow = () => {
   useRedirectLoggedOutUser("/login");
 
-  const closeIcon = <Icon icon="line-md:menu-to-close-transition" />;
+  const closeIcon = (
+    <Icon icon="line-md:menu-to-close-transition" width="30" height="30" />
+  );
   const icon = (
     <Icon
       icon="emojione-monotone:white-heavy-check-mark"
-      width="20"
-      height="20"
+      width="12"
+      height="12"
     />
   );
 
@@ -106,22 +108,29 @@ const Workflow = () => {
         shouldCloseOnOverlayClick={false}
         style={customModalStyles}
       >
-        <div style={modalImageStyles}>
-          <div className="modaljpg">
-            <img src={ModalImg} alt="Auth" />
-            {/* <button onClick={closeModal} className="close-button">
+        <div>
+          <div style={modalImageStyles}>
+            <div className="modaljpg">
+              <img src={ModalImg} alt="Auth" />
+              {/* <button onClick={closeModal} className="close-button">
               {closeIcon}
             </button> */}
-          </div>
-          <div className="insideMod">
-            <h4>UPGRADE TO STANDARD</h4>
-            <h3>Automate notifications with workflows and more!</h3>
-
-            <p>
-              {icon} Unlimited one-on-ones, group, and collective event types
-            </p>
-            <p>{icon} Connect Google Analytics and Meta Pixel</p>
-            <p>{icon} Collect payments with Stripe and PayPal</p>
+            </div>
+            <div>
+              <div className="insideMod">
+                <h4>UPGRADE TO STANDARD</h4>
+                <h3>Automate notifications with workflows and more!</h3>
+                <button onClick={closeModal}>{closeIcon}</button>
+              </div>
+              <div className="paragP">
+                <p>
+                  {icon} Unlimited one-on-ones, group, and collective event
+                  types
+                </p>
+                <p>{icon} Connect Google Analytics and Meta Pixel</p>
+                <p>{icon} Collect payments with Stripe and PayPal</p>
+              </div>
+            </div>
           </div>
         </div>
       </Modal>
