@@ -33,7 +33,7 @@ const customModalStyles = {
 };
 
 const modalImageStyles = {
-  marginBottom: "30%", // Adjust this value to set the desired distance from the top
+  marginBottom: "10%", // Adjust this value to set the desired distance from the top
   width: "100%",
 };
 
@@ -112,9 +112,6 @@ const Workflow = () => {
           <div style={modalImageStyles}>
             <div className="modaljpg">
               <img src={ModalImg} alt="Auth" />
-              {/* <button onClick={closeModal} className="close-button">
-              {closeIcon}
-            </button> */}
             </div>
             <div>
               <div className="insideMod">
@@ -129,6 +126,10 @@ const Workflow = () => {
                 </p>
                 <p>{icon} Connect Google Analytics and Meta Pixel</p>
                 <p>{icon} Collect payments with Stripe and PayPal</p>
+              </div>
+              <div className="bottom-div">
+                <button className="big-rounded2">Compare All Prices</button>
+                <button className="big-rounded">Upgrade to Standard</button>
               </div>
             </div>
           </div>

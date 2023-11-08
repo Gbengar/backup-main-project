@@ -65,6 +65,22 @@ border-bottom: 1px solid lightgrey;  }
       background-color: #0056b3; /* Change the background color on hover */
     }
   }
+  .big-rounded-button2 {
+    padding: 10px 16px; /* Adjust padding to make the button bigger */
+    border: 1px solid black;
+    border-radius: 20px; /* Adjust the border-radius to make the edges rounded */
+    background-color: white; /* Change the background color to your preferred color */
+    color: black; /* Change the text color to white or your preferred color */
+    font-size: 14px; /* Adjust the font size to make the text bigger */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  
+    /* Add hover effect (optional) */
+    &:hover {
+      background-color: #e4ece7
+      ; /* Change the background color on hover */
+    }
+  }
 
   .button-container {
     display: flex;
@@ -162,4 +178,52 @@ border-bottom: 1px solid lightgrey;  }
 .close-button:hover {
   background-color: #333; /* Change background color on hover */
   color: #fff; /* Change text color on hover */
+}
+
+.bottom-div{
+  display: flex;
+  flex-direction: row; /* Keep the buttons side by side */
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 30px; /* Adjust the margin as needed */
+}
+.bottom-div button {
+  margin-right: 10px; /* Adjust the right margin between the buttons as needed */
+  margin-left: 10px; /* Adjust the right margin between the buttons as needed */
+
+}
+
+
+.big-rounded {
+  padding: 16px 38px; /* Adjust padding to make the button bigger */
+  border: none;
+  border-radius: 30px; /* Adjust the border-radius to make the edges rounded */
+  background-color: #007bff; /* Change the background color to your preferred color */
+  color: #fff; /* Change the text color to white or your preferred color */
+  font-size: 14px; /* Adjust the font size to make the text bigger */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  /* Add hover effect (optional) */
+  &:hover {
+    background-color: #0056b3; /* Change the background color on hover */
+  }
+}
+
+.big-rounded2 {
+  padding: 16px 38px;; /* Adjust padding to make the button bigger */
+  border: 1px solid black;
+  border-radius: 30px; /* Adjust the border-radius to make the edges rounded */
+  background-color: white; /* Change the background color to your preferred color */
+  color: black; /* Change the text color to white or your preferred color */
+  font-size: 14px; /* Adjust the font size to make the text bigger */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  /* Add hover effect (optional) */
+  &:hover {
+    background-color: #e4ece7
+    ; /* Change the background color on hover */
+  }
 }
