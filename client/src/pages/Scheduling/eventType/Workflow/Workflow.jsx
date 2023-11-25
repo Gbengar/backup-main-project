@@ -9,6 +9,7 @@ import FlowCard from "./FlowCard/FlowCard";
 import Modal from "react-modal";
 import ModalImg from "../../../../assets/images/ModalImage.svg";
 import { Icon } from "@iconify/react";
+import ComparePricesModal from "./ComingSoon/ComparePricesModal";
 
 const customModalStyles = {
   overlay: {
@@ -52,6 +53,8 @@ const Workflow = () => {
   );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isComparePricesModalOpen, setIsComparePricesModalOpen] =
+    useState(false);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -59,6 +62,15 @@ const Workflow = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const openComparePricesModal = () => {
+    setIsModalOpen(false); // Close the existing modal
+    setIsComparePricesModalOpen(true); // Open the new modal
+  };
+
+  const closeComparePricesModal = () => {
+    setIsComparePricesModalOpen(false);
   };
 
   return (
@@ -128,13 +140,22 @@ const Workflow = () => {
                 <p>{icon} Collect payments with Stripe and PayPal</p>
               </div>
               <div className="bottom-div">
-                <button className="big-rounded2">Compare All Prices</button>
+                <button
+                  className="big-rounded2"
+                  onClick={openComparePricesModal}
+                >
+                  Compare All Prices
+                </button>
                 <button className="big-rounded">Upgrade to Standard</button>
               </div>
             </div>
           </div>
         </div>
       </Modal>
+      <ComparePricesModal
+        isOpen={isComparePricesModalOpen}
+        onRequestClose={closeComparePricesModal}
+      />
     </section>
   );
 };

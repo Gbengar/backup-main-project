@@ -1,0 +1,48 @@
+// ComparePricesModal.scss
+
+.close-icon-container {
+  position: absolute;
+  top: 10px; // Adjust the top position as needed
+  right: 10px; // Adjust the right position as needed
+  padding-right: 20px;
+  
+}
+
+.close-icon-container button{
+  outline: none;
+  background: none; /* Remove button background */
+border: none; /* Remove button border */
+padding: 0; /* Remove button padding */
+cursor: pointer; /* Add pointer cursor for the icon */
+
+}
+
+.header-content h4{
+  font-weight: bold;
+  font-size: 25px;
+
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 40px; // Adjust padding as needed
+}
+
+.header-content h4 {
+  margin: 0; // Remove default margin to align with the left edge
+  padding-left: 20px;
+}
+
+
+
+
+.toggle-switch-container {
+  padding-right: 20px; // Add right padding to the ToggleSwitch container
+}
+.modal-scontent {
+  margin-top: 60px;
+  display: flex; // Add flex display
+  justify-content: space-between; 
+}

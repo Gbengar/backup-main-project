@@ -1,0 +1,36 @@
+.withincard {
+    padding: 10px;
+  }
+
+  .parent-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .each-event-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .sacard {
+    width: calc(33.33% - 20px);
+    max-width: 400px; /* Set a maximum width if needed */
+    height: 300px; /* Set the desired height */
+      margin: 10px;
+      padding: 20px;    backdrop-filter: blur(10px); /* Add the glass blur effect */
+    /* From https://css.glass */
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 5px solid ;
+    justify-content: center;
+
+  }
+  
+  .sacard h5{
+  }
