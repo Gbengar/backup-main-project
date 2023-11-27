@@ -44,7 +44,13 @@ const ComparePricesModal = ({ isOpen, onRequestClose }) => {
         <div className="header-content">
           <h4>Choose a plan that fits</h4>
           <div className="toggle-switch-container">
-            <ToggleSwitch label="Notifications" />
+            <ToggleSwitch
+              selectionMode={1}
+              roundCorner={true}
+              option1={"Bill yearly (save up to 20%)"}
+              option2={"Bill monthly"}
+              selectionColor={"blue"}
+            />
           </div>
         </div>
       </div>
@@ -52,16 +58,33 @@ const ComparePricesModal = ({ isOpen, onRequestClose }) => {
         <EachPricesCard>
           <h3>Standard</h3>
           <h4>$10 USD per seat</h4>
+          <p>
+            Eliminate the back-and-forth between you and your customers with
+            automated and personalized scheduling experiences.
+          </p>
+
+          <button>Select</button>
         </EachPricesCard>
 
         <EachPricesCard>
           <h3>Teams</h3>
-          <p>Description for Card 2.</p>
+          <h4>Description for Card 2.</h4>
+          <p>
+            Collaborate effectively with team members and drive business results
+            with smart automations, reporting, and advanced scheduling options.
+          </p>
+          <button>Select</button>
         </EachPricesCard>
 
         <EachPricesCard>
           <h3>Enterprise</h3>
-          <p>Description for Card 3.</p>
+          <h4>Description for Card 3.</h4>
+          <p>
+            Standardize the scheduling experience for your organization and
+            access enterprise-level security, admin control, and personalized
+            support.
+          </p>
+          <button>Select</button>
         </EachPricesCard>
       </div>
     </Modal>
