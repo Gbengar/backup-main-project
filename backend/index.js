@@ -11,27 +11,15 @@ const path = require("path");
 const app = express();
 
 // Middlewares
+app.use(cors({
+  origin: ["https://backup-main-project-frontend.vercel.app"],
+  credentials: true,
+}));
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(
-  cors({
-    origin: ["https://backup-main-project-backend.vercel.app", "backup-main-project-frontend"],
-    credentials: true,
-  })
-);
-/* app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, OPTIONS"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", "true"); // Allow requests with credentials
-  next();
-}); */
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
