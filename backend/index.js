@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(
   cors({
-    origin: ["http://localhost:5000", "http://localhost:3000"],
+    origin: ["https://backup-main-project-backend.vercel.app", "backup-main-project-frontend"],
     credentials: true,
   })
 );
