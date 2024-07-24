@@ -49,6 +49,7 @@ import AwaitSchedule from "./pages/Scheduling/eventType/Awaiting/AwaitSchedule";
 import AwaitScheduleEvent from "./pages/Scheduling/eventType/Awaiting/Fetch/AwaitScheduleEvent";
 import Workflow from "./pages/Scheduling/eventType/Workflow/Workflow";
 import Page from "../src/redux-app/Page";
+import TestPage from "./pages/testpage/TestPage";
 
 axios.defaults.withCredentials = true;
 
@@ -97,6 +98,17 @@ function App() {
               <Layout>
                 <Page pageTitle="Profile">
                   <Profile />
+                </Page>
+              </Layout>
+            }
+          />
+
+          <Route
+            path="/testpage"
+            element={
+              <Layout>
+                <Page pageTitle="Profile">
+                  <TestPage />
                 </Page>
               </Layout>
             }

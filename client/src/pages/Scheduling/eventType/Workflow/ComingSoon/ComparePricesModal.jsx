@@ -1,6 +1,6 @@
 // ComparePricesModal.jsx
 
-import React from "react";
+import React, { useState } from "react";
 import Modal from "react-modal";
 import { Icon } from "@iconify/react";
 import "./ComparePricesModal.scss";
@@ -19,16 +19,29 @@ const customModalStyles = {
     right: "auto",
     bottom: "auto",
     transform: "translate(-50%, -50%)",
-    width: "70%", // Set the width as a percentage of the viewport width
-    height: "800px", // Set the max height of the modal
-    overflowY: "auto", // Enable vertical scrolling
+    width: "70%",
+    height: "800px",
+    overflowY: "auto",
     padding: 0,
-    border: "none", // Remove the default border
+    border: "none",
   },
 };
 
 const ComparePricesModal = ({ isOpen, onRequestClose }) => {
   const closeIcon = <Icon icon="ci:close-sm" width="25" height="25" />;
+
+  const [standardPrice, setStandardPrice] = useState(10);
+  const [teamsPrice, setTeamsPrice] = useState(16);
+
+  const updatePrices = (selectedOption) => {
+    if (selectedOption === 1) {
+      setStandardPrice(10);
+      setTeamsPrice(16);
+    } else {
+      setStandardPrice(12);
+      setTeamsPrice(20);
+    }
+  };
 
   return (
     <Modal
@@ -49,7 +62,9 @@ const ComparePricesModal = ({ isOpen, onRequestClose }) => {
               roundCorner={true}
               option1={"Bill yearly (save up to 20%)"}
               option2={"Bill monthly"}
-              selectionColor={"blue"}
+              selectionColor={"white"}
+              onSelectSwitch={updatePrices}
+              updatePrices={updatePrices}
             />
           </div>
         </div>
@@ -57,18 +72,21 @@ const ComparePricesModal = ({ isOpen, onRequestClose }) => {
       <div className="modal-scontent">
         <EachPricesCard>
           <h3>Standard</h3>
-          <h4>$10 USD per seat</h4>
+          <h4>
+            ${standardPrice} <span>USD per seat</span>
+          </h4>
           <p>
             Eliminate the back-and-forth between you and your customers with
             automated and personalized scheduling experiences.
           </p>
-
           <button>Select</button>
         </EachPricesCard>
 
-        <EachPricesCard>
+        <EachPricesCard isHighlighted={true}>
           <h3>Teams</h3>
-          <h4>Description for Card 2.</h4>
+          <h4>
+            ${teamsPrice} <span>USD per seat</span>
+          </h4>
           <p>
             Collaborate effectively with team members and drive business results
             with smart automations, reporting, and advanced scheduling options.
@@ -78,7 +96,7 @@ const ComparePricesModal = ({ isOpen, onRequestClose }) => {
 
         <EachPricesCard>
           <h3>Enterprise</h3>
-          <h4>Description for Card 3.</h4>
+          <h4>Let's chat</h4>
           <p>
             Standardize the scheduling experience for your organization and
             access enterprise-level security, admin control, and personalized

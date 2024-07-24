@@ -1,3 +1,4 @@
+// ToggleSwitch.jsx
 import React, { useState } from "react";
 
 const ToggleSwitch = ({
@@ -7,6 +8,7 @@ const ToggleSwitch = ({
   option2,
   onSelectSwitch,
   selectionColor,
+  updatePrices,
 }) => {
   const [getSelectionMode, setSelectionMode] = useState(selectionMode);
   const [getRoundCorner, setRoundCorner] = useState(roundCorner);
@@ -14,6 +16,7 @@ const ToggleSwitch = ({
   const updatedSwitchData = (val) => {
     setSelectionMode(val);
     onSelectSwitch(val);
+    updatePrices(val);
   };
 
   return (
@@ -22,8 +25,8 @@ const ToggleSwitch = ({
         style={{
           height: 44,
           width: 350,
-          backgroundColor: "white",
-          borderRadius: getRoundCorner ? 25 : 0,
+          backgroundColor: "gray",
+          borderRadius: getRoundCorner ? 10 : 0,
           border: `1px solid ${selectionColor}`,
           display: "flex",
           flexDirection: "row",
@@ -34,9 +37,9 @@ const ToggleSwitch = ({
         <button
           onClick={() => updatedSwitchData(1)}
           style={{
-            flex: 1,
-            backgroundColor: getSelectionMode === 1 ? selectionColor : "white",
-            borderRadius: getRoundCorner ? 25 : 0,
+            flex: 2,
+            backgroundColor: getSelectionMode === 1 ? selectionColor : "gray",
+            borderRadius: getRoundCorner ? 10 : 0,
             justifyContent: "center",
             alignItems: "center",
             border: "none",
@@ -45,7 +48,10 @@ const ToggleSwitch = ({
           }}
         >
           <span
-            style={{ color: getSelectionMode === 1 ? "white" : selectionColor }}
+            style={{
+              color: getSelectionMode === 1 ? "black" : selectionColor,
+              fontWeight: "bold",
+            }}
           >
             {option1}
           </span>
@@ -54,8 +60,8 @@ const ToggleSwitch = ({
           onClick={() => updatedSwitchData(2)}
           style={{
             flex: 1,
-            backgroundColor: getSelectionMode === 2 ? selectionColor : "white",
-            borderRadius: getRoundCorner ? 25 : 0,
+            backgroundColor: getSelectionMode === 2 ? selectionColor : "gray",
+            borderRadius: getRoundCorner ? 10 : 0,
             justifyContent: "center",
             alignItems: "center",
             border: "none",
@@ -64,7 +70,10 @@ const ToggleSwitch = ({
           }}
         >
           <span
-            style={{ color: getSelectionMode === 2 ? "white" : selectionColor }}
+            style={{
+              color: getSelectionMode === 2 ? "black" : selectionColor,
+              fontWeight: "bold",
+            }}
           >
             {option2}
           </span>

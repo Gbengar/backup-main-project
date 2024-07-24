@@ -17,20 +17,35 @@
 
   .sacard {
     width: calc(33.33% - 20px);
-    max-width: 400px; /* Set a maximum width if needed */
-    height: 300px; /* Set the desired height */
-      margin: 10px;
-      padding: 20px;    backdrop-filter: blur(10px); /* Add the glass blur effect */
-    /* From https://css.glass */
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 5px solid ;
+    max-width: 400px;
+    height: 300px;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 16px;
+    border: 0.5px solid rgb(214, 214, 214);
     justify-content: center;
-
   }
+  
+  .highlighted-card {
+    width: calc(33.33% - 20px);
+    max-width: 400px;
+    height: 300px;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 16px;
+    border: 4px solid black; /* Adjust the border thickness and color here */
+    position: relative;
+  
+   
+  }
+
+  
+
+  .highlighted-border-box {
+    top: 100%;
+  }
+
+  
   
   .sacard h5{
   }

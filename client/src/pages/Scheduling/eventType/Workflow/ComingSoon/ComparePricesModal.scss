@@ -46,3 +46,13 @@ cursor: pointer; /* Add pointer cursor for the icon */
   display: flex; // Add flex display
   justify-content: space-between; 
 }
+
+.modal-scontent h3, h4 {
+  font-weight: bold;
+}
+
+.modal-scontent h4 span {
+  font-size: 70%; /* Adjust the percentage as needed */
+  vertical-align: middle;
+  font-weight: normal;
+}
